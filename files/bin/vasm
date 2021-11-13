@@ -1,0 +1,677 @@
+#!/bin/bash
+# shellcheck disable=SC1091,SC2164,SC2034,SC1072,SC1073,SC1009,SC2120,SC2035,SC2004,SC2129,SC2103,SC2001,SC2046,SC2162,SC1083,SC2154,SC2064,SC2071,SC2014,SC2086
+#--------------------------------------------------------
+#   Don't remove this section for credits
+#   Don't rename this file
+#--------------------------------------------------------
+#   This script to manage v2rayA VPN service
+#   by Helmi Amirudin a.k.a helmiau
+#   my profile page https://helmiau.com/about
+#   my github https://github.com/helmiau
+#--------------------------------------------------------
+#   Contributors
+#   Malik Al a.k.a malikshi
+#   github https://github.com/malikshi
+#--------------------------------------------------------
+
+#--- Warna Warna
+R='\033[1;31m' # Merah Muda
+G='\033[1;32m' # Hijau Muda
+C='\033[0;36m' # Biru Muda
+Y='\033[1;33m' # Kuning
+N='\033[1;37m' # Putih
+
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+SCRIPTNAME="$(basename "$0")"
+SCRIPTUPD="${SCRIPTNAME}upd"
+SCRIPTSRC="raw.githubusercontent.com/helmiau/HelmiWrt-OS/main/files/bin/vasm"
+SCRIPTVER="2.7"
+
+if [[ -f /root/$SCRIPTUPD ]]; then
+	rm /root/$SCRIPTUPD
+fi
+if [[ -f /bin/$SCRIPTUPD ]]; then
+	rm /bin/$SCRIPTUPD
+fi
+
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+CHECKNET="http://github.com/v2rayA/v2rayA"
+INITD="/etc/init.d/v2raya"
+VAUSRBIN="/usr/bin/v2raya"
+VUSRSHARE="/usr/share/v2ray"
+VAETCBIN="/etc/v2raya/bin"
+ARCH=$(. /etc/openwrt_release ; echo $DISTRIB_ARCH)
+
+V2RAYSTAT=$(if [[ -f $VAETCBIN/v2ray ]]; then echo -e "${G}Installed${N}"; else echo -e "${R}Not Installed${N}"; fi)
+V2RAYASTAT=$(if [[ -s $VAUSRBIN ]]; then echo -e "${G}Installed${N}"; else echo -e "${R}Not Installed${N}"; fi)
+CHECKRUN=""
+CHECKRUN=$(netstat -ltnp | grep -w '2017')
+V2RAYASVC=$( if [[ $CHECKRUN = "" ]]; then echo -e "${G}Not Running${N}"; else echo -e "${R}Running${N}"; fi )
+VAIP="$(uci show network | grep network.lan.ipaddr | cut -d \' -f2):2017"
+
+OPKGS=$( if [[ $(opkg list-installed | grep -c "ca-certificates\|wget\|unzip\|tar\|kmod-ipt-nat6\|kmod-ipt-filter\|iptables-mod-tproxy\|iptables-mod-filter") > "9" ]]; then echo -e "${G}Already Installed${N}"; else echo -e "${R}Install Pkgs First${N}"; fi )
+INSTALLSUPPORT=$(if [[ $ARCH == *"aarch64"* || $ARCH == *"arm"* || $ARCH == *"x86"* || $ARCH == *"i386"* ]]; then echo -e "${G}Supported${N}"; else echo -e "${R}Unsupported${N}"; fi)
+
+echo -e "${N}======================================================${Y}"
+echo -e "          v2rayA OpenWrt Script Manager v$SCRIPTVER"
+echo -e "             Copyright(R)2021 helmiau.com"
+echo -e "${N}======================================================"
+echo -e "  Device Architecture         : ${G}$ARCH${N}"
+echo -e "  Installation Support        : $INSTALLSUPPORT"
+echo -e "  Requirement Packages        : $OPKGS"
+echo -e "  V2ray Core Status           : $V2RAYSTAT"
+echo -e "  V2rayA Binaries             : $V2RAYASTAT"
+echo -e "  V2rayA Service Status       : $V2RAYASVC"
+echo -e "  V2rayA WebGUI Address       : ${G}$VAIP${N}"
+echo -e "======================================================"
+echo -e "  Run stable commands 3,4,5,7 : 1"
+echo -e "  Run beta commands 3,4,6,7   : 2"
+echo -e "  Install required packages   : 3"
+echo -e "  Install v2ray core          : 4"
+echo -e "  Install/Upd v2rayA - stable : 5"
+echo -e "  Install/Upd v2rayA - beta   : 6"
+echo -e "  Start v2rayA                : 7"
+echo -e "  Stop v2rayA                 : 8"
+echo -e "  Enable v2rayA on-boot       : 9"
+echo -e "  Disable v2rayA on-boot      : 10"
+echo -e "  Uninstall v2rayA            : 88"
+echo -e "  Update vasm script          : 99"
+echo -e "======================================================"
+echo -e "     Use regular connection for Install/Update"
+echo -e " Gunakan kuota reguler untuk melakukan install/update"
+echo -e "======================================================"
+echo -e "              Type anything to exit"
+echo -e "======================================================"
+echo -e "     Type one of command above to run its command"
+
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function helmiau_unsupported() {
+	if [[ $INSTALLSUPPORT = "Unsupported" ]];then
+		echo -e "${R}  Sorry, your device is unsupported for v2rayA installation"
+		echo -e "  Exiting in 3 secs...${N}"
+		echo -e "======================================================"
+		sleep 3
+		exit
+	fi
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function helmiau_checknet() {
+	echo -e "${G}  Checking connections...${Y}"
+	if wget -S --spider "$CHECKNET" 2>&1 | grep -q 'HTTP/1.1 200 OK'; then
+		echo -e "  Internet connected...${N}"
+		echo -e "======================================================"
+	else
+		echo -e "${R}  No internet or URL unavailable...${N}"
+		echo -e "${Y}  Back to installer menu...${N}"
+		echo -e "======================================================"
+		sleep 3
+		clear
+		return_installer
+	fi
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function return_installer() {
+	clear
+	if [[ -f /root/$SCRIPTNAME ]] && [[ -f /bin/$SCRIPTNAME ]]; then
+		trap "$SCRIPTNAME" EXIT
+		exit
+	elif [[ -f /root/$SCRIPTNAME ]]; then
+		cat /root/"$SCRIPTNAME" > /bin/"$SCRIPTNAME"
+		chmod +x /bin/"$SCRIPTNAME"
+		trap ./"$SCRIPTNAME" EXIT
+		exit
+	elif [[ ! -f /root/$SCRIPTNAME ]] && [[ -f /bin/$SCRIPTNAME ]]; then
+		cat /bin/"$SCRIPTNAME" > /root/"$SCRIPTNAME"
+		chmod +x /root/"$SCRIPTNAME"
+		trap "$SCRIPTNAME" EXIT
+		exit
+	fi
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function update_installer() {
+	clear
+	echo -e "======================================================"
+	echo -e "        ${C}v2raya script manager update menu${N}"
+	echo -e "======================================================"
+
+	cat << EOF > /bin/$SCRIPTUPD
+
+#!/bin/bash
+SCRIPTNAME="vasm"
+SCRIPTSRC="raw.githubusercontent.com/helmiau/HelmiWrt-OS/main/files/bin/vasm"
+
+echo -e "======================================================"
+echo -e "  Starting update for $SCRIPTNAME Script"
+echo -e "======================================================"
+echo -e "  Script by helmiau a.k.a Helmi Amirudin"
+echo -e "======================================================"
+echo "  Checking connections..."
+if wget -S --spider $SCRIPTSRC 2>&1 | grep -q 'HTTP/1.1 200 OK'; then
+	wget --show-progress -qO /bin/$SCRIPTNAME-dl $SCRIPTSRC
+	rm -f /bin/$SCRIPTNAME
+	mv /bin/$SCRIPTNAME-dl /bin/$SCRIPTNAME
+	chmod +x /bin/$SCRIPTNAME
+	echo -e "======================================================"
+	echo -e "  Update Success. Exiting in 3 secs."
+	echo -e "======================================================"
+	echo -e "  Now returning to $SCRIPTNAME main menu..."
+	echo -e "  If $SCRIPTNAME main menu not showing after 3 secs."
+	echo -e "  please run command : $SCRIPTNAME or ./$SCRIPTNAME"
+	echo -e "  to use main script, thank you."
+	echo -e "======================================================"
+	echo -e "  Script by helmiau a.k.a Helmi Amirudin"
+	echo -e "======================================================"
+	sleep 2
+	trap $SCRIPTNAME EXIT
+	clear
+	exit
+else
+	echo "  No internet connection or repository url unavailable..."
+	echo "  Returning to $SCRIPTNAME main menu in 3 secs."
+	sleep 3
+	trap $SCRIPTNAME EXIT
+	clear
+	exit
+fi
+
+EOF
+
+	echo -e "  Downloading needed files."
+	sleep 1
+	echo -e "  Downloading needed files...."
+	sleep 1
+	echo -e "  Downloading needed files........."
+	sleep 1
+	echo -e "  Downloading needed files.............."
+	sleep 1
+	echo -e "  Downloading needed files.................."
+	chmod +x /bin/$SCRIPTUPD
+	chmod 755 /bin/$SCRIPTUPD
+	echo -e "  Files and patches downloaded.............."
+	echo -e "======================================================"
+	echo -e "  Now screen will show update screen installation"
+	echo -e "  If update screen menu not showing after 3 secs,"
+	echo -e "  please run command ./$SCRIPTUPD or $SCRIPTUPD"
+	echo -e "  manually for resuming update"
+	echo -e "======================================================"
+	echo -e "  Exiting in 2 secs."
+	echo -e "======================================================"
+	sleep 2
+	trap /bin/$SCRIPTUPD EXIT
+	exit
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function opkg_reqs() {
+	echo -e "${G}  Installing requirements packages....${Y}"
+	opkg update
+	opkg install ca-certificates wget unzip tar kmod-ipt-nat6 iptables-mod-tproxy iptables-mod-filter
+	echo -e "${G}  Requirements packages installed....${N}"
+	echo -e "======================================================"
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function v2ray_core_check() {
+	echo -e "${G}  Checking v2ray core....${Y}"
+	if [[ -f $VAETCBIN/v2ray ]]; then
+		echo -e "${G}  v2ray core already installed....${Y}"
+		echo -e "  Resuming script runs....${N}"
+	else
+		echo -e "${R}  v2ray core is not installed....${N}"
+		v2ray_core
+	fi
+	echo -e "======================================================"
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function v2ray_core() {
+	echo -e "${G}  Installing v2ray core by v2fly...."
+	echo -e "${G}  Architecture detected : ${R}$ARCH....${Y}"
+	# Check etc/v2raya/bin/v2ray binary, delete when exist
+	if [[ -s $VAETCBIN/v2ray ]]; then
+		rm -f $VAETCBIN/v2ray
+		rm -f $VAETCBIN/v2ctl
+	fi
+	# Check etc/v2raya/bin directory
+	if [[ ! -d $VAETCBIN ]]; then
+		mkdir -p $VAETCBIN
+	fi
+	if [[ $ARCH == *"arm_arm1"* ]]; then
+		echo -e "  Downloading v2ray-linux-arm32-v6...."
+		wget -O $VAETCBIN/v2ray-core.zip $(curl -sL http://github.com/v2fly/v2ray-core/releases/latest | sed -e 's/\"//g' -e 's/ //g' -e 's/rel=.*//g' -e 's#<ahref=#http://github.com#g' | grep http | grep 'v2ray-linux-arm32-v6' | grep -v 'dgst' )
+	elif [[	$ARCH == *"arm_cortex-a7"* ]]; then
+		echo -e "  Downloading v2ray-linux-arm32-v7a...."
+		wget -O $VAETCBIN/v2ray-core.zip $(curl -sL http://github.com/v2fly/v2ray-core/releases/latest | sed -e 's/\"//g' -e 's/ //g' -e 's/rel=.*//g' -e 's#<ahref=#http://github.com#g' | grep http | grep 'v2ray-linux-arm32-v7a' | grep -v 'dgst' )
+	elif [[ $ARCH == *"aarch64"* ]]; then
+		echo -e "  Downloading v2ray-linux-arm64...."
+		wget -O $VAETCBIN/v2ray-core.zip $(curl -sL http://github.com/v2fly/v2ray-core/releases/latest | sed -e 's/\"//g' -e 's/ //g' -e 's/rel=.*//g' -e 's#<ahref=#http://github.com#g' | grep http | grep 'v2ray-linux-arm64' | grep -v 'dgst' )
+	elif [[ $ARCH == *"x86_64"* ]]; then
+		echo -e "  Downloading v2ray-linux-64...."
+		wget -O $VAETCBIN/v2ray-core.zip $(curl -sL http://github.com/v2fly/v2ray-core/releases/latest | sed -e 's/\"//g' -e 's/ //g' -e 's/rel=.*//g' -e 's#<ahref=#http://github.com#g' | grep http | grep 'v2ray-linux-64' | grep -v 'dgst' )
+	elif [[ $ARCH == *"i386"* ]]; then
+		echo -e "  Downloading v2ray-linux-32...."
+		wget -O $VAETCBIN/v2ray-core.zip $(curl -sL http://github.com/v2fly/v2ray-core/releases/latest | sed -e 's/\"//g' -e 's/ //g' -e 's/rel=.*//g' -e 's#<ahref=#http://github.com#g' | grep http | grep 'v2ray-linux-32' | grep -v 'dgst' )
+	else
+		echo -e "${R}  v2ray binary download failed or device unsupported....${N}"
+		sleep 3
+		return_installer
+	fi
+	#Check size v2ray-core.zip then symlink and set permissions
+	if [[ -s $VAETCBIN ]]; then
+		echo -e "  $VABIN downloaded, installing...."
+		unzip -d $VAETCBIN $VAETCBIN/v2ray-core.zip
+		find $VAETCBIN -type f -name '*.json' -exec rm $VAETCBIN/*.json \;
+		find $VAETCBIN -type f -name '*.dat' -exec rm $VAETCBIN/*.dat \;
+		find $VAETCBIN -type f -name '*.zip' -exec rm $VAETCBIN/*.zip \;
+		rm -rf $VAETCBIN/systemd
+		echo -e "${G}  v2ray core by v2fly installed....${N}"
+	else
+		echo -e "${R}  v2ray core by v2fly install failed....${N}"
+		sleep 3
+		return_installer
+	fi
+	# Check usr/bin/v2raya directory
+	if [[ ! -d $VUSRSHARE ]]; then
+		mkdir -p $VUSRSHARE
+	fi
+	# Downloading geoip files for v2ray core
+	if [[ -d $VUSRSHARE ]]; then
+		VARULES="https://raw.githubusercontent.com/v2rayA/dist-v2ray-rules-dat/master"
+		wget -O $VUSRSHARE/geosite.dat $VARULES/geosite.dat
+		wget -O $VUSRSHARE/geoip.dat $VARULES/geoip.dat
+		wget -O $VUSRSHARE/LoyalsoldierSite.dat $VARULES/geosite.dat
+	else
+		echo -e "${R}  v2ray core by v2fly install failed....${N}"
+		sleep 3
+		return_installer
+	fi
+	echo -e "======================================================"
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function v2raya_binary() {
+	echo -e "${G}  Installing v2rayA binary...."
+	echo -e "${G}  Architecture detected : ${R}$ARCH....${Y}"
+	# Check if v2rayA run then stop it
+	if [[ $V2RAYASVC = "Running" ]]; then
+		v2raya_stop
+	fi
+	sleep 5
+	# Check /usr/bin/v2raya binary, delete when exist
+	if [[ -s $VAUSRBIN ]]; then
+		rm -f $VAUSRBIN
+	fi
+	if [[ $ARCH == *"arm"* ]]; then
+		echo -e "  Downloading v2raya_linux_arm binary...."
+		wget -O $VAUSRBIN $(curl -sL http://github.com/v2rayA/v2rayA/releases/latest | sed -e 's/\"//g' -e 's/ //g' -e 's/rel=.*//g' -e 's#<ahref=#http://github.com#g' | grep http | grep 'v2raya_linux_arm_')
+	elif [[ $ARCH == *"aarch64"* ]]; then
+		echo -e "  Downloading v2raya_linux_arm64 binary...."
+		wget -O $VAUSRBIN $(curl -sL http://github.com/v2rayA/v2rayA/releases/latest | sed -e 's/\"//g' -e 's/ //g' -e 's/rel=.*//g' -e 's#<ahref=#http://github.com#g' | grep http | grep 'v2raya_linux_arm64_')
+	elif [[ $ARCH == *"x86_64"* ]]; then
+		echo -e "  Downloading v2raya_linux_x64 binary...."
+		wget -O $VAUSRBIN $(curl -sL http://github.com/v2rayA/v2rayA/releases/latest | sed -e 's/\"//g' -e 's/ //g' -e 's/rel=.*//g' -e 's#<ahref=#http://github.com#g' | grep http | grep 'v2raya_linux_x64_')
+	elif [[ $ARCH == *"i386"* ]]; then
+		echo -e "  Downloading v2raya_linux_x86 binary...."
+		wget -O $VAUSRBIN $(curl -sL http://github.com/v2rayA/v2rayA/releases/latest | sed -e 's/\"//g' -e 's/ //g' -e 's/rel=.*//g' -e 's#<ahref=#http://github.com#g' | grep http | grep 'v2raya_linux_x86_')
+	else
+		echo -e "${R}  v2rayA binary download failed or device unsupported....${N}"
+	fi
+	#Check size then symlink and set permissions
+	if [[ -s $VAUSRBIN ]]; then
+		echo -e "  $VAUSRBIN downloaded, installing...."
+		chmod +x $VAUSRBIN
+		echo -e "  symlinking $VAUSRBIN to $VABIN...."
+		ln -sf $VAUSRBIN $VABIN
+		echo -e "  Set binary permissions...."
+		chmod +x $VABIN
+		echo -e "${G}  v2rayA binary installed....${N}"
+	else
+		echo -e "${R}  v2rayA binary install failed....${N}"
+	fi
+	echo -e "======================================================"
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function v2raya_dev_binary(){
+	#set variable
+	count=$(curl -I -k "https://api.github.com/repos/v2rayA/v2rayA/commits?per_page=1" 2>&1 | sed -n '/^[Ll]ink:/ s/.*"next".*page=\([0-9]*\).*"last".*/\1/p')
+	commit=$(curl https://api.github.com/repos/v2rayA/v2rayA/commits/master 2>&1 | grep -n '"sha"' | head -n1 | cut -c 13-19)
+	date=$(curl https://api.github.com/repos/v2rayA/v2rayA/commits/master 2>&1 | grep '"date"' | tail -n 1 | cut -c 16-25 | sed s/-//g)
+	V2RAYABETAVER="unstable-$date.r${count}.$commit"
+	V2RAYADEV="/root/v2raya_dev.zip"
+	# Check if v2rayA run then stop it
+	if [[ $V2RAYASVC = "Running" ]]; then
+		v2raya_stop
+	fi
+	sleep 5
+	# Check /usr/bin/v2raya binary, delete when exist
+	if [[ -s $VAUSRBIN ]]; then
+		rm -f $VAUSRBIN
+	fi
+	echo -e "${G}  Installing v2rayA developer version binary...."
+	echo -e "${G}  Architecture detected : ${R}$ARCH....${Y}"
+	if [[ $ARCH == *"arm"* ]]; then
+		echo -e "  Downloading v2raya_linux_arm binary...."
+		wget -O $V2RAYADEV "https://nightly.link/v2rayA/v2rayA/workflows/release/master/v2raya_linux_arm_${V2RAYABETAVER}.zip"
+		unzip -d /root/ $V2RAYADEV
+		mv /root/v2raya_linux_arm_${V2RAYABETAVER} ${VAUSRBIN}
+	elif [[ $ARCH == *"aarch64"* ]]; then
+		echo -e "  Downloading v2raya_linux_arm64 binary...."
+		wget -O $V2RAYADEV "https://nightly.link/v2rayA/v2rayA/workflows/release/master/v2raya_linux_arm64_${V2RAYABETAVER}.zip"
+		unzip -d /root/ $V2RAYADEV
+		mv /root/v2raya_linux_arm64_${V2RAYABETAVER} ${VAUSRBIN}
+	elif [[ $ARCH == *"x86_64"* ]]; then
+		echo -e "  Downloading v2raya_linux_x64 binary...."
+		wget -O $V2RAYADEV "https://nightly.link/v2rayA/v2rayA/workflows/release/master/v2raya_linux_x64_${V2RAYABETAVER}.zip"
+		unzip -d /root/ $V2RAYADEV
+		mv /root/v2raya_linux_x64_${V2RAYABETAVER} ${VAUSRBIN}
+	elif [[ $ARCH == *"i386"* ]]; then
+		echo -e "  Downloading v2raya_linux_x86 binary...."
+		wget -O $V2RAYADEV "https://nightly.link/v2rayA/v2rayA/workflows/release/master/v2raya_linux_x86_${V2RAYABETAVER}.zip"
+		unzip -d /root/ $V2RAYADEV
+		mv /root/v2raya_linux_x86_${V2RAYABETAVER} ${VAUSRBIN}
+	else
+		echo -e "${R}  v2ray binary download failed or device unsupported....${N}"
+	fi
+	#remove v2raya dev zip
+	rm $V2RAYADEV
+	#Check size then symlink and set permissions
+	if [[ -s $VAUSRBIN ]]; then
+		echo -e "  $VAUSRBIN downloaded, installing...."
+		chmod +x $VAUSRBIN
+		echo -e "  symlinking $VAUSRBIN to $VABIN...."
+		ln -sf $VAUSRBIN $VABIN
+		echo -e "  Set binary permissions...."
+		chmod +x $VABIN
+		echo -e "${G}  v2rayA binary installed....${N}"
+	else
+		echo -e "${R}  v2rayA binary install failed....${N}"
+	fi
+	echo -e "======================================================"
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function v2raya_daemon() {
+	echo -e "${G}  Installing v2rayA daemon....${Y}"
+	cat <<'EOF' >$INITD
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2021 Tianling Shen <cnsztl@immortalwrt.org>
+
+USE_PROCD=1
+START=99
+
+CONF="v2raya"
+PROG="/usr/bin/v2raya"
+
+is_enabled() {
+        local enabled
+        config_get_bool enabled "$1" "$2" "${3:-0}"
+        if [ "$enabled" -eq "1" ]; then
+                return 0
+        else
+                return 1
+        fi
+}
+
+append_param() {
+        procd_append_param command "$1" $2
+}
+
+append_param_arg() {
+        local value
+        config_get value "$1" "$2" $3
+        [ -n "$value" ] && append_param "--${2//_/-}" "$value"
+}
+
+append_param_bool() {
+        is_enabled "$1" "$2" && append_param "--${2//_/-}"
+}
+
+start_service() {
+        config_load "$CONF"
+
+        is_enabled "config" "enabled" || exit 1
+
+        procd_open_instance "$CONF"
+        procd_set_param command "$PROG"
+
+        append_param_arg "config" "address" "0.0.0.0:2017"
+        append_param_arg "config" "config" "/etc/v2raya"
+        append_param_arg "config" "ipv6_support" "auto"
+        append_param_arg "config" "log_level" "info"
+        append_param_arg "config" "log_file" "/tmp/v2raya.log"
+        append_param_arg "config" "log_max_days" "3"
+        append_param_arg "config" "v2ray_bin"
+        append_param_arg "config" "v2ray_confdir"
+        append_param_arg "config" "vless_grpc_inbound_cert_key"
+        append_param_bool "config" "log_disable_color"
+        append_param_bool "config" "log_disable_timestamp"
+
+        procd_set_param limits core="unlimited"
+        procd_set_param respawn
+        procd_set_param stdout 1
+        procd_set_param stderr 1
+
+        procd_close_instance
+}
+
+reload_service() {
+        stop
+        start
+}
+
+service_triggers() {
+        procd_add_reload_trigger "$CONF"
+}
+
+EOF
+	chmod +x $INITD
+	echo -e "${G}  v2rayA daemon installed....${N}"
+	echo -e "======================================================"
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function v2raya_start() {
+	echo -e "${G}  Starting v2rayA service....${Y}"
+	cat >/etc/config/v2raya <<EOF
+config v2raya 'config'
+        option enabled '1'
+
+        # Listening address
+        option address '0.0.0.0:2017'
+
+        # v2rayA configuration directory
+        option config '/etc/v2raya'
+
+        # Make sure your IPv6 network works fine before you turn it on.
+        # Optional values: auto, on, off.
+        option ipv6_support 'auto'
+
+        # Optional values: trace, debug, info, warn or error
+        option log_level 'info'
+
+        # The path of log file
+        option log_file '/tmp/v2raya.log'
+
+        # Maximum number of days to keep log files
+        option log_max_days '1'
+
+        option log_disable_color '1'
+
+        option log_disable_timestamp '1'
+
+        # Executable v2ray binary path. Auto-detect if put it empty
+        option v2ray_bin '/etc/v2raya/bin/v2ray'
+
+        # Additional v2ray config directory, files in it will be combined with config generated by >
+        option v2ray_confdir '/etc/v2raya'
+
+        # Specify the certification path instead of automatically generating a self-signed certific>
+        # Example: /etc/v2raya/grpc_certificate.crt,/etc/v2raya/grpc_private.key
+        option vless_grpc_inbound_cert_key ''
+EOF
+	uci commit v2raya
+	$INITD start
+	echo -e "${G}  v2rayA service started....${N}"
+	echo -e "======================================================"
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function v2raya_stop() {
+	echo -e "${G}  Stopping v2rayA service....${Y}"
+	$INITD stop
+	echo -e "${G}  v2rayA service stopped....${N}"
+	echo -e "======================================================"
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function v2raya_boot_on() {
+	echo -e "${G}  Enabling v2rayA service run on-boot....${Y}"
+	$INITD enable
+	echo -e "${G}  v2rayA service enabled to on-boot....${N}"
+	echo -e "======================================================"
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function v2raya_boot_off() {
+	echo -e "${G}  Disabling v2rayA service run on-boot....${Y}"
+	$INITD disable
+	echo -e "${G}  v2rayA service disabled from on-boot....${N}"
+	echo -e "======================================================"
+}
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+function v2raya_uninstall() {
+	echo -e "${G}  Uninstalling v2rayA service....${Y}"
+	sleep 1
+	echo -e "  Removing v2rayA init.d service...."
+	rm -f $INITD || true
+	echo -e "  v2rayA init.d service removed...."
+	sleep 1
+	echo -e "  Removing v2rayA Config startup ...."
+	rm -f /etc/config/v2raya || true
+	sleep 1
+	echo -e "  Unlinking v2rayA binary...."
+	rm -f $VABIN || true
+	echo -e "  v2rayA binary unlinked...."
+	sleep 1
+	echo -e "  Uninstalling v2rayA binary...."
+	rm -f $VAUSRBIN || true
+	echo -e "  v2rayA binary removed...."
+	sleep 1
+	echo -e "  Uninstalling v2rayA web ui...."
+	rm -rf /etc/v2raya || true
+	echo -e "  v2rayA web ui removed...."
+	sleep 1
+	echo -e "${G}  v2rayA service uninstall success....${N}"
+	echo -e "${R}  Please reboot immediately....${N}"
+	echo -e "======================================================"
+}
+
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
+helmiau_unsupported
+echo -n " "
+read -r OPT
+if [[ $OPT = "1" ]];then
+	helmiau_checknet \ &&
+	opkg_reqs \ &&
+	v2ray_core_check \ &&
+	v2raya_binary \ &&
+	v2raya_daemon \ &&
+	v2raya_start \ &&
+	echo -e "  ${Y}Please Reboot Immediately !${N}"
+	echo -e "======================================================"
+	sleep 3
+	return_installer
+elif [[ $OPT = "2" ]];then
+	helmiau_checknet \ &&
+	opkg_reqs \ &&
+	v2ray_core_check \ &&
+	v2raya_dev_binary \ &&
+	v2raya_daemon \ &&
+	v2raya_start \ &&
+	echo -e "  ${Y}Please Reboot Immediately !${N}"
+	echo -e "======================================================"
+	sleep 3
+	return_installer
+elif [[ $OPT = "3" ]];then
+	helmiau_checknet \ &&
+	opkg_reqs \ &&
+	sleep 3
+	return_installer
+elif [[ $OPT = "4" ]];then
+	helmiau_checknet \ &&
+	v2ray_core_check \ &&
+	sleep 3
+	return_installer
+elif [[ $OPT = "5" ]];then
+	helmiau_checknet \ &&
+	v2raya_binary \ &&
+	v2raya_daemon \ &&
+	v2raya_start
+	echo -e "  ${Y}Please Reboot Immediately !${N}"
+	echo -e "======================================================"
+	sleep 3
+	return_installer
+elif [[ $OPT = "6" ]];then
+	helmiau_checknet \ &&
+	v2raya_dev_binary \ &&
+	v2raya_daemon \ &&
+	v2raya_start
+	echo -e "  ${Y}Please Reboot Immediately !${N}"
+	echo -e "======================================================"
+	sleep 3
+	return_installer
+elif [[ $OPT = "7" ]];then
+	v2raya_start \ &&
+	sleep 3
+	return_installer
+elif [[ $OPT = "8" ]];then
+	v2raya_stop \ &&
+	sleep 3
+	return_installer
+elif [[ $OPT = "9" ]];then
+	v2raya_boot_on \ &&
+	sleep 3
+	return_installer
+elif [[ $OPT = "10" ]];then
+	v2raya_boot_off \ &&
+	sleep 3
+	return_installer
+elif [[ $OPT = "88" ]];then
+	v2raya_stop \ &&
+	sleep 20
+	v2raya_uninstall
+	sleep 3
+	return_installer
+elif [[ $OPT = "99" ]];then
+	update_installer
+fi
+#--------------------------------------------------------
+#   If you use some codes frome here, please give credit to www.helmiau.com
+#--------------------------------------------------------
