@@ -18,7 +18,7 @@ on:
 env:
   TOOLCHAIN_TAG: immortalwrt-immortalwrt
   TOOLCHAIN_NAME: toolchain-image-immortalwrt-immortalwrt-openwrt-18.06-k5.4-rpi-4.img
-  CONFIG_FILE: config/rpi4-lean-target.config
+  CONFIG_FILE: config/rpi4-target.config
   DIY_SH: scripts/immortalwrt.sh
   WEBROOT: /data/dnmp/www/openwrt.cc
   UPLOAD_FIRMWARE: true
@@ -87,7 +87,7 @@ jobs:
         run: |
           [ -e files ] && mv files $OPENWRTROOT/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
-          cat config/rpi-lean-extra.config >> $OPENWRTROOT/.config
+          cat config/rpi-extra.config >> $OPENWRTROOT/.config
           cat config/universal.config >> $OPENWRTROOT/.config
           sed -i 's/adbyby-plus=y/adbyby-plus=n/g' $OPENWRTROOT/.config
           sed -i 's/adguardhome=n/adguardhome=y/g' $OPENWRTROOT/.config

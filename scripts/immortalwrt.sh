@@ -12,7 +12,7 @@ HWOSDIR="package/base-files/files"
 #sed -i 's/192.168.1.1/192.168.50.5/g' $HWOSDIR/bin/config_generate
 
 # Mod zzz-default-settings for HelmiWrt
-pushd package/lean/default-settings/files
+pushd package/emortal/default-settings/files
 sed -i '/http/d' zzz-default-settings
 sed -i '/openwrt_luci/d' zzz-default-settings
 sed -i 's/zh_cn/auto/g' zzz-default-settings
