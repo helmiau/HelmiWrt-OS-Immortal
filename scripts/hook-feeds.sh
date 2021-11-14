@@ -15,9 +15,6 @@ git clone --depth=1 https://github.com/immortalwrt/packages -b openwrt-18.06 pac
 git clone --depth=1 https://github.com/immortalwrt/luci -b openwrt-18.06-k5.4 luci
 
 # Add v2rayA
-cp -r temp/packages/net/xray-core packages/net/xray-core
-cp -r temp/packages/net/xray-plugin packages/net/xray-plugin
-cp -r temp/packages/net/v2raya packages/net/v2raya
 sed -i 's#include ../../lang/golang#include $(TOPDIR)/feeds/packages/lang/golang#g' packages/net/v2raya/Makefile
 
 popd
