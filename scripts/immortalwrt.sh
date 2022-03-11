@@ -24,9 +24,18 @@ sed -i "s/%C/%C (${DATE_VERSION})/g" package/base-files/files/etc/openwrt_releas
 mkdir package/community
 pushd package/community
 
+# Add luci-app-mqos
+git clone --depth=1 https://github.com/WROIATE/luci-app-mqos
+
 # HelmiWrt packages
 git clone --depth=1 https://github.com/helmiau/helmiwrt-packages
 rm -rf helmiwrt-packages/luci-app-v2raya
+# telegrambot
+svn co https://github.com/helmiau/helmiwrt-adds/trunk/packages/net/telegrambot helmiwrt-adds/telegrambot
+svn co https://github.com/helmiau/helmiwrt-adds/trunk/luci/luci-app-telegrambot helmiwrt-adds/luci-app-telegrambot
+
+# Add luci-theme-neobird theme
+git clone --depth=1 https://github.com/helmiau/luci-theme-neobird
 
 popd
 
