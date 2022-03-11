@@ -168,13 +168,6 @@ jobs:
           echo $CURRENT_HASH > $GITHUB_WORKSPACE/output/toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$DEVICE_TARGET-$DEVICE_SUBTARGET.hash
           ls -lh $GITHUB_WORKSPACE/output
 
-      - name: Upload Toolchain Image To Artifact
-        if: env.TOOLCHAIN_RELEASE_UPLOAD != 'true' && steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
-        uses: actions/upload-artifact@main
-        with:
-          name: ${{ env.TOOLCHAIN_IMAGE }}
-          path: output
-
       - name: Upload Toolchain Image To Release
         if: env.TOOLCHAIN_RELEASE_UPLOAD == 'true' && steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         uses: ncipollo/release-action@v1.8.0
@@ -248,33 +241,12 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           git init
-          git remote add origin https://github.com/$GITHUB_REPOSITORY
+          git config --global credential.helper store
+          git remote add origin https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY
           git fetch
           git checkout -t origin/$CURRENT_BRANCH
 
-      - name: Download Toolchain Image Form Artifacts
-        if: env.TOOLCHAIN_RELEASE_UPLOAD != 'true'
-        uses: actions/download-artifact@v2
-        with:
-          name: ${{ env.TOOLCHAIN_IMAGE }}
-          path: workspace
-
-      - name: Prepare Toolchain Image Form Artifacts
-        if: env.TOOLCHAIN_RELEASE_UPLOAD != 'true'
-        run: |
-          cd workspace
-          for i in {1..9}
-          do
-            cat $TOOLCHAIN_IMAGE.img.0$i >> $TOOLCHAIN_IMAGE.img.00 && rm $TOOLCHAIN_IMAGE.img.0$i || break
-          done
-          mv $TOOLCHAIN_IMAGE.img.00 $TOOLCHAIN_IMAGE.img
-          mkdir openwrt-ro openwrt workdir overlay
-          sudo mount -o loop $TOOLCHAIN_IMAGE.img openwrt-ro
-          sudo mount -t overlay overlay -o lowerdir=openwrt-ro,upperdir=overlay,workdir=workdir openwrt
-          cd $OPENWRT_ROOT_PATH
-          git pull
-
-      - name: Prepare Toolchain Image Form Releases
+      - name: Prepare Toolchain Image From Releases
         if: env.TOOLCHAIN_RELEASE_UPLOAD == 'true'
         run: |
           mkdir -p workspace
