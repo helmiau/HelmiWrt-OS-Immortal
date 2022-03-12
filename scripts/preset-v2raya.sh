@@ -30,7 +30,7 @@ fi
 
 version=$(curl -s https://api.github.com/repos/v2fly/v2ray-core/releases | jq -r .[].tag_name | head -1)
 echo -e "  Downloading v2ray-linux-$1, installing...."
-wget --show-progress -qO $VAETCBIN/v2ray-core.zip "https://github.com/v2fly/v2ray-core/releases/download/$version/v2ray-linux-$1.zip"
+wget -qO $VAETCBIN/v2ray-core.zip "https://github.com/v2fly/v2ray-core/releases/download/$version/v2ray-linux-$1.zip"
 
 #Check size v2ray-core.zip then symlink and set permissions
 if [[ -s $VAETCBIN ]]; then

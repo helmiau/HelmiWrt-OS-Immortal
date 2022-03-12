@@ -21,7 +21,7 @@
 # Download luci-app-filebrowser binary
 [ ! -d files/root ] && mkdir -p files/root
 echo -e "  Downloading linux-$1-filebrowser.tar.gz, installing...."
-wget --show-progress -qO- https://github.com/filebrowser/filebrowser/releases/latest/download/linux-$1-filebrowser.tar.gz | tar xOvz > files/root/filebrowser
+wget -qO- https://github.com/filebrowser/filebrowser/releases/latest/download/linux-$1-filebrowser.tar.gz | tar xOvz > files/root/filebrowser
 chmod +x files/root/filebrowser
 #wget --show-progress -qO files/root/linux-filebrowser.tar.gz http://github.com/filebrowser/filebrowser/releases/latest/download/linux-$1-filebrowser.tar.gz
 #[ -f files/root/linux-filebrowser.tar.gz ] && tar xOvz files/root/linux-filebrowser.tar.gz > files/root/filebrowser
