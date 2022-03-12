@@ -27,7 +27,7 @@ env:
   #Workflow Infos
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
   SOURCE_BRANCH: openwrt-18.06-k5.4
-  DIY_SH: scripts/custom.sh
+  DIY_SH: scripts/immortalwrt.sh
   TOOLCHAIN_TAG: toolchain
   TOOLCHAIN_RELEASE_UPLOAD: true
   FIRMWARE_RELEASE_UPLOAD: true
@@ -285,6 +285,19 @@ jobs:
           $GITHUB_WORKSPACE/scripts/preset-speedtest.sh $SPEEDTEST_CLI_BINARY
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
           make defconfig
+
+      - name: Load HelmiWrt Mods
+        id: mods
+        run: |
+          cd $OPENWRT_ROOT_PATH
+          git config --global credential.helper store
+          git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
+          rm -rf filex/{README.md,LICENSE,runbashing.sh}
+          cp -r filex/* package/base-files/files/
+          rm -rf filex
+          sed -i -e 's/\r$//' $(grep -rli "/bin/bash" "package/base-files/files/bin")
+          chmod +x package/base-files/files/bin/*
+          mv package/base-files/files/root/.oh-my-zsh/themes/ys.zsh-theme files/root/.oh-my-zsh/themes/ys.zsh-theme
 
       - name: Download DL Package
         id: download
