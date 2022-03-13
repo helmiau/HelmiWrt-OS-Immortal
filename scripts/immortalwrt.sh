@@ -6,7 +6,6 @@
 # Blog: https://p3terx.com
 #=================================================
 
-HWOSDIR="package/base-files/files"
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
@@ -23,6 +22,21 @@ sed -i "s/%C/%C (${DATE_VERSION})/g" package/base-files/files/etc/openwrt_releas
 # Clone community packages to package/community
 mkdir package/community
 pushd package/community
+
+# Add luci-app-ssr-plus
+git clone --depth=1 https://github.com/fw876/helloworld
+
+# Add OpenClash
+git clone --depth=1 -b dev https://github.com/vernesong/OpenClash
+
+# Add luci-app-dockerman
+rm -rf ../lean/luci-app-docker
+git clone --depth=1 https://github.com/lisaac/luci-app-dockerman
+git clone --depth=1 https://github.com/lisaac/luci-lib-docker
+
+# Add luci-theme-argon
+git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
+git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 
 # Add luci-app-mqos
 git clone --depth=1 https://github.com/WROIATE/luci-app-mqos
@@ -68,30 +82,30 @@ rawgit="https://raw.githubusercontent.com"
 
 # Add vmess creator account from racevpn.com
 # run "vmess" using terminal to create free vmess account
-# wget --show-progress -qO $HWOSDIR/bin/vmess "$rawgit/ryanfauzi1/vmesscreator/main/vmess"
+# wget -qO $HWOSDIR/bin/vmess "$rawgit/ryanfauzi1/vmesscreator/main/vmess"
 
 # Add ram checker from wegare123
 # run "ram" using terminal to check ram usage
-wget --show-progress -qO $HWOSDIR/bin/ram "$rawgit/wegare123/ram/main/ram.sh"
+wget -qO $HWOSDIR/bin/ram "$rawgit/wegare123/ram/main/ram.sh"
 
 # Add fix download file.php for xderm and libernet
 # run "fixphp" using terminal for use
-wget --show-progress -qO $HWOSDIR/bin/fixphp "$rawgit/helmiau/openwrt-config/main/fix-xderm-libernet-gui"
+wget -qO $HWOSDIR/bin/fixphp "$rawgit/helmiau/openwrt-config/main/fix-xderm-libernet-gui"
 
 # Add wegare123 stl tools
 # run "stl" using terminal for use
 usergit="wegare123"
 mkdir -p $HWOSDIR/root/akun $HWOSDIR/usr/bin
-wget --show-progress -qO $HWOSDIR/usr/bin/stl "$rawgit/$usergit/stl/main/stl/stl.sh"
-wget --show-progress -qO $HWOSDIR/usr/bin/gproxy "$rawgit/$usergit/stl/main/stl/gproxy.sh"
-wget --show-progress -qO $HWOSDIR/usr/bin/autorekonek-stl "$rawgit/$usergit/stl/main/stl/autorekonek-stl.sh"
-wget --show-progress -qO $HWOSDIR/root/akun/tunnel.py "$rawgit/$usergit/stl/main/stl/tunnel.py"
-wget --show-progress -qO $HWOSDIR/root/akun/ssh.py "$rawgit/$usergit/stl/main/stl/ssh.py"
-wget --show-progress -qO $HWOSDIR/root/akun/inject.py "$rawgit/$usergit/stl/main/stl/inject.py"
+wget -qO $HWOSDIR/usr/bin/stl "$rawgit/$usergit/stl/main/stl/stl.sh"
+wget -qO $HWOSDIR/usr/bin/gproxy "$rawgit/$usergit/stl/main/stl/gproxy.sh"
+wget -qO $HWOSDIR/usr/bin/autorekonek-stl "$rawgit/$usergit/stl/main/stl/autorekonek-stl.sh"
+wget -qO $HWOSDIR/root/akun/tunnel.py "$rawgit/$usergit/stl/main/stl/tunnel.py"
+wget -qO $HWOSDIR/root/akun/ssh.py "$rawgit/$usergit/stl/main/stl/ssh.py"
+wget -qO $HWOSDIR/root/akun/inject.py "$rawgit/$usergit/stl/main/stl/inject.py"
 
 # Add wifi id seamless autologin by kopijahe
 # run "kopijahe" using terminal for use
-wget --show-progress -qO $HWOSDIR/bin/kopijahe "$rawgit/kopijahe/wifiid-openwrt/master/scripts/kopijahe"
+wget -qO $HWOSDIR/bin/kopijahe "$rawgit/kopijahe/wifiid-openwrt/master/scripts/kopijahe"
 
 #-----------------------------------------------------------------------------
 #   End of @helmiau terminal scripts additionals menu

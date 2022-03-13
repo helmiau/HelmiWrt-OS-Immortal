@@ -267,6 +267,8 @@ jobs:
         run: |
           cd $OPENWRT_ROOT_PATH
           ./scripts/feeds update -a
+          chmod +x $GITHUB_WORKSPACE/scripts/*.sh
+          $GITHUB_WORKSPACE/scripts/hook-feeds.sh
           ./scripts/feeds install -a
 
       - name: Load Custom Configuration
@@ -278,7 +280,6 @@ jobs:
           cd $OPENWRT_ROOT_PATH
           echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
           sed -i 's/36/44/g;s/VHT80/VHT20/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
-          chmod +x $GITHUB_WORKSPACE/scripts/*.sh
           $GITHUB_WORKSPACE/$DIY_SH
           $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_BINARY
           $GITHUB_WORKSPACE/scripts/preset-v2raya.sh $V2RAYA_BINARY
