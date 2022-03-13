@@ -9,7 +9,7 @@
 #--------------------------------------------------------
 
 # Remove LuCI Apps
-pushd luci/applications
+pushd feeds/luci/applications
 
 ls | grep "openclash"
 
@@ -29,7 +29,7 @@ ls | grep "openclash"
 popd
 
 # Remove LuCI Themes
-pushd luci/themes
+pushd feeds/luci/themes
 
 ls | grep "argon"
 
@@ -53,7 +53,7 @@ ls | grep "argon"
 popd
 
 # Remove Packages
-pushd packages
+pushd feeds/packages
 
 popd
 
