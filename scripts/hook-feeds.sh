@@ -12,9 +12,10 @@
 pushd feeds
 echo "========================================"
 echo "============   luci.index   ============"
-cat < luci.index
+#cat < luci.index
+ls
 echo "============ packages.index ============"
-cat < packages.index
+#cat < packages.index
 echo "========================================"
 popd
 
