@@ -23,21 +23,6 @@ sed -i "s/%C/%C (${DATE_VERSION})/g" package/base-files/files/etc/openwrt_releas
 mkdir package/community
 pushd package/community
 
-# Add luci-app-ssr-plus
-git clone --depth=1 https://github.com/fw876/helloworld
-
-# Add OpenClash
-git clone --depth=1 -b dev https://github.com/vernesong/OpenClash
-
-# Add luci-app-dockerman
-rm -rf ../lean/luci-app-docker
-git clone --depth=1 https://github.com/lisaac/luci-app-dockerman
-git clone --depth=1 https://github.com/lisaac/luci-lib-docker
-
-# Add luci-theme-argon
-git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
-git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
-
 # Add luci-app-mqos
 git clone --depth=1 https://github.com/WROIATE/luci-app-mqos
 
@@ -57,7 +42,6 @@ git clone --depth=1 https://github.com/helmiau/luci-theme-neobird
 # Add themes from kenzok8 openwrt-packages
 svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-atmaterial_new kenzok8/luci-theme-atmaterial_new
 svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-edge kenzok8/luci-theme-edge
-svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-ifit kenzok8/luci-theme-ifit
 
 popd
 
