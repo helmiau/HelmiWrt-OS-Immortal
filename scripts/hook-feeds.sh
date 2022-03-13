@@ -8,6 +8,16 @@
 #   If you use some codes frome here, please give credit to www.helmiau.com
 #--------------------------------------------------------
 
+# List installed feeds
+pushd feeds
+echo "========================================"
+echo "============   luci.index   ============"
+cat < luci.index
+echo "============ packages.index ============"
+cat < packages.index
+echo "========================================"
+popd
+
 # Remove LuCI Apps
 pushd feeds/luci/applications
 
