@@ -16,12 +16,12 @@ sed -i '/openwrt_luci/d' zzz-default-settings
 popd
 
 pushd package/base-files
-sed -i 's/default \"ImmortalWrt\"/default \"HelmiWrt\"/g' image-config.in
+sed -i 's/ImmortalWrt/HelmiWrt/g' image-config.in
 sed -i 's/ImmortalWrt/HelmiWrt/g' files/bin/config_generate
 sed -i 's/UTC/WIB-7/g' files/bin/config_generate
 popd
 
-sed -i 's/default \"ImmortalWrt\"/default \"HelmiWrt\"/g' config/Config-images.in
+sed -i 's/ImmortalWrt/HelmiWrt/g' config/Config-images.in
 sed -i 's/ImmortalWrt/HelmiWrt/g' include/version.mk
 sed -i 's/immortalwrt.org/helmiau.com/g' include/version.mk
 sed -i 's|github.com/immortalwrt/immortalwrt/issues|helmiau.com|g' include/version.mk
