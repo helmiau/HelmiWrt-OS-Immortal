@@ -127,7 +127,7 @@ jobs:
           echo "CURRENT_HASH=$CURRENT_HASH" >> $GITHUB_ENV
           echo "::set-output name=CURRENT_HASH::$(echo $CURRENT_HASH)"
           echo "CURRENT_HASH is $CURRENT_HASH"
-          export CACHE_HASH=$(curl -fSsL https://github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-OS/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.hash)
+          export CACHE_HASH=$(curl -fSsL https://github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-OS-Immortal/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.hash)
           echo "CACHE_HASH is $CACHE_HASH"
           if [ -z "$CACHE_HASH" ] || [ "$CURRENT_HASH" != "$CACHE_HASH" ]; then
             echo "::set-output name=REBUILD_TOOLCHAIN::true"
@@ -183,7 +183,7 @@ jobs:
         uses: ncipollo/release-action@v1.8.0
         with:
           name: ImmortalWrt Toolchains
-          repo: HelmiWrt-OS
+          repo: HelmiWrt-OS-Immortal
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
@@ -265,7 +265,7 @@ jobs:
           cd workspace
           for i in {0..9}
           do
-            curl -fsL https://github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-OS/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.img.0$i >> $TOOLCHAIN_IMAGE.img || break
+            curl -fsL https://github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-OS-Immortal/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.img.0$i >> $TOOLCHAIN_IMAGE.img || break
           done
           mkdir openwrt-ro openwrt workdir overlay
           sudo mount -o loop $TOOLCHAIN_IMAGE.img openwrt-ro
@@ -370,8 +370,8 @@ jobs:
         uses: ncipollo/release-action@v1.8.0
         if: env.FIRMWARE_RELEASE_UPLOAD == 'true'
         with:
-          name: HelmiWrt-OS-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.BUILD_DATE }}
-          repo: HelmiWrt-OS
+          name: HelmiWrt-OS-Immortal-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.BUILD_DATE }}
+          repo: HelmiWrt-OS-Immortal
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
