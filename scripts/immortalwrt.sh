@@ -21,9 +21,11 @@ sed -i 's/ImmortalWrt/HelmiWrt/g' files/bin/config_generate
 sed -i 's/UTC/WIB-7/g' files/bin/config_generate
 popd
 
-pushd config
-sed -i 's/default \"ImmortalWrt\"/default \"HelmiWrt\"/g' Config-images.in
-popd
+sed -i 's/default \"ImmortalWrt\"/default \"HelmiWrt\"/g' config/Config-images.in
+sed -i 's/ImmortalWrt/HelmiWrt/g' include/version.mk
+sed -i 's/immortalwrt.org/helmiau.com/g' include/version.mk
+sed -i 's|github.com/immortalwrt/immortalwrt/issues|helmiau.com|g' include/version.mk
+sed -i 's|github.com/immortalwrt/immortalwrt/discussions|helmiau.com|g' include/version.mk
 
 # Add date version
 export DATE_VERSION=$(date -d "$(rdate -n -4 -p pool.ntp.org)" +'%Y-%m-%d')
