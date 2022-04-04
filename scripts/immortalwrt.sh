@@ -15,6 +15,16 @@ sed -i '/http/d' zzz-default-settings
 sed -i '/openwrt_luci/d' zzz-default-settings
 popd
 
+pushd package/base-files
+sed -i 's/default \"ImmortalWrt\"/default \"HelmiWrt\"/g' image-config.in
+sed -i 's/ImmortalWrt/HelmiWrt/g' files/bin/config_generate
+sed -i 's/UTC/WIB-7/g' files/bin/config_generate
+popd
+
+pushd config
+sed -i 's/default \"ImmortalWrt\"/default \"HelmiWrt\"/g' Config-images.in
+popd
+
 # Add date version
 export DATE_VERSION=$(date -d "$(rdate -n -4 -p pool.ntp.org)" +'%Y-%m-%d')
 sed -i "s/%C/%C (${DATE_VERSION})/g" package/base-files/files/etc/openwrt_release
