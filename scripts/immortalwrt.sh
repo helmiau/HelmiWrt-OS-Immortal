@@ -52,7 +52,7 @@ git clone --depth=1 https://github.com/zxlhhyccc/luci-app-v2raya
 git clone --depth=1 https://github.com/helmiau/luci-theme-neobird
 
 # Add themes from kenzok8 openwrt-packages
-svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-atmaterial_new kenzok8/luci-theme-atmaterial_new
+# svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-atmaterial_new kenzok8/luci-theme-atmaterial_new
 svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-edge kenzok8/luci-theme-edge
 
 popd
