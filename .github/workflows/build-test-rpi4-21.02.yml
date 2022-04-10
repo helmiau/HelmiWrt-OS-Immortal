@@ -365,11 +365,11 @@ jobs:
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           cd $OPENWRT_ROOT_PATH/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
           rm -rf packages
-          mv config.buildinfo helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-config.buildinfo
-          mv feeds.buildinfo helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-feeds.buildinfo
-          mv profiles.json helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-profiles.json
-          mv version.buildinfo helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-version.buildinfo
-          mv sha256sums helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-sha256sums
+          [ -f config.buildinfo ] && mv config.buildinfo helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-config.buildinfo
+          [ -f feeds.buildinfo ] && mv feeds.buildinfo helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-feeds.buildinfo
+          [ -f profiles.json ] && mv profiles.json helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-profiles.json
+          [ -f version.buildinfo ] && mv version.buildinfo helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-version.buildinfo
+          [ -f sha256sums ] && mv sha256sums helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-sha256sums
           df -hT $PWD
 
       - name: Deploy Files To Release
