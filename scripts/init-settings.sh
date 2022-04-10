@@ -20,6 +20,9 @@ uci set system.@system[0].timezone='WIB-7'
 uci set system.@system[0].zonename='Asia/Jakarta'
 uci commit system
 
+# Set default wifi name to HelmiWrt
+sed -i "s#option ssid 'OpenWrt'#option ssid 'HelmiWrt'#iIg" /etc/config/wireless
+
 # Bye-bye zh_cn
 opkg remove $(opkg list-installed | grep zh-cn)
 
