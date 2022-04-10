@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build Test Raspberry Pi 4
+name: Build Test Raspberry Pi 4 21.02
 
 on:
   workflow_dispatch:
@@ -26,7 +26,7 @@ env:
   SPEEDTEST_CLI_BINARY: aarch64
   #Workflow Infos
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
-  SOURCE_BRANCH: openwrt-18.06-k5.4
+  SOURCE_BRANCH: openwrt-21.02
   DIY_SH: scripts/immortalwrt.sh
   TOOLCHAIN_TAG: toolchain
   TOOLCHAIN_RELEASE_UPLOAD: true
@@ -376,12 +376,12 @@ jobs:
         uses: ncipollo/release-action@v1.8.0
         if: env.FIRMWARE_RELEASE_UPLOAD == 'true'
         with:
-          name: HelmiWrt-OS-Immortal-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.BUILD_DATE }}
+          name: HelmiWrt-OS-Immortal21-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.BUILD_DATE }}
           repo: HelmiWrt-OS-Immortal
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
-          tag: helmiwrt-immortal-${{ env.BUILD_DATE }}
+          tag: helmiwrt-immortal-21.02-${{ env.BUILD_DATE }}
           body: ${{ env.BUILD_DATE }}
           commit: ${{ env.CURRENT_BRANCH }}
           token: ${{ secrets.HELMIWRT_RW }}
