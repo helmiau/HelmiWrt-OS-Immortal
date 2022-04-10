@@ -303,11 +303,11 @@ jobs:
           git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
           rm -rf filex/{README.md,LICENSE,runbashing.sh}
           cp -r filex/* package/base-files/files/
-          cat "this is immortalwrt base build" > package/base-files/files/bin/is_immortalwrt_based
           rm -rf filex
           sed -i -e 's/\r$//' $(grep -rli "/bin/bash" "package/base-files/files/bin")
           chmod +x package/base-files/files/bin/*
           mv package/base-files/files/root/.oh-my-zsh/themes/ys.zsh-theme files/root/.oh-my-zsh/themes/ys.zsh-theme
+          echo "this is immortalwrt base build" > package/base-files/files/bin/is_immortalwrt_based
 
       - name: Download DL Package
         id: download
