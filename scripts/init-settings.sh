@@ -172,6 +172,9 @@ touch /root/akun/ipmodem.txt
 # run "kopijahe" using terminal for use
 chmod +x /bin/kopijahe
 
+# Fix telegrambot
+chmod +x  /etc/init.d/telegrambot
+
 # Check file system during boot
 uci set fstab.@global[0].check_fs=1
 uci commit
