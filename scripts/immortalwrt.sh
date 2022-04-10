@@ -35,6 +35,27 @@ sed -i "s/%C/%C (${DATE_VERSION})/g" package/base-files/files/etc/openwrt_releas
 mkdir package/community
 pushd package/community
 
+# Add modeminfo
+git clone --depth=1 https://github.com/koshev-msk/luci-app-modeminfo
+
+# Add luci-app-smstools3
+git clone --depth=1 https://github.com/koshev-msk/luci-app-smstools3
+
+# Add luci-app-mmconfig : configure modem cellular bands via mmcli utility
+git clone --depth=1 https://github.com/koshev-msk/luci-app-mmconfig
+
+# Add support for Fibocom L860-GL l850/l860 ncm
+git clone --depth=1 https://github.com/koshev-msk/xmm-modem
+
+# Add 3ginfo, luci-app-3ginfo
+git clone --depth=1 https://github.com/4IceG/luci-app-3ginfo
+
+# Add luci-app-sms-tool
+git clone --depth=1 https://github.com/4IceG/luci-app-sms-tool
+
+# Add luci-app-atinout-mod
+git clone --depth=1 https://github.com/4IceG/luci-app-atinout-mod
+
 # Add luci-app-mqos
 git clone --depth=1 https://github.com/WROIATE/luci-app-mqos
 
