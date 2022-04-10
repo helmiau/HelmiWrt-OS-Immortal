@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build Test Raspberry Pi 4 21.02
+name: Build Test Raspberry Pi 4
 
 on:
   workflow_dispatch:
@@ -17,7 +17,7 @@ on:
 
 env:
   #Config Files
-  CONFIG_FILE: config/rpi4-target.config
+  CONFIG_FILE: config/rpi3-target.config
   EXTRA_CONFIG_FILE: config/rpi-extra.config
   UNIVERSAL_CONFIG_FILE: config/rpi-extra.config
   #Binaries Platform
@@ -26,7 +26,7 @@ env:
   SPEEDTEST_CLI_BINARY: aarch64
   #Workflow Infos
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
-  SOURCE_BRANCH: openwrt-21.02
+  SOURCE_BRANCH: openwrt-18.06-k5.4
   DIY_SH: scripts/immortalwrt.sh
   TOOLCHAIN_TAG: toolchain
   TOOLCHAIN_RELEASE_UPLOAD: true
@@ -286,8 +286,6 @@ jobs:
           cat config/rpi-extra.config >> $OPENWRT_ROOT_PATH/.config
           cat config/universal.config >> $OPENWRT_ROOT_PATH/.config
           cd $OPENWRT_ROOT_PATH
-          echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
-          sed -i 's/36/44/g;s/VHT80/VHT20/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
           chmod +x $GITHUB_WORKSPACE/scripts/*.sh
           $GITHUB_WORKSPACE/$DIY_SH
           $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_BINARY
@@ -376,12 +374,12 @@ jobs:
         uses: ncipollo/release-action@v1.8.0
         if: env.FIRMWARE_RELEASE_UPLOAD == 'true'
         with:
-          name: HelmiWrt-OS-Immortal21-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.BUILD_DATE }}
+          name: HelmiWrt-OS-Immortal-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.BUILD_DATE }}
           repo: HelmiWrt-OS-Immortal
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
-          tag: helmiwrt-immortal-21.02-${{ env.BUILD_DATE }}
+          tag: helmiwrt-immortal-${{ env.BUILD_DATE }}
           body: ${{ env.BUILD_DATE }}
           commit: ${{ env.CURRENT_BRANCH }}
           token: ${{ secrets.HELMIWRT_RW }}
