@@ -175,6 +175,12 @@ chmod +x /bin/kopijahe
 # Fix telegrambot
 chmod +x /etc/init.d/telegrambot
 
+# Fix nft-qos
+chmod +x /etc/init.d/nft-qos
+chmod +x /lib/nft-qos/*.sh
+chmod +x /etc/hotplug.d/dhcp/00-nft-qos-monitor
+chmod +x /etc/hotplug.d/dhcp/01-nft-qos-dynamic
+
 # Check file system during boot
 uci set fstab.@global[0].check_fs=1
 uci commit

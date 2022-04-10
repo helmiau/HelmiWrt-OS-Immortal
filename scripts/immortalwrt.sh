@@ -56,9 +56,6 @@ git clone --depth=1 https://github.com/4IceG/luci-app-sms-tool
 # Add luci-app-atinout-mod
 git clone --depth=1 https://github.com/4IceG/luci-app-atinout-mod
 
-# Add luci-app-mqos
-git clone --depth=1 https://github.com/WROIATE/luci-app-mqos
-
 # HelmiWrt packages
 git clone --depth=1 https://github.com/helmiau/helmiwrt-packages
 rm -rf helmiwrt-packages/luci-app-v2raya
