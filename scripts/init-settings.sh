@@ -23,6 +23,48 @@ uci commit system
 # Bye-bye zh_cn
 opkg remove $(opkg list-installed | grep zh-cn)
 
+# start v2rayA service on boot
+# sed -i "s#option enabled.*#option enabled '1'#g" /etc/config/v2raya
+# /etc/init.d/v2raya enable
+# /etc/init.d/v2raya start
+# /etc/init.d/v2raya reload
+# /etc/init.d/v2raya restart
+
+# activate TUN TAP interface
+/usr/sbin/openvpn --mktun --dev tun0
+/usr/sbin/openvpn --mktun --dev tun1
+
+# Apply your own customization on boot features
+if grep -q "helmiwrt.sh" /boot/helmiwrt.sh; then
+	logger "  helmilog : detected helmiwrt.sh boot script, running script..."
+	echo -e "  helmilog : detected helmiwrt.sh boot script, running script..."
+	chmod +x /boot/helmiwrt.sh
+	./boot/helmiwrt.sh
+	logger "  helmilog : helmiwrt.sh boot script running done!"
+	echo -e "  helmilog : helmiwrt.sh boot script running done!"
+fi
+
+# Disable etc/config/xmm-modem on boot first
+if [[ -f /etc/config/xmm-modem ]]; then
+	logger "  helmilog : detected helmiwrt.sh boot script, running script..."
+	echo -e "  helmilog : detected helmiwrt.sh boot script, running script..."
+	sed -i "s#option enable.*#option enable '0'#g" /etc/config/xmm-modem
+	logger "  helmilog : helmiwrt.sh boot script running done!"
+	echo -e "  helmilog : helmiwrt.sh boot script running done!"
+fi
+
+# Set Custom TTL
+cat << 'EOF' >> /etc/firewall.user
+
+# Set Custom TTL
+iptables -t mangle -I POSTROUTING -o  -j TTL --ttl-set 65
+iptables -t mangle -I PREROUTING -i  -j TTL --ttl-set 65
+ip6tables -t mangle -I POSTROUTING ! -p icmpv6 -o  -j HL --hl-set 65
+ip6tables -t mangle -I PREROUTING ! -p icmpv6 -i  -j HL --hl-set 65
+
+EOF
+/etc/config/firewall restart
+
 # Add ram checker from wegare123
 # run "ram" using terminal to check ram usage
 chmod +x /bin/ram
@@ -51,10 +93,23 @@ ln -sf /usr/sbin/trojan /usr/bin/trojan
 
 # HelmiWrt Patches
 chmod +x /bin/helmiwrt
-#helmiwrt
+helmiwrt
 
 # Add default interfaces
 helmiwrt addinterfacefirewall
+
+# HelmiWrt Patches
+if ! grep -q "helmiwrt" /etc/rc.local; then
+	sed -i 's#exit 0#\n#g' /etc/rc.local
+	cat << 'EOF' >> /etc/rc.local
+
+chmod +x /bin/helmiwrt
+/bin/helmiwrt
+exit 0
+EOF
+	logger "  helmilog : helmipatch already applied to on-boot..."
+	echo -e "  helmilog : helmipatch already applied to on-boot..."
+fi
 
 # Set default theme to luci-theme-argon
 # Delete default watchcat setting
@@ -77,6 +132,42 @@ default-theme
 echo "neofetch" > /root/.oh-my-zsh/custom/example.zsh
 chmod +x /bin/neofetch
 neofetch
+
+# Fix 3ginfo
+chmod +x /etc/init.d/3ginfo
+chmod +x /usr/share/3ginfo/scripts/*
+chmod +x /usr/share/3ginfo/cgi-bin/*
+
+# Fix xdrtool: Xderm Mini Tool Script permission
+chmod +x /bin/xdrtool
+
+# Fix atinout permission
+chmod +x /sbin/set_at_port.sh
+
+# Fix sms tool
+chmod +x /etc/init.d/smsled
+chmod +x /sbin/cronsync.sh
+chmod +x /sbin/set_sms_ports.sh
+chmod +x /sbin/smsled-init.sh
+chmod +x /sbin/smsled.sh
+
+# Add wegare123 stl tool
+# run "stl" using terminal for use
+chmod +x /usr/bin/gproxy
+chmod +x /usr/bin/stl
+chmod +x /root/akun/tunnel.py
+chmod +x /root/akun/ssh.py
+chmod +x /root/akun/inject.py
+chmod +x /usr/bin/autorekonek-stl
+mkdir -p /root/.ssh/
+touch /root/akun/ssl.conf
+touch /root/.ssh/config
+touch /root/akun/stl.txt
+touch /root/akun/ipmodem.txt 
+
+# Add wifi id seamless autologin by kopijahe
+# run "kopijahe" using terminal for use
+chmod +x /bin/kopijahe
 
 # Check file system during boot
 uci set fstab.@global[0].check_fs=1
