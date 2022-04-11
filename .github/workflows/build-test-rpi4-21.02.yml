@@ -285,6 +285,11 @@ jobs:
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_ROOT_PATH/.config
           cat config/rpi-extra.config >> $OPENWRT_ROOT_PATH/.config
           cat config/universal.config >> $OPENWRT_ROOT_PATH/.config
+          if grep -q "21.02" ${{ matrix.SOURCE_BRANCH }}; then
+            sed -i "s|argonv3=y|argon=y|g" $OPENWRT_ROOT_PATH/.config
+            sed -i "s|edge=y|edge=n|g" $OPENWRT_ROOT_PATH/.config
+            sed -i "s|neobird=y|neobird=n|g" $OPENWRT_ROOT_PATH/.config
+          fi
           cd $OPENWRT_ROOT_PATH
           echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
           sed -i 's/36/44/g;s/VHT80/VHT20/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
