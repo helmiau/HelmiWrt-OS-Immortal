@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build Test Raspberry Pi 3
+name: Build Test Raspberry Pi 3 18.06
 
 on:
   workflow_dispatch:
