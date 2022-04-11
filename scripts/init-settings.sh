@@ -174,10 +174,11 @@ chmod +x /bin/kopijahe
 
 # Fix telegrambot
 chmod +x /etc/init.d/telegrambot
+chmod -R +x /usr/lib/telegrambot/* /usr/lib/functions/*
 
 # Fix nft-qos
 chmod +x /etc/init.d/nft-qos
-chmod +x /lib/nft-qos/*.sh
+chmod -R +x /lib/nft-qos/*
 chmod +x /etc/hotplug.d/dhcp/00-nft-qos-monitor
 chmod +x /etc/hotplug.d/dhcp/01-nft-qos-dynamic
 
