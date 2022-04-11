@@ -388,7 +388,7 @@ jobs:
         uses: ncipollo/release-action@v1.8.0
         if: env.FIRMWARE_RELEASE_UPLOAD == 'true'
         with:
-          name: HelmiWrt-OS-${{ matrix.SOURCE_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.BUILD_DATE }}
+          name: HelmiWrt-OS-${{ matrix.SOURCE_BRANCH }}-${{ env.BUILD_DATE }}
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true

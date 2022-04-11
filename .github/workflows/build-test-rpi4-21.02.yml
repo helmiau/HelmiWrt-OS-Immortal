@@ -376,12 +376,11 @@ jobs:
         uses: ncipollo/release-action@v1.8.0
         if: env.FIRMWARE_RELEASE_UPLOAD == 'true'
         with:
-          name: HelmiWrt-OS-Immortal21-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.BUILD_DATE }}
-          repo: HelmiWrt-OS-Immortal
+          name: HelmiWrt-OS-${{ env.SOURCE_BRANCH }}-${{ env.BUILD_DATE }}
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
-          tag: helmiwrt-immortal-21.02-${{ env.BUILD_DATE }}
+          tag: helmiwrt-${{ env.SOURCE_BRANCH }}-${{ env.BUILD_DATE }}
           body: ${{ env.BUILD_DATE }}
           commit: ${{ env.CURRENT_BRANCH }}
           token: ${{ secrets.HELMIWRT_RW }}
