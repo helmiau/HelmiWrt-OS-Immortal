@@ -399,11 +399,11 @@ jobs:
         uses: ncipollo/release-action@v1.8.0
         if: env.FIRMWARE_RELEASE_UPLOAD == 'true'
         with:
-          name: HelmiWrt-OS-${{ matrix.SOURCE_BRANCH }}-${{ env.BUILD_DATE }}
+          name: HelmiWrt OS ${{ env.BUILD_DATE }}
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
-          tag: helmiwrt-${{ matrix.SOURCE_BRANCH }}-${{ env.BUILD_DATE }}
+          tag: helmiwrt-${{ env.BUILD_DATE }}
           body: ${{ env.BUILD_DATE }}
           commit: ${{ env.CURRENT_BRANCH }}
           token: ${{ secrets.HELMIWRT_RW }}
