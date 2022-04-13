@@ -370,7 +370,7 @@ jobs:
           rm -rf packages
           export RENAME_BRANCH="$(echo $SOURCE_BRANCH | sed 's/openwrt-//g')"
           find . -type f -name 'helmiwrt-*' | while read FILE ; do
-            newfile="$(echo ${FILE} | sed -e 's/helmiwrt-/helmiwrt-$RENAME_BRANCH-/')" ;
+            newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-${RENAME_BRANCH}/g')" ;
             echo -e $(readlink -f ${FILE}) ;
             mv "${FILE}" "${newfile}" ;
           done
