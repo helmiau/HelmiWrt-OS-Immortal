@@ -114,18 +114,39 @@ EOF
 	echo -e "  helmilog : helmipatch already applied to on-boot..."
 fi
 
-# Set default theme to luci-theme-argon
-# Delete default watchcat setting
-# Set Google DNS as default DNS Forwarding
+# Other setup on start on-boot
 cat << 'EOF' > /bin/default-theme
 
+# Set Default Theme to Argon
 uci set luci.main.mediaurlbase='/luci-static/argon'
 uci commit luci
 
+# Set Google DNS as default DNS Forwarding
 uci add_list dhcp.@dnsmasq[0].server='8.8.8.8'
 uci add_list dhcp.@dnsmasq[0].server='8.8.4.4'
 uci commit dhcp
 /etc/init.d/dnsmasq restart
+
+
+# Disable /etc/config/xmm-modem
+uci set xmm-modem.@xmm-modem[0].enable='0'
+uci commit
+
+# Delete default watchcat setting
+uci delete watchcat.@watchcat[0]
+uci commit
+
+# add cron job for modem rakitan
+echo '#auto renew ip lease for modem rakitan' >> /etc/crontabs/root
+echo '#30 3 * * * echo AT+CFUN=4 | atinout - /dev/ttyUSB1 - && ifdown mm && sleep 3 && ifup mm' >> /etc/crontabs/root
+echo '#30 3 * * * ifdown fibocom && sleep 3 && ifup fibocom' >> /etc/crontabs/root
+/etc/init.d/cron restart
+
+# remove huawei me909s usb-modeswitch
+sed -i -e '/12d1:15c1/,+5d' /etc/usb-mode.json
+
+# remove dw5821e usb-modeswitch
+sed -i -e '/413c:81d7/,+5d' /etc/usb-mode.json
 
 EOF
 chmod +x /bin/default-theme
