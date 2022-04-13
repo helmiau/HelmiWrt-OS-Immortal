@@ -369,8 +369,9 @@ jobs:
           cd $OPENWRT_ROOT_PATH/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
           rm -rf packages
           export RENAME_BRANCH="$(echo $SOURCE_BRANCH | sed 's/openwrt-//g')"
+          echo "RENAME_BRANCH=$RENAME_BRANCH" >> $GITHUB_ENV
           find . -type f -name 'helmiwrt-*' | while read FILE ; do
-            newfile="$(echo ${FILE} | sed -e 's/helmiwrt/helmiwrt-${{RENAME_BRANCH}}/g')" ;
+            newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-${{ env.RENAME_BRANCH }}/')" ;
             echo -e $(readlink -f ${FILE}) ;
             mv "${FILE}" "${newfile}" ;
           done
