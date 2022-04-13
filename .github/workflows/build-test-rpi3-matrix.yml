@@ -381,16 +381,17 @@ jobs:
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           cd $OPENWRT_ROOT_PATH/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
           rm -rf packages
+          export RENAME_BRANCH="$(echo $SOURCE_BRANCH | sed 's/openwrt-//g')"
           find . -type f -name 'helmiwrt-*' | while read FILE ; do
-            newfile="$(echo ${FILE} | sed -e 's/helmiwrt-/helmiwrt-${{ matrix.SOURCE_BRANCH }}-/')" ;
+            newfile="$(echo ${FILE} | sed -e 's/helmiwrt-/helmiwrt-$RENAME_BRANCH-/')" ;
             echo -e $(readlink -f ${FILE}) ;
             mv "${FILE}" "${newfile}" ;
           done
-          [ -f config.buildinfo ] && mv config.buildinfo helmiwrt-${{ matrix.SOURCE_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-config.buildinfo
-          [ -f feeds.buildinfo ] && mv feeds.buildinfo helmiwrt-${{ matrix.SOURCE_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-feeds.buildinfo
-          [ -f profiles.json ] && mv profiles.json helmiwrt-${{ matrix.SOURCE_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-profiles.json
-          [ -f version.buildinfo ] && mv version.buildinfo helmiwrt-${{ matrix.SOURCE_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-version.buildinfo
-          [ -f sha256sums ] && mv sha256sums helmiwrt-${{ matrix.SOURCE_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-sha256sums
+          [ -f config.buildinfo ] && mv config.buildinfo helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-config.buildinfo
+          [ -f feeds.buildinfo ] && mv feeds.buildinfo helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-feeds.buildinfo
+          [ -f profiles.json ] && mv profiles.json helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-profiles.json
+          [ -f version.buildinfo ] && mv version.buildinfo helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-version.buildinfo
+          [ -f sha256sums ] && mv sha256sums helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-sha256sums
           df -hT $PWD
 
       - name: Deploy Files To Release

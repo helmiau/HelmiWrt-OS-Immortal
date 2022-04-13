@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Matrix Build Raspberry Pi Devices
+name: Build Raspberry Pi 4 21.02
 
 on:
   workflow_dispatch:
@@ -16,8 +16,17 @@ on:
   #   types: started
 
 env:
-  SOURCE_URL: https://github.com/immortalwrt/immortalwrt
+  #Config Files
+  CONFIG_FILE: config/rpi4-target.config
+  EXTRA_CONFIG_FILE: config/rpi-extra.config
   UNIVERSAL_CONFIG_FILE: config/universal.config
+  #Binaries Platform
+  CLASH_BINARY: armv8
+  V2RAYA_BINARY: arm64-v8a
+  SPEEDTEST_CLI_BINARY: aarch64
+  #Workflow Infos
+  SOURCE_URL: https://github.com/immortalwrt/immortalwrt
+  SOURCE_BRANCH: openwrt-21.02
   DIY_SH: scripts/immortalwrt.sh
   TOOLCHAIN_TAG: toolchain
   TOOLCHAIN_RELEASE_UPLOAD: true
@@ -27,24 +36,7 @@ env:
 
 jobs:
   Toolchain:
-    name: Generate ${{ matrix.JOB_NAME }} Toolchain
     runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - JOB_NAME: helmiwrt-rpi4-18.06-k5.4
-            SOURCE_BRANCH: openwrt-18.06-k5.4
-            CONFIG_FILE: config/rpi4-target.config
-          - JOB_NAME: helmiwrt-rpi4-21.02
-            SOURCE_BRANCH: openwrt-21.02
-            CONFIG_FILE: config/rpi4-target.config
-          - JOB_NAME: helmiwrt-rpi3-18.06-k5.4
-            SOURCE_BRANCH: openwrt-18.06-k5.4
-            CONFIG_FILE: config/rpi3-target.config
-          - JOB_NAME: helmiwrt-rpi3-21.02
-            SOURCE_BRANCH: openwrt-21.02
-            CONFIG_FILE: config/rpi3-target.config
 
     outputs:
       OPENWRT_ROOT_PATH: ${{ steps.clone.outputs.OPENWRT_ROOT_PATH }}
@@ -77,14 +69,14 @@ jobs:
         id: clone
         run: |
           df -hT $PWD
-          git clone $SOURCE_URL -b ${{ matrix.SOURCE_BRANCH }} workspace/openwrt
+          git clone $SOURCE_URL -b $SOURCE_BRANCH workspace/openwrt
           cd workspace/openwrt
           echo "OPENWRT_ROOT_PATH=$PWD" >> $GITHUB_ENV
           echo "::set-output name=OPENWRT_ROOT_PATH::$(echo $PWD)"
 
       - name: Generate Toolchain Config
         run: |
-          [ -e ${{ matrix.CONFIG_FILE }} ] && mv ${{ matrix.CONFIG_FILE }} $OPENWRT_ROOT_PATH/.config
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_ROOT_PATH/.config
           echo -e "\nCONFIG_ALL=y" >> $OPENWRT_ROOT_PATH/.config
           echo -e "\nCONFIG_ALL_NONSHARED=y" >> $OPENWRT_ROOT_PATH/.config
           cd $OPENWRT_ROOT_PATH
@@ -112,7 +104,7 @@ jobs:
           export DEVICE_PLATFORM=$(cat .config | grep CONFIG_TARGET_ARCH_PACKAGES | awk -F '"' '{print $2}')
           echo "DEVICE_PLATFORM=$DEVICE_PLATFORM" >> $GITHUB_ENV
           echo "::set-output name=DEVICE_PLATFORM::$(echo $DEVICE_PLATFORM)"
-          export TOOLCHAIN_IMAGE="toolchain-$SOURCE_OWNER-$SOURCE_REPO-${{ matrix.SOURCE_BRANCH }}-$DEVICE_TARGET-$DEVICE_SUBTARGET"
+          export TOOLCHAIN_IMAGE="toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$DEVICE_TARGET-$DEVICE_SUBTARGET"
           echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE" >> $GITHUB_ENV
           echo "::set-output name=TOOLCHAIN_IMAGE::$(echo $TOOLCHAIN_IMAGE)"
           echo "==========================================="
@@ -173,7 +165,7 @@ jobs:
           split -d -b 1900M $TOOLCHAIN_IMAGE $GITHUB_WORKSPACE/output/$TOOLCHAIN_IMAGE.img.
           rm $TOOLCHAIN_IMAGE
           cd $OPENWRT_ROOT_PATH
-          echo $CURRENT_HASH > $GITHUB_WORKSPACE/output/toolchain-$SOURCE_OWNER-$SOURCE_REPO-${{ matrix.SOURCE_BRANCH }}-$DEVICE_TARGET-$DEVICE_SUBTARGET.hash
+          echo $CURRENT_HASH > $GITHUB_WORKSPACE/output/toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$DEVICE_TARGET-$DEVICE_SUBTARGET.hash
           ls -lh $GITHUB_WORKSPACE/output
 
       - name: Delete Old Toolchain Assets From Release
@@ -201,36 +193,7 @@ jobs:
 
   Build:
     needs: [Toolchain]
-    name: Generate ${{ matrix.JOB_NAME }} Firmware
     runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - JOB_NAME: helmiwrt-rpi4-18.06-k5.4
-            SOURCE_BRANCH: openwrt-18.06-k5.4
-            CONFIG_FILE: config/rpi4-target.config
-            CLASH_BINARY: armv8
-            V2RAYA_BINARY: arm64-v8a
-            SPEEDTEST_BINARY: aarch64
-          - JOB_NAME: helmiwrt-rpi4-21.02
-            SOURCE_BRANCH: openwrt-21.02
-            CONFIG_FILE: config/rpi4-target.config
-            CLASH_BINARY: armv8
-            V2RAYA_BINARY: arm64-v8a
-            SPEEDTEST_BINARY: aarch64
-          - JOB_NAME: helmiwrt-rpi3-18.06-k5.4
-            SOURCE_BRANCH: openwrt-18.06-k5.4
-            CONFIG_FILE: config/rpi3-target.config
-            CLASH_BINARY: armv8
-            V2RAYA_BINARY: arm64-v8a
-            SPEEDTEST_BINARY: aarch64
-          - JOB_NAME: helmiwrt-rpi3-21.02
-            SOURCE_BRANCH: openwrt-21.02
-            CONFIG_FILE: config/rpi3-target.config
-            CLASH_BINARY: armv8
-            V2RAYA_BINARY: arm64-v8a
-            SPEEDTEST_BINARY: aarch64
 
     steps:
       - name: Restore Variables
@@ -318,29 +281,23 @@ jobs:
       - name: Load Custom Configuration
         run: |
           [ -e files ] && mv files $OPENWRT_ROOT_PATH/files
-          [ -e ${{ matrix.CONFIG_FILE }} ] && mv ${{ matrix.CONFIG_FILE }} $OPENWRT_ROOT_PATH/.config
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_ROOT_PATH/.config
+          cat $EXTRA_CONFIG_FILE >> $OPENWRT_ROOT_PATH/.config
           cat $UNIVERSAL_CONFIG_FILE >> $OPENWRT_ROOT_PATH/.config
-          if grep -q "bcm27" ${{ matrix.CONFIG_FILE }}; then
-            echo "helmilog: using rpi-extra.config..."
-            cat config/rpi-extra.config >> $OPENWRT_ROOT_PATH/.config
-          fi
-          if [[ "${{ matrix.SOURCE_BRANCH }}" == *"21.02"* ]]; then
-            echo "helmilog: using ${{ matrix.SOURCE_BRANCH }} config..."
+          if [[ "$SOURCE_BRANCH" == *"21.02"* ]]; then
+            echo -e "helmilog: using $SOURCE_BRANCH config..."
             sed -i "s|argonv3=y|argon=y|g" $OPENWRT_ROOT_PATH/.config
             sed -i "s|edge=y|edge=n|g" $OPENWRT_ROOT_PATH/.config
             sed -i "s|neobird=y|neobird=n|g" $OPENWRT_ROOT_PATH/.config
           fi
           cd $OPENWRT_ROOT_PATH
-          if grep -q "bcm27xx/bcm2711" ${{ matrix.CONFIG_FILE }}; then
-            echo "helmilog: using bcm2711 config additions..."
-            echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
-            sed -i 's/36/44/g;s/VHT80/VHT20/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
-          fi
+          echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
+          sed -i 's/36/44/g;s/VHT80/VHT20/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
           chmod +x $GITHUB_WORKSPACE/scripts/*.sh
           $GITHUB_WORKSPACE/$DIY_SH
-          $GITHUB_WORKSPACE/scripts/preset-clash-core.sh ${{ matrix.CLASH_BINARY }}
-          $GITHUB_WORKSPACE/scripts/preset-v2raya.sh ${{ matrix.V2RAYA_BINARY }}
-          $GITHUB_WORKSPACE/scripts/preset-speedtest-cli.sh ${{ matrix.SPEEDTEST_BINARY }}
+          $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_BINARY
+          $GITHUB_WORKSPACE/scripts/preset-v2raya.sh $V2RAYA_BINARY
+          $GITHUB_WORKSPACE/scripts/preset-speedtest-cli.sh $SPEEDTEST_CLI_BINARY
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
 
       - name: Load HelmiWrt Mods
@@ -413,22 +370,28 @@ jobs:
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           cd $OPENWRT_ROOT_PATH/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
           rm -rf packages
-          [ -f config.buildinfo ] && mv config.buildinfo helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-config.buildinfo
-          [ -f feeds.buildinfo ] && mv feeds.buildinfo helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-feeds.buildinfo
-          [ -f profiles.json ] && mv profiles.json helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-profiles.json
-          [ -f version.buildinfo ] && mv version.buildinfo helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-version.buildinfo
-          [ -f sha256sums ] && mv sha256sums helmiwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-sha256sums
+          export RENAME_BRANCH="$(echo $SOURCE_BRANCH | sed 's/openwrt-//g')"
+          find . -type f -name 'helmiwrt-*' | while read FILE ; do
+            newfile="$(echo ${FILE} | sed -e 's/helmiwrt-/helmiwrt-$RENAME_BRANCH-/')" ;
+            echo -e $(readlink -f ${FILE}) ;
+            mv "${FILE}" "${newfile}" ;
+          done
+          [ -f config.buildinfo ] && mv config.buildinfo helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-config.buildinfo
+          [ -f feeds.buildinfo ] && mv feeds.buildinfo helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-feeds.buildinfo
+          [ -f profiles.json ] && mv profiles.json helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-profiles.json
+          [ -f version.buildinfo ] && mv version.buildinfo helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-version.buildinfo
+          [ -f sha256sums ] && mv sha256sums helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-sha256sums
           df -hT $PWD
 
       - name: Deploy Files To Release
         uses: ncipollo/release-action@v1.8.0
         if: env.FIRMWARE_RELEASE_UPLOAD == 'true'
         with:
-          name: HelmiWrt-OS-${{ matrix.SOURCE_BRANCH }}-${{ env.BUILD_DATE }}
+          name: HelmiWrt OS ${{ env.BUILD_DATE }}
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
-          tag: helmiwrt-${{ matrix.SOURCE_BRANCH }}-${{ env.BUILD_DATE }}
+          tag: helmiwrt-${{ env.BUILD_DATE }}
           body: ${{ env.BUILD_DATE }}
           commit: ${{ env.CURRENT_BRANCH }}
           token: ${{ secrets.HELMIWRT_RW }}

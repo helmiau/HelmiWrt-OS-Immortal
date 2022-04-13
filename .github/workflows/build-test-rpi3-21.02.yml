@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build Test Raspberry Pi 4 Matrix
+name: Build Raspberry Pi 3 21.02
 
 on:
   workflow_dispatch:
@@ -17,7 +17,7 @@ on:
 
 env:
   #Config Files
-  CONFIG_FILE: config/rpi4-target.config
+  CONFIG_FILE: config/rpi3-target.config
   EXTRA_CONFIG_FILE: config/rpi-extra.config
   UNIVERSAL_CONFIG_FILE: config/universal.config
   #Binaries Platform
@@ -26,6 +26,7 @@ env:
   SPEEDTEST_CLI_BINARY: aarch64
   #Workflow Infos
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
+  SOURCE_BRANCH: openwrt-21.02
   DIY_SH: scripts/immortalwrt.sh
   TOOLCHAIN_TAG: toolchain
   TOOLCHAIN_RELEASE_UPLOAD: true
@@ -36,13 +37,6 @@ env:
 jobs:
   Toolchain:
     runs-on: ubuntu-20.04
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - SOURCE_BRANCH: openwrt-18.06-k5.4
-          - SOURCE_BRANCH: openwrt-21.02
 
     outputs:
       OPENWRT_ROOT_PATH: ${{ steps.clone.outputs.OPENWRT_ROOT_PATH }}
@@ -75,7 +69,7 @@ jobs:
         id: clone
         run: |
           df -hT $PWD
-          git clone $SOURCE_URL -b ${{ matrix.SOURCE_BRANCH }} workspace/openwrt
+          git clone $SOURCE_URL -b $SOURCE_BRANCH workspace/openwrt
           cd workspace/openwrt
           echo "OPENWRT_ROOT_PATH=$PWD" >> $GITHUB_ENV
           echo "::set-output name=OPENWRT_ROOT_PATH::$(echo $PWD)"
@@ -110,7 +104,7 @@ jobs:
           export DEVICE_PLATFORM=$(cat .config | grep CONFIG_TARGET_ARCH_PACKAGES | awk -F '"' '{print $2}')
           echo "DEVICE_PLATFORM=$DEVICE_PLATFORM" >> $GITHUB_ENV
           echo "::set-output name=DEVICE_PLATFORM::$(echo $DEVICE_PLATFORM)"
-          export TOOLCHAIN_IMAGE="toolchain-$SOURCE_OWNER-$SOURCE_REPO-${{ matrix.SOURCE_BRANCH }}-$DEVICE_TARGET-$DEVICE_SUBTARGET"
+          export TOOLCHAIN_IMAGE="toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$DEVICE_TARGET-$DEVICE_SUBTARGET"
           echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE" >> $GITHUB_ENV
           echo "::set-output name=TOOLCHAIN_IMAGE::$(echo $TOOLCHAIN_IMAGE)"
           echo "==========================================="
@@ -171,7 +165,7 @@ jobs:
           split -d -b 1900M $TOOLCHAIN_IMAGE $GITHUB_WORKSPACE/output/$TOOLCHAIN_IMAGE.img.
           rm $TOOLCHAIN_IMAGE
           cd $OPENWRT_ROOT_PATH
-          echo $CURRENT_HASH > $GITHUB_WORKSPACE/output/toolchain-$SOURCE_OWNER-$SOURCE_REPO-${{ matrix.SOURCE_BRANCH }}-$DEVICE_TARGET-$DEVICE_SUBTARGET.hash
+          echo $CURRENT_HASH > $GITHUB_WORKSPACE/output/toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$DEVICE_TARGET-$DEVICE_SUBTARGET.hash
           ls -lh $GITHUB_WORKSPACE/output
 
       - name: Delete Old Toolchain Assets From Release
@@ -200,13 +194,6 @@ jobs:
   Build:
     needs: [Toolchain]
     runs-on: ubuntu-20.04
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - SOURCE_BRANCH: openwrt-18.06-k5.4
-          - SOURCE_BRANCH: openwrt-21.02
 
     steps:
       - name: Restore Variables
@@ -297,15 +284,13 @@ jobs:
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_ROOT_PATH/.config
           cat $EXTRA_CONFIG_FILE >> $OPENWRT_ROOT_PATH/.config
           cat $UNIVERSAL_CONFIG_FILE >> $OPENWRT_ROOT_PATH/.config
-          if [[ "${{ matrix.SOURCE_BRANCH }}" == *"21.02"* ]]; then
-            echo -e "helmilog: using ${{ matrix.SOURCE_BRANCH }} config..."
+          if [[ "$SOURCE_BRANCH" == *"21.02"* ]]; then
+            echo -e "helmilog: using $SOURCE_BRANCH config..."
             sed -i "s|argonv3=y|argon=y|g" $OPENWRT_ROOT_PATH/.config
             sed -i "s|edge=y|edge=n|g" $OPENWRT_ROOT_PATH/.config
             sed -i "s|neobird=y|neobird=n|g" $OPENWRT_ROOT_PATH/.config
           fi
           cd $OPENWRT_ROOT_PATH
-          echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
-          sed -i 's/36/44/g;s/VHT80/VHT20/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
           chmod +x $GITHUB_WORKSPACE/scripts/*.sh
           $GITHUB_WORKSPACE/$DIY_SH
           $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_BINARY
