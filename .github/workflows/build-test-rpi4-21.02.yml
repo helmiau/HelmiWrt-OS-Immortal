@@ -69,7 +69,7 @@ jobs:
         id: clone
         run: |
           df -hT $PWD
-          git clone $SOURCE_URL -b $SOURCE_BRANCH workspace/openwrt
+          git clone $SOURCE_URL -b openwrt-$SOURCE_BRANCH workspace/openwrt
           cd workspace/openwrt
           echo "OPENWRT_ROOT_PATH=$PWD" >> $GITHUB_ENV
           echo "::set-output name=OPENWRT_ROOT_PATH::$(echo $PWD)"
@@ -104,7 +104,7 @@ jobs:
           export DEVICE_PLATFORM=$(cat .config | grep CONFIG_TARGET_ARCH_PACKAGES | awk -F '"' '{print $2}')
           echo "DEVICE_PLATFORM=$DEVICE_PLATFORM" >> $GITHUB_ENV
           echo "::set-output name=DEVICE_PLATFORM::$(echo $DEVICE_PLATFORM)"
-          export TOOLCHAIN_IMAGE="toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$DEVICE_TARGET-$DEVICE_SUBTARGET"
+          export TOOLCHAIN_IMAGE="toolchain-$SOURCE_OWNER-$SOURCE_REPO-openwrt-$SOURCE_BRANCH-$DEVICE_TARGET-$DEVICE_SUBTARGET"
           echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE" >> $GITHUB_ENV
           echo "::set-output name=TOOLCHAIN_IMAGE::$(echo $TOOLCHAIN_IMAGE)"
           echo "==========================================="
@@ -165,7 +165,7 @@ jobs:
           split -d -b 1900M $TOOLCHAIN_IMAGE $GITHUB_WORKSPACE/output/$TOOLCHAIN_IMAGE.img.
           rm $TOOLCHAIN_IMAGE
           cd $OPENWRT_ROOT_PATH
-          echo $CURRENT_HASH > $GITHUB_WORKSPACE/output/toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$DEVICE_TARGET-$DEVICE_SUBTARGET.hash
+          echo $CURRENT_HASH > $GITHUB_WORKSPACE/output/toolchain-$SOURCE_OWNER-$SOURCE_REPO-openwrt-$SOURCE_BRANCH-$DEVICE_TARGET-$DEVICE_SUBTARGET.hash
           ls -lh $GITHUB_WORKSPACE/output
 
       - name: Delete Old Toolchain Assets From Release
@@ -285,7 +285,7 @@ jobs:
           cat $EXTRA_CONFIG_FILE >> $OPENWRT_ROOT_PATH/.config
           cat $UNIVERSAL_CONFIG_FILE >> $OPENWRT_ROOT_PATH/.config
           if [[ "$SOURCE_BRANCH" == *"21.02"* ]]; then
-            echo -e "helmilog: using $SOURCE_BRANCH config..."
+            echo -e "helmilog: using openwrt-$SOURCE_BRANCH config..."
             sed -i "s|argonv3=y|argon=y|g" $OPENWRT_ROOT_PATH/.config
             sed -i "s|edge=y|edge=n|g" $OPENWRT_ROOT_PATH/.config
             sed -i "s|neobird=y|neobird=n|g" $OPENWRT_ROOT_PATH/.config
@@ -370,18 +370,16 @@ jobs:
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           cd $OPENWRT_ROOT_PATH/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
           rm -rf packages
-          export RENAME_BRANCH="$(echo $SOURCE_BRANCH | sed 's/openwrt-//g')"
-          echo "RENAME_BRANCH=$RENAME_BRANCH" >> $GITHUB_ENV
           find . -type f -name 'helmiwrt-*' | while read FILE ; do
-            newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-${{ env.RENAME_BRANCH }}/')" ;
+            newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-$SOURCE_BRANCH/')" ;
             echo -e $(readlink -f ${FILE}) ;
             mv "${FILE}" "${newfile}" ;
           done
-          [ -f config.buildinfo ] && mv config.buildinfo helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-config.buildinfo
-          [ -f feeds.buildinfo ] && mv feeds.buildinfo helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-feeds.buildinfo
-          [ -f profiles.json ] && mv profiles.json helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-profiles.json
-          [ -f version.buildinfo ] && mv version.buildinfo helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-version.buildinfo
-          [ -f sha256sums ] && mv sha256sums helmiwrt-$RENAME_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-sha256sums
+          [ -f config.buildinfo ] && mv config.buildinfo helmiwrt-$SOURCE_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-config.buildinfo
+          [ -f feeds.buildinfo ] && mv feeds.buildinfo helmiwrt-$SOURCE_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-feeds.buildinfo
+          [ -f profiles.json ] && mv profiles.json helmiwrt-$SOURCE_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-profiles.json
+          [ -f version.buildinfo ] && mv version.buildinfo helmiwrt-$SOURCE_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-version.buildinfo
+          [ -f sha256sums ] && mv sha256sums helmiwrt-$SOURCE_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-sha256sums
           df -hT $PWD
 
       - name: Deploy Files To Release
