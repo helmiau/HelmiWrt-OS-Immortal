@@ -27,6 +27,9 @@ sed -i 's/immortalwrt.org/helmiau.com/g' include/version.mk
 sed -i 's|github.com/immortalwrt/immortalwrt/issues|helmiau.com|g' include/version.mk
 sed -i 's|github.com/immortalwrt/immortalwrt/discussions|helmiau.com|g' include/version.mk
 
+# Delete ImmortalWrt source
+find . -type d -name "luci-app-openclash" -exec rm -rf "{}" \;
+
 # Add date version
 export DATE_VERSION=$(date -d "$(rdate -n -4 -p pool.ntp.org)" +'%Y-%m-%d')
 sed -i "s/%C/%C (${DATE_VERSION})/g" package/base-files/files/etc/openwrt_release
@@ -34,6 +37,9 @@ sed -i "s/%C/%C (${DATE_VERSION})/g" package/base-files/files/etc/openwrt_releas
 # Clone community packages to package/community
 mkdir package/community
 pushd package/community
+
+# Add official OpenClash source
+git clone --depth=1 -b dev https://github.com/vernesong/OpenClash
 
 # Add modeminfo
 git clone --depth=1 https://github.com/koshev-msk/luci-app-modeminfo
