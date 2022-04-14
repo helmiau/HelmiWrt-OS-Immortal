@@ -29,6 +29,7 @@ sed -i 's|github.com/immortalwrt/immortalwrt/discussions|helmiau.com|g' include/
 
 # Delete ImmortalWrt source
 find . -type d -name "luci-app-openclash" -exec rm -rf "{}" \;
+find . -type f -name "luci-app-openclash" -exec rm -rf "{}" \;
 
 # Add date version
 export DATE_VERSION=$(date -d "$(rdate -n -4 -p pool.ntp.org)" +'%Y-%m-%d')
