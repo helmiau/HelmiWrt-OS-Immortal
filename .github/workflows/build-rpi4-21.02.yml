@@ -366,7 +366,7 @@ jobs:
 
       - name: Organize Files
         run: |
-          export BUILD_DATE=$(date +"%Y.%m.%d")
+          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           export SOURCE_BRANCH=$SOURCE_BRANCH
           echo "SOURCE_BRANCH=$SOURCE_BRANCH" >> $GITHUB_ENV
