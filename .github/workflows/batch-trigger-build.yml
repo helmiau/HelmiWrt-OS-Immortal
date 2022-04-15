@@ -29,7 +29,7 @@ env:
   REPO_NAME: HelmiWrt-OS-Immortal
   BRANCH_NAME: main
   # delay nterval in seconds
-  DELAY_INT: 300
+  DELAY_INT: 150
   # other configs
   FAILPROP: false
   TRIGGERWF: true
