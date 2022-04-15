@@ -203,6 +203,11 @@ chmod -R +x /lib/nft-qos/*
 chmod +x /etc/hotplug.d/dhcp/00-nft-qos-monitor
 chmod +x /etc/hotplug.d/dhcp/01-nft-qos-dynamic
 
+# auto fix for bcm27xx
+if [ -e /bin/is_immortalwrt_based ] && grep -q "bcm27" /etc/openwrt_release; then
+	helmiwrt fixov
+fi
+
 # Check file system during boot
 uci set fstab.@global[0].check_fs=1
 uci commit
