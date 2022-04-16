@@ -1,0 +1,31 @@
+#!/bin/bash
+#=================================================
+# File name: ssr
+# Usage: ssr $start/stop/restart | example: ssr start
+# System Required: Linux
+# Version: 1.0
+# Lisence: MIT
+# Author: Helmi Amirudin <https://www.helmiau.com>
+#=================================================
+
+INITSSR=/etc/init.d/shadowsocksr
+
+if [[ $1 = "restart" ]]; then
+	echo -e "Restarting ShadowSocksR+ Plus"
+	$INITSSR restart
+elif [[ $1 = "stop" ]]; then
+	echo -e "Stoping ShadowSocksR+ Plus"
+	$INITSSR stop
+elif [[ $1 = "start" ]]; then
+	echo -e "Starting ShadowSocksR+ Plus"
+	$INITSSR start
+else
+	echo -e "Welcome to ShadowSocksR+ Plus Shortscript !"
+	echo -e "Run one of commands below :"
+	echo -e " "
+	echo -e "ssr start : To start ShadowSocksR+ Plus"
+	echo -e "ssr stop : To stop ShadowSocksR+ Plus"
+	echo -e "ssr restart : To restart ShadowSocksR+ Plus"
+	echo -e " "
+	echo -e "Script by Helmi Amirudin (helmiau.com)"
+fi
