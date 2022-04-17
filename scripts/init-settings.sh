@@ -56,7 +56,7 @@ if [[ -f /etc/config/xmm-modem ]]; then
 	echo -e "  helmilog : helmiwrt.sh boot script running done!"
 fi
 
-# Set Custom TTL
+# Set Custom TTL & QoS Limiter
 cat << 'EOF' >> /etc/firewall.user
 
 # Set Custom TTL
@@ -64,6 +64,12 @@ iptables -t mangle -I POSTROUTING -o  -j TTL --ttl-set 65
 iptables -t mangle -I PREROUTING -i  -j TTL --ttl-set 65
 ip6tables -t mangle -I POSTROUTING ! -p icmpv6 -o  -j HL --hl-set 65
 ip6tables -t mangle -I PREROUTING ! -p icmpv6 -i  -j HL --hl-set 65
+
+# QoS Limiter
+# ubah 192.168.1 jadi IP openwrt kamu.
+# di akhir IP ada angka 11 dan 254, ubah aja jadi maks IP perangkat yang mau ditambahkan.
+# ubah 16kb/s jadi angka/limit kecepatan koneksi.
+# iptables -I FORWARD -m iprange --dst-range 192.168.1.11-192.168.1.254 -m hashlimit --hashlimit-above 16kb/s --hashlimit-mode dstip --hashlimit-name lambat -j DROP
 
 EOF
 /etc/config/firewall restart
