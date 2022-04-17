@@ -15,7 +15,7 @@
 # - Then you can run this actions.
 #=================================================
 
-name: Batch Trigger Build
+name: Batch Trigger Build Raspberry Pi 
 
 on:
   workflow_dispatch:
@@ -72,13 +72,81 @@ jobs:
           sleep 15
           echo "Actions Checkout running succesfully, resuming build"
 
-      - name: Running Raspberry Pi 3 18.06 Build
+      - name: Running Raspberry Pi 1 18.06 Build
         uses: convictional/trigger-workflow-and-wait@v1.5.0
         with:
           owner: ${{ env.REPO_OWNER }}
           repo: ${{ env.REPO_NAME }}
           github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-rpi3-18.06.yml
+          workflow_file_name: build-rpi1-18.06.yml
+          ref: ${{ env.BRANCH_NAME }}
+          propagate_failure: ${{ env.FAILPROP }}
+          trigger_workflow: ${{ env.TRIGGERWF }}
+          wait_workflow: ${{ env.WAITWF }}
+
+      - name: Previous build running succesfully, resuming build
+        run: |
+          sleep $DELAY_INT
+          echo "Previous build running succesfully, resuming build"
+
+      - name: Running Raspberry Pi 1 21.02 Build
+        uses: convictional/trigger-workflow-and-wait@v1.5.0
+        with:
+          owner: ${{ env.REPO_OWNER }}
+          repo: ${{ env.REPO_NAME }}
+          github_token: ${{ secrets.HELMIWRT_RW }}
+          workflow_file_name: build-rpi1-21.02.yml
+          ref: ${{ env.BRANCH_NAME }}
+          propagate_failure: ${{ env.FAILPROP }}
+          trigger_workflow: ${{ env.TRIGGERWF }}
+          wait_workflow: ${{ env.WAITWF }}
+
+      - name: Previous build running succesfully, resuming build
+        run: |
+          sleep $DELAY_INT
+          echo "Previous build running succesfully, resuming build"
+
+      - name: Running Raspberry Pi 4 18.06 Build
+        uses: convictional/trigger-workflow-and-wait@v1.5.0
+        with:
+          owner: ${{ env.REPO_OWNER }}
+          repo: ${{ env.REPO_NAME }}
+          github_token: ${{ secrets.HELMIWRT_RW }}
+          workflow_file_name: build-rpi4-18.06.yml
+          ref: ${{ env.BRANCH_NAME }}
+          propagate_failure: ${{ env.FAILPROP }}
+          trigger_workflow: ${{ env.TRIGGERWF }}
+          wait_workflow: ${{ env.WAITWF }}
+
+      - name: Previous build running succesfully, resuming build
+        run: |
+          sleep $DELAY_INT
+          echo "Previous build running succesfully, resuming build"
+
+      - name: Running Raspberry Pi 2 21.02 Build
+        uses: convictional/trigger-workflow-and-wait@v1.5.0
+        with:
+          owner: ${{ env.REPO_OWNER }}
+          repo: ${{ env.REPO_NAME }}
+          github_token: ${{ secrets.HELMIWRT_RW }}
+          workflow_file_name: build-rpi2-21.02.yml
+          ref: ${{ env.BRANCH_NAME }}
+          propagate_failure: ${{ env.FAILPROP }}
+          trigger_workflow: ${{ env.TRIGGERWF }}
+          wait_workflow: ${{ env.WAITWF }}
+
+      - name: Previous build running succesfully, resuming build
+        run: |
+          sleep $DELAY_INT
+          echo "Previous build running succesfully, resuming build"
+
+      - name: Running Raspberry Pi 2 18.06 Build
+        uses: convictional/trigger-workflow-and-wait@v1.5.0
+        with:
+          owner: ${{ env.REPO_OWNER }}
+          repo: ${{ env.REPO_NAME }}
+          github_token: ${{ secrets.HELMIWRT_RW }}
+          workflow_file_name: build-rpi2-18.06.yml
           ref: ${{ env.BRANCH_NAME }}
           propagate_failure: ${{ env.FAILPROP }}
           trigger_workflow: ${{ env.TRIGGERWF }}
