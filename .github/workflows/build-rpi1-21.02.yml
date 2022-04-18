@@ -17,7 +17,7 @@ on:
 
 env:
   #Config Files
-  CONFIG_FILE: config/rpi3-target.config
+  CONFIG_FILE: config/rpi1-target.config
   EXTRA_CONFIG_FILE: config/rpi-extra.config
   UNIVERSAL_CONFIG_FILE: config/universal.config
   #Binaries Platform
