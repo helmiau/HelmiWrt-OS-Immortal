@@ -140,6 +140,7 @@ uci commit
 
 # Delete default watchcat setting
 uci delete watchcat.@watchcat[0]
+[[ -f /etc/config/watchcat ]] && echo "" > /etc/config/watchcat
 uci commit
 
 # add cron job for modem rakitan
