@@ -76,12 +76,9 @@ git clone --depth=1 https://github.com/zxlhhyccc/luci-app-v2raya
 # Add luci-theme-neobird theme
 git clone --depth=1 https://github.com/helmiau/luci-theme-neobird
 
-# Add themes from kenzok8 openwrt-packages
-# svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-atmaterial_new kenzok8/luci-theme-atmaterial_new
-svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-edge kenzok8/luci-theme-edge
-
-if [[ $TOOLCHAIN_IMAGE == *"armvirt"* ]]
+if [[ $TOOLCHAIN_IMAGE == *"armvirt"* ]]; then
 	# Add luci-app-amlogic
+	echo "armvirt target detected! Adding amlogic service..."
 	git clone --depth=1 https://github.com/ophub/luci-app-amlogic
 fi
 
