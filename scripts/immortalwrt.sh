@@ -80,6 +80,11 @@ git clone --depth=1 https://github.com/helmiau/luci-theme-neobird
 # svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-atmaterial_new kenzok8/luci-theme-atmaterial_new
 svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-theme-edge kenzok8/luci-theme-edge
 
+if [[ $TOOLCHAIN_IMAGE == *"armvirt"* ]]
+	# Add luci-app-amlogic
+	git clone --depth=1 https://github.com/ophub/luci-app-amlogic
+fi
+
 popd
 
 # Fix mt76 wireless driver
