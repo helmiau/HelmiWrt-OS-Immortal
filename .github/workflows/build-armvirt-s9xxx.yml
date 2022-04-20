@@ -107,6 +107,7 @@ jobs:
           [Donation here](https://www.helmiau.com/pay/index_en.html) • [Read more firmware info and guides](https://www.google.com/search?q=helmi+wrt+os)
 
   Build_21:
+    needs: [Build_18]
     runs-on: ubuntu-20.04
     if: github.event.repository.owner.id == github.event.sender.id
 
