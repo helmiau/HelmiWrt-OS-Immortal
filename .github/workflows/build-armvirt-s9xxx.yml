@@ -62,7 +62,7 @@ jobs:
         cd openwrt
         echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
 
-    - name: Building HelmiWrt 18.06
+    - name: Building HelmiWrt
       id: build
       run: |
         cd $OPENWRTROOT
