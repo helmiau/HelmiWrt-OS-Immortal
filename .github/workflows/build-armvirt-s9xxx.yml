@@ -87,6 +87,7 @@ jobs:
             echo -e $(readlink -f ${FILE}) ;
             mv "${FILE}" "${newfile}" ;
           done
+          echo "::set-output name=status::success"
         fi
         #
         # Start Build s9xxx based on 21.02 source.
@@ -105,8 +106,8 @@ jobs:
             echo -e $(readlink -f ${FILE}) ;
             mv "${FILE}" "${newfile}" ;
           done
+          echo "::set-output name=status::success"
         fi
-        echo "::set-output name=status::success"
 
     - name: Upload Firmware Files to GitHub Release
       uses: ncipollo/release-action@v1
