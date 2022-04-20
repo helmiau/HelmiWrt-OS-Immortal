@@ -79,7 +79,7 @@ jobs:
           sudo chmod +x makeHelmi
           sudo ./makeHelmi -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.4.0_5.15.15 -a false
           echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
-          find . -type f -name '${{ env.HELMIWRT_FILENAME_18 }}' -exec rm "{}" \;
+          find . -type f -name '$HELMIWRT_FILENAME_18' -exec rm "{}" \;
           find . -type f -name 'helmiwrt-s9*' | while read FILE ; do
             newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-18.06-k5.4/')" ;
             echo -e $(readlink -f ${FILE}) ;
@@ -98,7 +98,7 @@ jobs:
           sudo chmod +x makeHelmi
           sudo ./makeHelmi -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.4.0_5.15.15 -a false
           echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
-          find . -type f -name '${{ env.HELMIWRT_FILENAME_20 }}' -exec rm "{}" \;
+          find . -type f -name '$HELMIWRT_FILENAME_20' -exec rm "{}" \;
           find . -type f -name 'helmiwrt-s9*' | while read FILE ; do
             newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-21.02/')" ;
             echo -e $(readlink -f ${FILE}) ;
