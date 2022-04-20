@@ -71,10 +71,10 @@ jobs:
         # Start Build s9xxx based on 18.06 source.
         export HELMIWRT_FILENAME_18="helmiwrt-18.06-k5.4-armvirt-64-default-rootfs.tar.gz"
         echo "HELMIWRT_FILENAME_18=$HELMIWRT_FILENAME_18" >> $GITHUB_ENV
-        if wget -q --method=HEAD $HELMIWRT_REL-$BUILD_TAG/$HELMIWRT_FILENAME_18; then
+        if wget -q --method=HEAD "$HELMIWRT_REL-$BUILD_TAG/$HELMIWRT_FILENAME_18"; then
           # Download Firmware 18.06
           echo "${{ env.HELMIWRT_FILENAME_18 }} rootfs found under $BUILD_TAG tag! Start downloading..."
-          wget -q --show-progress -P openwrt-armvirt $HELMIWRT_REL-$BUILD_TAG/$HELMIWRT_FILENAME_18
+          wget -q --show-progress -P openwrt-armvirt "$HELMIWRT_REL-$BUILD_TAG/$HELMIWRT_FILENAME_18"
           # Build Firmware 18.06
           sudo chmod +x makeHelmi
           sudo ./makeHelmi -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.4.0_5.15.15 -a false
@@ -90,10 +90,10 @@ jobs:
         # Start Build s9xxx based on 21.02 source.
         export HELMIWRT_FILENAME_20="helmiwrt-20.12-armvirt-64-default-rootfs.tar.gz"
         echo "HELMIWRT_FILENAME_20=$HELMIWRT_FILENAME_20" >> $GITHUB_ENV
-        if wget -q --method=HEAD $HELMIWRT_REL-$BUILD_TAG/$HELMIWRT_FILENAME_20; then
+        if wget -q --method=HEAD "$HELMIWRT_REL-$BUILD_TAG/$HELMIWRT_FILENAME_20"; then
           # Download Firmware 20.12
           echo "${{ env.HELMIWRT_FILENAME_20 }} rootfs found under $BUILD_TAG tag! Start downloading..."
-          wget -q --show-progress -P openwrt-armvirt $HELMIWRT_REL-$BUILD_TAG/$HELMIWRT_FILENAME_20
+          wget -q --show-progress -P openwrt-armvirt "$HELMIWRT_REL-$BUILD_TAG/$HELMIWRT_FILENAME_20"
           # Build Firmware 20.12
           sudo chmod +x makeHelmi
           sudo ./makeHelmi -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.4.0_5.15.15 -a false
