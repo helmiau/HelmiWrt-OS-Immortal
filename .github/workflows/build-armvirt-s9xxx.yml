@@ -82,6 +82,7 @@ jobs:
             newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-18.06-k5.4/')" ;
             echo -e $(readlink -f ${FILE}) ;
             mv "${FILE}" "${newfile}" ;
+            echo -e $(readlink -f ${FILE}) ;
           done
           echo "::set-output name=status::success"
         fi
@@ -103,6 +104,7 @@ jobs:
             newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-21.02/')" ;
             echo -e $(readlink -f ${FILE}) ;
             mv "${FILE}" "${newfile}" ;
+            echo -e $(readlink -f ${FILE}) ;
           done
           echo "::set-output name=status::success"
         fi
