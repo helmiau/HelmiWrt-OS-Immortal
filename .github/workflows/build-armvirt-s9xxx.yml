@@ -24,7 +24,6 @@ env:
 jobs:
   Build_18:
     runs-on: ubuntu-20.04
-    if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
     - name: Checkout
@@ -109,7 +108,6 @@ jobs:
   Build_21:
     needs: [Build_18]
     runs-on: ubuntu-20.04
-    if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
     - name: Checkout
