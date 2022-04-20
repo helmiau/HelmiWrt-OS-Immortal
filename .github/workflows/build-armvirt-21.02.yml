@@ -33,6 +33,15 @@ env:
   FIRMWARE_RELEASE_UPLOAD: true
   WEB_ROOT_PATH: /data/www/openwrt.cc
   TZ: Asia/Jakarta
+  
+  # Trigger build s9xxx environments
+  REPO_OWNER: helmiau
+  REPO_NAME: HelmiWrt-OS-Immortal
+  BRANCH_NAME: main
+  # other configs
+  FAILPROP: false
+  TRIGGERWF: true
+  WAITWF: false
 
 jobs:
   Toolchain:
@@ -395,3 +404,28 @@ jobs:
           commit: ${{ env.CURRENT_BRANCH }}
           token: ${{ secrets.HELMIWRT_RW }}
           artifacts: ${{ env.OPENWRT_ROOT_PATH }}/bin/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/*
+
+  Trigger_s9xxx_Build:
+    needs: [Build]
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Actions Checkout running succesfully, resuming build
+        run: |
+          sleep 20
+          echo "Actions Checkout running succesfully, resuming build"
+
+      - name: Running s9xxx Build with armvirt64 base
+        uses: convictional/trigger-workflow-and-wait@v1.5.0
+        with:
+          owner: ${{ env.REPO_OWNER }}
+          repo: ${{ env.REPO_NAME }}
+          github_token: ${{ secrets.HELMIWRT_RW }}
+          workflow_file_name: build-s9xxx-armvirt.yml
+          ref: ${{ env.BRANCH_NAME }}
+          propagate_failure: ${{ env.FAILPROP }}
+          trigger_workflow: ${{ env.TRIGGERWF }}
+          wait_workflow: ${{ env.WAITWF }}
