@@ -292,8 +292,8 @@ jobs:
             sed -i "s|neobird=y|neobird=n|g" $OPENWRT_ROOT_PATH/.config
           fi
           # Add Configs to Kernel Config
-          cat config/x86-kernel.config >> $OPENWRTROOT/target/linux/x86/config-5.4
-          cat config/x86-kernel.config >> $OPENWRTROOT/target/linux/x86/64/config-5.4
+          [ -f $OPENWRTROOT/target/linux/x86/config-5.4 ] && cat config/x86-kernel.config >> $OPENWRTROOT/target/linux/x86/config-5.4
+          [ -f $OPENWRTROOT/target/linux/x86/64/config-5.4 ] && cat config/x86-kernel.config >> $OPENWRTROOT/target/linux/x86/64/config-5.4
           cd $OPENWRT_ROOT_PATH
           chmod +x $GITHUB_WORKSPACE/scripts/*.sh
           $GITHUB_WORKSPACE/$DIY_SH
