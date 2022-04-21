@@ -346,8 +346,8 @@ jobs:
             mkdir -p $OPENWRT_ROOT_PATH/files/etc/opkg
             cd $OPENWRT_ROOT_PATH/files/etc/opkg
             cp $GITHUB_WORKSPACE/data/opkg/distfeeds.conf .
-            sed -i "s/DEVICE_SUBTARGET/$DEVICE_SUBTARGET/g" distfeeds.conf
-            sed -i "s/DEVICE_TARGET/$DEVICE_TARGET/g" distfeeds.conf
+            sed -i "s/DEVICE_SUBTARGET/bcm2710/g" distfeeds.conf
+            sed -i "s/DEVICE_TARGET/bcm27xx/g" distfeeds.conf
             sed -i "s/DEVICE_PLATFORM/$DEVICE_PLATFORM/g" distfeeds.conf
             cd $OPENWRT_ROOT_PATH
             git clone https://git.openwrt.org/project/usign.git

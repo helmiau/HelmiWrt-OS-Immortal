@@ -1,4 +1,5 @@
 # This file include supported targets at https://openwrt.cc
+armvirt/64
 bcm27xx/bcm2708
 bcm27xx/bcm2709
 bcm27xx/bcm2710
