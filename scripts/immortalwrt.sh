@@ -39,6 +39,9 @@ sed -i "s/%C/%C (${DATE_VERSION})/g" package/base-files/files/etc/openwrt_releas
 mkdir package/community
 pushd package/community
 
+# Add Argon theme configuration
+git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
+
 # Add official OpenClash source
 git clone --depth=1 -b dev https://github.com/vernesong/OpenClash
 
@@ -54,8 +57,21 @@ git clone --depth=1 https://github.com/koshev-msk/luci-app-mmconfig
 # Add support for Fibocom L860-GL l850/l860 ncm
 git clone --depth=1 https://github.com/koshev-msk/xmm-modem
 
-# Add 3ginfo, luci-app-3ginfo
-git clone --depth=1 https://github.com/4IceG/luci-app-3ginfo
+if [[ $SOURCE_BRANCH == *"21.02"* ]]; then
+	echo "21.02 branch detected! Adding 21.02 repos..."
+	# Add luci-app-modemband
+	echo "Adding luci-app-modemband..."
+	git clone --depth=1 https://github.com/4IceG/luci-app-modemband
+	# Add 3ginfo, luci-app-3ginfo-lite
+	echo "Adding luci-app-3ginfo-lite..."
+	git clone --depth=1 https://github.com/4IceG/luci-app-3ginfo-lite
+	svn co https://github.com/4IceG/luci-app-3ginfo/trunk/3ginfo 4IceG_3ginfo
+else
+	echo "18.06 branch detected! Adding 18.06 repos..."
+	# Add 3ginfo, luci-app-3ginfo
+	echo "Adding luci-app-3ginfo..."
+	git clone --depth=1 https://github.com/4IceG/luci-app-3ginfo
+fi
 
 # Add luci-app-sms-tool
 git clone --depth=1 https://github.com/4IceG/luci-app-sms-tool
@@ -81,6 +97,9 @@ if [[ $TOOLCHAIN_IMAGE == *"armvirt"* ]]; then
 	echo "armvirt target detected! Adding amlogic service..."
 	git clone --depth=1 https://github.com/ophub/luci-app-amlogic
 fi
+
+# Add Adguardhome
+git clone --depth=1 https://github.com/yang229/luci-app-adguardhome
 
 popd
 
