@@ -424,7 +424,7 @@ jobs:
           owner: ${{ env.REPO_OWNER }}
           repo: ${{ env.REPO_NAME }}
           github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-s9xxx-armvirt.yml
+          workflow_file_name: build-armvirt-s9xxx.yml
           ref: ${{ env.BRANCH_NAME }}
           propagate_failure: ${{ env.FAILPROP }}
           trigger_workflow: ${{ env.TRIGGERWF }}

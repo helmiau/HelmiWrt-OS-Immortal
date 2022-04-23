@@ -28,8 +28,8 @@ env:
   REPO_OWNER: helmiau
   REPO_NAME: HelmiWrt-OS-Immortal
   BRANCH_NAME: main
-  # delay nterval in seconds
-  DELAY_INT: 150
+  # delay interval in seconds
+  DELAY_INT: 200
   # other configs
   FAILPROP: false
   TRIGGERWF: true
