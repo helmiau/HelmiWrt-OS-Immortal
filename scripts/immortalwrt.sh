@@ -65,7 +65,6 @@ if [[ $SOURCE_BRANCH == *"21.02"* ]]; then
 	# Add 3ginfo, luci-app-3ginfo-lite
 	echo "Adding luci-app-3ginfo-lite..."
 	git clone --depth=1 https://github.com/4IceG/luci-app-3ginfo-lite
-	svn co https://github.com/4IceG/luci-app-3ginfo/trunk/3ginfo 4IceG_3ginfo
 else
 	echo "18.06 branch detected! Adding 18.06 repos..."
 	# Add 3ginfo, luci-app-3ginfo
