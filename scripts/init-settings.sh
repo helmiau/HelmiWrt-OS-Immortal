@@ -166,8 +166,10 @@ neofetch
 
 # Fix 3ginfo
 chmod +x /etc/init.d/3ginfo
-chmod +x /usr/share/3ginfo/scripts/*
-chmod +x /usr/share/3ginfo/cgi-bin/*
+chmod 0755 -R /usr/share/3ginfo/*
+
+# Fix 3ginfo-lite
+chmod 0755 -R /usr/share/3ginfo-lite/*
 
 # Fix xdrtool: Xderm Mini Tool Script permission
 chmod +x /bin/xdrtool
