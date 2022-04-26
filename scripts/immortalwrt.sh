@@ -13,13 +13,18 @@
 [ -d package/emortal/default-settings/files ] && pushd package/emortal/default-settings/files
 sed -i 's#exit 0#chmod +x /bin/helmiwrt\n/bin/helmiwrt#g' 99-default-settings
 cat << 'EOF' >>  99-default-settings
-if ! grep -q "helmiwrt" /etc/rc.local; then
+if ! grep -q 'helmiwrt' /etc/rc.local; then
 sed -i 's#exit 0#\nchmod +x /bin/helmiwrt#g' /etc/rc.local
 cat << 'EOF' >> /etc/rc.local
 /bin/helmiwrt
 exit 0
 \EOF
 fi
+
+if ! grep '/usr/bin/zsh' /etc/passwd
+sed -i 's|/bin/ash|/usr/bin/zsh|g' /etc/passwd
+fi
+
 exit 0
 EOF
 echo "=== helmilog: Below is 99-default-settings contents.. ==="
@@ -125,7 +130,7 @@ sed -i 's/ImmortalWrt/HelmiWrt/g' config_generate
 popd
 
 # Change default shell to zsh
-sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
+sed -i 's|/bin/ash|/usr/bin/zsh|g' package/base-files/files/etc/passwd
 
 #-----------------------------------------------------------------------------
 #   Start of @helmiau terminal scripts additionals menu
