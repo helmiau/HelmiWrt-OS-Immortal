@@ -13,12 +13,13 @@
 [ -d package/emortal/default-settings/files ] && pushd package/emortal/default-settings/files
 sed -i 's#exit 0#chmod +x /bin/helmiwrt\n/bin/helmiwrt#g' 99-default-settings
 cat << 'EOF' >>  99-default-settings
+if ! grep -q "helmiwrt" /etc/rc.local; then
+sed -i 's#exit 0#\nchmod +x /bin/helmiwrt#g' /etc/rc.local
 cat << 'EOF' >> /etc/rc.local
-chmod +x /bin/helmiwrt
 /bin/helmiwrt
 exit 0
 \EOF
-
+fi
 exit 0
 EOF
 echo "=== helmilog: Below is 99-default-settings contents.. ==="
