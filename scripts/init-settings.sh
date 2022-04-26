@@ -111,7 +111,6 @@ helmiwrt addinterfacefirewall
 if ! grep -q "helmiwrt" /etc/rc.local; then
 	sed -i 's#exit 0#\n#g' /etc/rc.local
 	cat << 'EOF' >> /etc/rc.local
-
 chmod +x /bin/helmiwrt
 /bin/helmiwrt
 exit 0

@@ -9,10 +9,21 @@
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
-# Mod zzz-default-settings
-pushd package/emortal/default-settings/files
-sed -i '/http/d' zzz-default-settings
-sed -i '/openwrt_luci/d' zzz-default-settings
+# Mod default-settings
+[ -d package/emortal/default-settings/files ] && pushd package/emortal/default-settings/files
+sed -i 's#exit 0#chmod +x /bin/helmiwrt\n/bin/helmiwrt#g' 99-default-settings
+cat << 'EOF' >>  99-default-settings
+cat << 'EOF' >> /etc/rc.local
+chmod +x /bin/helmiwrt
+/bin/helmiwrt
+exit 0
+\EOF
+
+exit 0
+EOF
+echo "=== helmilog: Below is 99-default-settings contents.. ==="
+cat 99-default-settings
+echo "=== helmilog: Below is 99-default-settings contents.. ==="
 popd
 
 pushd package/base-files
