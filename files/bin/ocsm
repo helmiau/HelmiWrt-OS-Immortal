@@ -476,6 +476,9 @@ elif [[ $OPT = "sp" ]];then # Stop OpenClash
 elif [[ $OPT = "b" ]];then # Install Adblock
 	echo "  Installing Adblock Rules...."
 	helmi_adblock
+elif [[ $OPT = "u" ]];then # Update OCSM
+	echo "  Updating OCSM...."
+	helmi_update_script
 else
 	exit
 fi
