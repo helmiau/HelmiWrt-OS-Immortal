@@ -247,7 +247,7 @@ function helmi_switch_vernesong() {
 function helmi_download_ipk() {
 	echo -e "${Y}"
 	#wget -O /root/luci-app-openclash.ipk $(curl -sL https://github.com/vernesong/OpenClash/releases | grep luci-app-openclash_ | sed -e 's/\"//g' -e 's/ //g' -e 's/rel=.*//g' -e 's#<ahref=#http://github.com#g' | awk 'FNR <= 1')
-	export ocipkurl=$(curl -sL https://github.com/vernesong/OpenClash/tree/master | grep luci-app-openclash_ | awk 'FNR <= 1' | sed -e 's|^.*luci-app-|https://github.com/vernesong/OpenClash/raw/dev/luci-app-|' -e 's|</a>.*||')
+	export ocipkurl=$(curl -sL https://github.com/vernesong/OpenClash/tree/master | grep luci-app-openclash_ | awk 'FNR <= 1' | sed -e 's|^.*luci-app-|https://github.com/vernesong/OpenClash/raw/master/luci-app-|' -e 's|</a>.*||')
 	wget -O /root/luci-app-openclash.ipk $ocipkurl
 	unset ocipkurl
 	echo -e "${G}"
