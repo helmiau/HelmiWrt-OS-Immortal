@@ -4,7 +4,7 @@
 
 ---
 
-<h3 align="center"><a href="https://github.com/helmiau/dl/releases">DOWNLOAD FIRMWARE RELEASE HERE</a></h3>
+<h3 align="center"><a href="https://github.com/helmiau/dl/releases">COLLABORATORS CAN DOWNLOAD FIRMWARE RELEASE HERE</a></h3>
 
 ---
 
