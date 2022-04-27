@@ -46,24 +46,44 @@ jobs:
 
       - name: Actions Checkout running succesfully, resuming build
         run: |
-          echo "BUILD_TAG=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+          echo "BUILD_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
           sleep 15
           echo "Actions Checkout running succesfully, resuming build"
 
-      - name: Create Release Tag
+      - name: Create Release Tag for This Repository
         uses: ncipollo/release-action@v1
         with:
-          allowUpdates: true
           prerelease: true
+          allowUpdates: true
+          replacesArtifacts: true
+          name: HelmiWrt OS ${{ env.BUILD_DATE }}
           token: ${{ secrets.HELMIWRT_RW }}
-          name: HelmiWrt Test ${{ env.BUILD_TAG }}
-          tag: helmiwrt-${{ env.BUILD_TAG }}
+          tag: helmiwrt-${{ env.BUILD_DATE }}
           body: |
             **HelmiWrt is custom OpenWrt build for**
             - Raspberry Pi 1,2,3,4
             - x86/64 (PC)
             - NanoPi R2C, R2S and R4S
-            - OrangePi Zero, R1 Plus
+            - OrangePi R1 Plus, R1 Plus LTS
+            - Set-top-box s9xxx chipset
+            [Donation here](https://www.helmiau.com/pay/index_en.html) • [Read more firmware info and guides](https://www.google.com/search?q=helmi+wrt+os)
+
+      - name: Create Release Tag for DL Repository
+        uses: ncipollo/release-action@v1
+        with:
+          prerelease: true
+          allowUpdates: true
+          replacesArtifacts: true
+          repo: dl
+          name: HelmiWrt OS ${{ env.BUILD_DATE }}
+          token: ${{ secrets.HELMIWRT_RW }}
+          tag: helmiwrt-${{ env.BUILD_DATE }}
+          body: |
+            **HelmiWrt is custom OpenWrt build for**
+            - Raspberry Pi 1,2,3,4
+            - x86/64 (PC)
+            - NanoPi R2C, R2S and R4S
+            - OrangePi R1 Plus, R1 Plus LTS
             - Set-top-box s9xxx chipset
             [Donation here](https://www.helmiau.com/pay/index_en.html) • [Read more firmware info and guides](https://www.google.com/search?q=helmi+wrt+os)
 
