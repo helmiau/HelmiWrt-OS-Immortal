@@ -392,6 +392,7 @@ jobs:
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
+          repo: dl
           name: HelmiWrt OS ${{ env.BUILD_DATE }}
           tag: helmiwrt-${{ env.BUILD_DATE }}
           body: ${{ env.BUILD_DATE }}
