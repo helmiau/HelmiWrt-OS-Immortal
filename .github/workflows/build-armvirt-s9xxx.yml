@@ -44,7 +44,6 @@ jobs:
         echo "COMPILE_STARTINGTIME=$(date +"%Y.%m.%d.%H:%M")" >> $GITHUB_ENV
         export BUILD_DATE=$(curl 'Authorization: token ${{ secrets.HELMIWRT_RW }}' -H 'Accept: application/vnd.github.v4.raw' -sL https://api.github.com/repos/helmiau/dl/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
         echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-        echo "$BUILD_DATE"
         export HELMIWRT_REL="https://github.com/helmiau/dl/releases/download/helmiwrt"
         echo "HELMIWRT_REL=$HELMIWRT_REL" >> $GITHUB_ENV
 
