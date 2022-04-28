@@ -425,7 +425,7 @@ jobs:
           sudo -E apt-get -qq clean
           export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-          echo -e "$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-$BUILD_DATE | grep armvirt-64-default-rootfs.tar.gz)" > armvirt64.txt
+          echo -e "$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-$BUILD_DATE | grep armvirt-64)" > armvirt64.txt
           wget -i armvirt64.txt
 
       - name: Checking Files
