@@ -399,7 +399,6 @@ jobs:
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
-          repo: dl
           name: HelmiWrt OS ${{ env.BUILD_DATE }}
           tag: helmiwrt-${{ env.BUILD_DATE }}
           body: ${{ env.BUILD_DATE }}
@@ -415,10 +414,46 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Actions Checkout running succesfully, resuming build
+      - name: Initialization Environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
-          sleep 20
-          echo "Actions Checkout running succesfully, resuming build"
+          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install wget curl
+          sudo -E apt-get -qq autoremove --purge
+          sudo -E apt-get -qq clean
+          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
+          echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
+          echo -e "$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-$BUILD_DATE | grep armvirt-64-default-rootfs.tar.gz)" > armvirt64.txt
+          wget -i armvirt64.txt
+
+      - name: Checking Files
+        id: checkfiles
+        run: |
+          [ ! -d $GITHUB_WORKSPACE/kerjain ] && mkdir -p $GITHUB_WORKSPACE/kerjain
+          cd $GITHUB_WORKSPACE/kerjain
+          echo -e "=== helmilog: Below is work/kerjain contents.. ==="
+          ls -R
+          rm -f armvirt64.txt
+          echo -e "=== helmilog: Upper is work/kerjain contents.. ==="
+          echo "::set-output name=status::success"
+
+      - name: Deploy Files To Release DL Repo
+        id: upload
+        uses: ncipollo/release-action@v1.8.0
+        if: steps.checkfiles.outputs.status == 'success' && !cancelled()
+        with:
+          prerelease: true
+          allowUpdates: true
+          replacesArtifacts: true
+          repo: dl
+          name: HelmiWrt OS ${{ env.BUILD_DATE }}
+          tag: helmiwrt-${{ env.BUILD_DATE }}
+          body: ${{ env.BUILD_DATE }}
+          commit: ${{ env.CURRENT_BRANCH }}
+          token: ${{ secrets.HELMIWRT_RW }}
+          artifacts: $GITHUB_WORKSPACE/kerjain/*
 
       - name: Running s9xxx Build with armvirt64 base
         uses: convictional/trigger-workflow-and-wait@v1.5.0

@@ -77,7 +77,6 @@ jobs:
           sudo chmod +x makeHelmi
           sudo ./makeHelmi -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.4.0_5.15.15 -a false
           echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
-          find . -type f -name '$HELMIWRT_FILENAME_18' -exec rm "{}" \;
           find . -type f -name 'helmiwrt-s9*' | while read FILE ; do
             newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-18.06-k5.4/')" ;
             echo -e $(readlink -f ${FILE}) ;
@@ -99,7 +98,6 @@ jobs:
           sudo chmod +x makeHelmi
           sudo ./makeHelmi -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.4.0_5.15.15 -a false
           echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
-          find . -type f -name '$HELMIWRT_FILENAME_21' -exec rm "{}" \;
           find . -type f -name 'helmiwrt-s9*' | while read FILE ; do
             newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-21.02/')" ;
             echo -e $(readlink -f ${FILE}) ;
@@ -116,6 +114,7 @@ jobs:
         prerelease: true
         allowUpdates: true
         replacesArtifacts: true
+        repo: dl
         name: HelmiWrt OS ${{ env.BUILD_DATE }}
         token: ${{ secrets.HELMIWRT_RW }}
         tag: helmiwrt-${{ env.BUILD_DATE }}
@@ -128,3 +127,19 @@ jobs:
           - OrangePi R1 Plus, R1 Plus LTS
           - Set-top-box s9xxx chipset
           [Donation here](https://www.helmiau.com/pay/index_en.html) • [Read more firmware info and guides](https://www.google.com/search?q=helmi+wrt+os)
+
+    - name: Checking Files
+      id: checkfiles
+      run: |
+        cd $OPENWRTROOT/openwrt-armvirt
+        [ -f $HELMIWRT_FILENAME_18 ] && echo "File $HELMIWRT_FILENAME_18 exists" && echo "::set-output name=status18::success"
+        [ -f $HELMIWRT_FILENAME_21 ] && echo "File $HELMIWRT_FILENAME_21 exists" && echo "::set-output name=status21::success"
+
+    - name: Checking Files
+      uses: dev-drprasad/delete-tag-and-release@v0.2.0
+      if: steps.checkfiles.outputs.status18 == 'success' && steps.checkfiles.outputs.status21 == 'success' && !cancelled()
+      env:
+        GITHUB_TOKEN: ${{ secrets.HELMIWRT_RW }}
+      with:
+        delete_release: true
+        tag_name: helmiwrt-${{ env.BUILD_DATE }}
