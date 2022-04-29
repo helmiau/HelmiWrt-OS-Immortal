@@ -1,0 +1,51 @@
+#=================================================
+# https://github.com/P3TERX/Actions-OpenWrt
+# Description: Build OpenWrt using GitHub Actions
+# Lisence: MIT
+# Author: P3TERX
+# Blog: https://p3terx.com
+# HelmiWrt OS by helmiau.com
+#=================================================
+
+name: Delete Latest Release
+
+on:
+  workflow_dispatch:
+  #schedule:
+  #  - cron: 0 17 * * *
+  # watch:
+  #   types: started
+
+env:
+  # Trigger build s9xxx environments
+  REPO_OWNER: helmiau
+  REPO_NAME: HelmiWrt-OS-Immortal
+  BRANCH_NAME: main
+
+jobs:
+  Delete:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Initialization Environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install wget curl
+          sudo -E apt-get -qq autoremove --purge
+          sudo -E apt-get -qq clean
+          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
+          echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
+
+      - name: Delete GitHub Release
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.HELMIWRT_RW }}
+        with:
+          delete_release: true
+          tag_name: helmiwrt-${{ env.BUILD_DATE }}

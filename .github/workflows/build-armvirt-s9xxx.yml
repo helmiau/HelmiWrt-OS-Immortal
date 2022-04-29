@@ -127,18 +127,3 @@ jobs:
           - OrangePi R1 Plus, R1 Plus LTS
           - Set-top-box s9xxx chipset
           [Donation here](https://www.helmiau.com/pay/index_en.html) • [Read more firmware info and guides](https://www.google.com/search?q=helmi+wrt+os)
-
-    - name: Checking Files
-      id: checkfiles
-      run: |
-        cd $OPENWRTROOT/openwrt-armvirt
-        [[ -f $HELMIWRT_FILENAME_18 && -f $HELMIWRT_FILENAME_21 ]] && {echo "File $HELMIWRT_FILENAME_18 and $HELMIWRT_FILENAME_21 are exists."; echo "::set-output name=status::success"; }
-
-    - name: Delete GitHub Release
-      uses: dev-drprasad/delete-tag-and-release@v0.2.0
-      if: steps.checkfiles.outputs.status == 'success' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.HELMIWRT_RW }}
-      with:
-        delete_release: true
-        tag_name: helmiwrt-${{ env.BUILD_DATE }}
