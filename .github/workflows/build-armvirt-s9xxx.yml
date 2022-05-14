@@ -76,7 +76,8 @@ jobs:
           # Build Firmware 18.06
           sudo chmod +x makeHelmi
           sudo ./makeHelmi -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.4.0_5.15.15 -a false
-          echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
+          export PACKAGED_OUTPUTPATH="${PWD}/out"
+          echo "PACKAGED_OUTPUTPATH=$PACKAGED_OUTPUTPATH" >> $GITHUB_ENV
           find . -type f -name 'helmiwrt-s9*' | while read FILE ; do
             newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-18.06-k5.4/')" ;
             echo -e $(readlink -f ${FILE}) ;
@@ -97,7 +98,8 @@ jobs:
           # Build Firmware 20.12
           sudo chmod +x makeHelmi
           sudo ./makeHelmi -d -b s905x3_s905x2_s905x_s905w_s905d_s922x_s912 -k 5.4.0_5.15.15 -a false
-          echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
+          export PACKAGED_OUTPUTPATH="${PWD}/out"
+          echo "PACKAGED_OUTPUTPATH=$PACKAGED_OUTPUTPATH" >> $GITHUB_ENV
           find . -type f -name 'helmiwrt-s9*' | while read FILE ; do
             newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-21.02/')" ;
             echo -e $(readlink -f ${FILE}) ;
@@ -107,9 +109,18 @@ jobs:
           echo "::set-output name=status::success"
         fi
 
+    - name: Download Releases
+      id: dlrelease
+      run: |
+        cd $PACKAGED_OUTPUTPATH
+        echo -e "$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases/tags/$BUILD_DATE | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-)" > dl.txt
+        wget -i dl.txt
+        echo "::set-output name=status::success"
+
+
     - name: Upload Firmware Files to GitHub Release
       uses: ncipollo/release-action@v1
-      if: steps.build.outputs.status == 'success' && !cancelled()
+      if: steps.build.outputs.status == 'success' && steps.dlrelease.outputs.status == 'success' && !cancelled()
       with:
         prerelease: true
         allowUpdates: true
