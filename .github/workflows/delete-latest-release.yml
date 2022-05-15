@@ -43,6 +43,8 @@ jobs:
         with:
           token: ${{ secrets.HELMIWRT_RW }}
           tag: helmiwrt-${{ env.BUILD_DATE }}
+          fail-if-no-assets: false
+          fail-if-no-release: false
           assets: | 
             helmiwrt-*
 
