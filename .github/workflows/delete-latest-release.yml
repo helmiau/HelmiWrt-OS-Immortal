@@ -44,8 +44,8 @@ jobs:
           export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
 
-      - name: Delete GitHub Release Assets Only
-        if: ${{ env.DELETE_ASSETS == true }}
+      - name: Delete Release Assets Only
+        if: ${{ env.DELETE_ASSETS }} == true 
         uses: mknejp/delete-release-assets@v1
         with:
           token: ${{ secrets.HELMIWRT_RW }}
@@ -53,8 +53,8 @@ jobs:
           assets: | 
             helmiwrt-*
 
-      - name: Delete GitHub Release
-        if: ${{ env.DELETE_RELEASE == true }}
+      - name: Delete Release Assets and Tags
+        if: ${{ env.DELETE_RELEASE }} == true 
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.HELMIWRT_RW }}
