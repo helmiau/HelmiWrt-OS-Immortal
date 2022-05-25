@@ -94,7 +94,7 @@ jobs:
       id: dlrelease
       run: |
         cd $PACKAGED_OUTPUTPATH
-        echo -e "$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases/tags/$BUILD_DATE | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-)" > dl.txt
+        echo -e "$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases/tags/helmiwrt-$BUILD_DATE | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-)" > dl.txt
         wget -i dl.txt
         echo "::set-output name=status::success"
 
@@ -190,7 +190,7 @@ jobs:
       id: dlrelease
       run: |
         cd $PACKAGED_OUTPUTPATH
-        echo -e "$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases/tags/$BUILD_DATE | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-)" > dl.txt
+        echo -e "$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases/tags/helmiwrt-$BUILD_DATE | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-)" > dl.txt
         wget -i dl.txt
         echo "::set-output name=status::success"
 
