@@ -120,7 +120,7 @@ jobs:
           - Set-top-box s9xxx chipset
           [Donation here](https://www.helmiau.com/pay/index_en.html) • [Read more firmware info and guides](https://www.google.com/search?q=helmi+wrt+os)
 
-  Build_21:
+  Build21:
     runs-on: ubuntu-20.04
 
     steps:
