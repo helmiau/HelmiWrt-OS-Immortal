@@ -216,6 +216,17 @@ jobs:
           echo "DEVICE_TARGET=$(echo '${{needs.Toolchain.outputs.DEVICE_TARGET}}')" >> $GITHUB_ENV
           echo "DEVICE_SUBTARGET=$(echo '${{needs.Toolchain.outputs.DEVICE_SUBTARGET}}')" >> $GITHUB_ENV
           echo "TOOLCHAIN_IMAGE=$(echo '${{needs.Toolchain.outputs.TOOLCHAIN_IMAGE}}')" >> $GITHUB_ENV
+          echo "==========================================="
+          echo "               Export Infos"
+          echo "==========================================="
+          echo "CURRENT_BRANCH=$CURRENT_BRANCH"
+          echo "SOURCE_OWNER=$SOURCE_OWNER"
+          echo "SOURCE_REPO=$SOURCE_REPO"
+          echo "DEVICE_TARGET=$DEVICE_TARGET"
+          echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET"
+          echo "DEVICE_PLATFORM=$DEVICE_PLATFORM"
+          echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE"
+          echo "==========================================="
 
       - name: Initialization Environment
         env:
