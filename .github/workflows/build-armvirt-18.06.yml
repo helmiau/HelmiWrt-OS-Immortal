@@ -208,22 +208,22 @@ jobs:
     steps:
       - name: Restore Variables
         run: |
-          export CURRENT_BRANCH=$(echo '${{needs.Toolchain.outputs.CURRENT_BRANCH}}')"
-          echo "CURRENT_BRANCH=$(echo '${{needs.Toolchain.outputs.CURRENT_BRANCH}}')" >> $GITHUB_ENV
-          export OPENWRT_ROOT_PATH=$(echo '${{needs.Toolchain.outputs.OPENWRT_ROOT_PATH}}')"
-          echo "OPENWRT_ROOT_PATH=$(echo '${{needs.Toolchain.outputs.OPENWRT_ROOT_PATH}}')" >> $GITHUB_ENV
-          export SOURCE_OWNER=$(echo '${{needs.Toolchain.outputs.SOURCE_OWNER}}')"
-          echo "SOURCE_OWNER=$(echo '${{needs.Toolchain.outputs.SOURCE_OWNER}}')" >> $GITHUB_ENV
-          export SOURCE_REPO=$(echo '${{needs.Toolchain.outputs.SOURCE_REPO}}')"
-          echo "SOURCE_REPO=$(echo '${{needs.Toolchain.outputs.SOURCE_REPO}}')" >> $GITHUB_ENV
-          export DEVICE_PLATFORM=$(echo '${{needs.Toolchain.outputs.DEVICE_PLATFORM}}')"
-          echo "DEVICE_PLATFORM=$(echo '${{needs.Toolchain.outputs.DEVICE_PLATFORM}}')" >> $GITHUB_ENV
-          export DEVICE_TARGET=$(echo '${{needs.Toolchain.outputs.DEVICE_TARGET}}')"
-          echo "DEVICE_TARGET=$(echo '${{needs.Toolchain.outputs.DEVICE_TARGET}}')" >> $GITHUB_ENV
-          export DEVICE_SUBTARGET=$(echo '${{needs.Toolchain.outputs.DEVICE_SUBTARGET}}')"
-          echo "DEVICE_SUBTARGET=$(echo '${{needs.Toolchain.outputs.DEVICE_SUBTARGET}}')" >> $GITHUB_ENV
-          export TOOLCHAIN_IMAGE=$(echo '${{needs.Toolchain.outputs.TOOLCHAIN_IMAGE}}')"
-          echo "TOOLCHAIN_IMAGE=$(echo '${{needs.Toolchain.outputs.TOOLCHAIN_IMAGE}}')" >> $GITHUB_ENV
+          export CURRENT_BRANCH="$(echo '${{needs.Toolchain.outputs.CURRENT_BRANCH}}')"
+          echo "CURRENT_BRANCH=$CURRENT_BRANCH" >> $GITHUB_ENV
+          export OPENWRT_ROOT_PATH="$(echo '${{needs.Toolchain.outputs.OPENWRT_ROOT_PATH}}')"
+          echo "OPENWRT_ROOT_PATH=$OPENWRT_ROOT_PATH" >> $GITHUB_ENV
+          export SOURCE_OWNER="$(echo '${{needs.Toolchain.outputs.SOURCE_OWNER}}')"
+          echo "SOURCE_OWNER=$SOURCE_OWNER" >> $GITHUB_ENV
+          export SOURCE_REPO="$(echo '${{needs.Toolchain.outputs.SOURCE_REPO}}')"
+          echo "SOURCE_REPO=$SOURCE_REPO" >> $GITHUB_ENV
+          export DEVICE_PLATFORM="$(echo '${{needs.Toolchain.outputs.DEVICE_PLATFORM}}')"
+          echo "DEVICE_PLATFORM=$DEVICE_PLATFORM" >> $GITHUB_ENV
+          export DEVICE_TARGET="$(echo '${{needs.Toolchain.outputs.DEVICE_TARGET}}')"
+          echo "DEVICE_TARGET=$DEVICE_TARGET" >> $GITHUB_ENV
+          export DEVICE_SUBTARGET="$(echo '${{needs.Toolchain.outputs.DEVICE_SUBTARGET}}')"
+          echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET" >> $GITHUB_ENV
+          export TOOLCHAIN_IMAGE="$(echo '${{needs.Toolchain.outputs.TOOLCHAIN_IMAGE}}')"
+          echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE" >> $GITHUB_ENV
           echo "==========================================="
           echo "               Export Infos"
           echo "==========================================="
