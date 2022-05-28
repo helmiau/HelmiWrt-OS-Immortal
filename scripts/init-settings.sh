@@ -2,15 +2,24 @@
 #=================================================
 # File name: init-settings.sh
 # Description: This script will be executed during the first boot
-# Author: SuLingGG
+# Author: SuLingGG & helmiau
 # Blog: https://mlapp.cn
 #=================================================
 #--------------------------------------------------------
 #   If you use some codes frome here, please give credit to www.helmiau.com
 #--------------------------------------------------------
 
+# Disable autostart by default for some packages
+[ -f /etc/rc.d/S99dockerd ] && rm -f /etc/rc.d/S99dockerd || true
+[ -f /etc/rc.d/S99dockerman ] && rm -f /etc/rc.d/S99dockerman || true
+[ -f /etc/rc.d/S30stubby ] && rm -f /etc/rc.d/S30stubby || true
+[ -f /etc/rc.d/S90stunnel ] && rm -f /etc/rc.d/S90stunnel || true
+
 # Set default theme to luci-theme-argon
 uci set luci.main.mediaurlbase='/luci-static/argon'
+
+# Disable opkg signature check
+sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf
 
 # Disable IPV6 ula prefix
 sed -i 's/^[^#].*option ula/#&/' /etc/config/network
@@ -27,11 +36,13 @@ sed -i "s#option ssid 'OpenWrt'#option ssid 'HelmiWrt'#iIg" /etc/config/wireless
 opkg remove $(opkg list-installed | grep zh-cn)
 
 # start v2rayA service on boot
-# sed -i "s#option enabled.*#option enabled '1'#g" /etc/config/v2raya
-# /etc/init.d/v2raya enable
-# /etc/init.d/v2raya start
-# /etc/init.d/v2raya reload
-# /etc/init.d/v2raya restart
+if [ -f /etc/config/v2raya ] && [ -f /etc/init.d/v2raya ]; then
+	sed -i "s#option enabled.*#option enabled '1'#g" /etc/config/v2raya
+	/etc/init.d/v2raya enable
+	/etc/init.d/v2raya start
+	/etc/init.d/v2raya reload
+	/etc/init.d/v2raya restart
+fi
 
 # activate TUN TAP interface
 /usr/sbin/openvpn --mktun --dev tun0
@@ -59,16 +70,25 @@ fi
 # Set Custom TTL & QoS Limiter
 cat << 'EOF' >> /etc/firewall.user
 
+#=================
 # Set Custom TTL
+#=================
 iptables -t mangle -I POSTROUTING -o  -j TTL --ttl-set 65
 iptables -t mangle -I PREROUTING -i  -j TTL --ttl-set 65
 ip6tables -t mangle -I POSTROUTING ! -p icmpv6 -o  -j HL --hl-set 65
 ip6tables -t mangle -I PREROUTING ! -p icmpv6 -i  -j HL --hl-set 65
 
+#=================
 # QoS Limiter
-# ubah 192.168.1 jadi IP openwrt kamu.
+#=================
+# change 192.168.1.1 to your openwrt IP.
+# at the end of IP you will see 11 and 254, change it to max IP devices you want to add.
+# change 16kb/s to number of max connection limits.
+#=================
+# ubah 192.168.1.1 jadi IP openwrt kamu.
 # di akhir IP ada angka 11 dan 254, ubah aja jadi maks IP perangkat yang mau ditambahkan.
 # ubah 16kb/s jadi angka/limit kecepatan koneksi.
+#=================
 # iptables -I FORWARD -m iprange --dst-range 192.168.1.11-192.168.1.254 -m hashlimit --hashlimit-above 16kb/s --hashlimit-mode dstip --hashlimit-name lambat -j DROP
 
 EOF
@@ -140,6 +160,9 @@ uci commit
 # Delete default watchcat setting
 uci delete watchcat.@watchcat[0]
 [[ -f /etc/config/watchcat ]] && echo "" > /etc/config/watchcat
+if grep -q "config watchcat" /etc/config/system; then
+	sed -i -e '/config watchcat/,+4d' /etc/config/system
+fi
 uci commit
 
 # add cron job for modem rakitan
@@ -163,53 +186,81 @@ echo "neofetch" > /root/.oh-my-zsh/custom/example.zsh
 chmod +x /bin/neofetch
 neofetch
 
-# Fix 3ginfo
-chmod +x /etc/init.d/3ginfo
-chmod 0755 -R /usr/share/3ginfo/*
+# Fix 3ginfo permission
+if [ -d "/usr/share/3ginfo" ]; then
+	chmod +x /etc/init.d/3ginfo
+	chmod 0755 -R /usr/share/3ginfo/*
+fi
 
-# Fix 3ginfo-lite
-chmod 0755 -R /usr/share/3ginfo-lite/*
+# Fix 3ginfo-lite permission
+[ -d "/usr/share/3ginfo-lite" ] && chmod 0755 -R /usr/share/3ginfo-lite/*
 
 # Fix xdrtool: Xderm Mini Tool Script permission
-chmod +x /bin/xdrtool
+[ -f "/bin/xdrtool" ] && chmod +x /bin/xdrtool
+
+# Fix ocsm permission
+[ -f "/bin/ocsm" ] && chmod +x /bin/ocsm
+
+# Fix vasm permission
+[ -f "/bin/vasm" ] && chmod +x /bin/vasm
+
+# Fix sambaset permission
+[ -f "/bin/sambaset" ] && chmod +x /bin/sambaset
+
+# Fix ssr permission
+[ -f "/bin/ssr" ] && chmod +x /bin/ssr
+
+# Fix wegare permission
+[ -f "/bin/wegare" ] && chmod +x /bin/wegare
+
+# Fix xderm_luci_install permission
+[ -f "/bin/xderm_luci_install" ] && chmod +x /bin/xderm_luci_install
 
 # Fix atinout permission
-chmod +x /sbin/set_at_port.sh
+[ -f "/sbin/set_at_port.sh" ] && chmod +x /sbin/set_at_port.sh
 
-# Fix sms tool
-chmod +x /etc/init.d/smsled
-chmod +x /sbin/cronsync.sh
-chmod +x /sbin/set_sms_ports.sh
-chmod +x /sbin/smsled-init.sh
-chmod +x /sbin/smsled.sh
+# Fix sms tool permission
+if [ -f "/sbin/set_sms_ports.sh" ]; then
+	chmod +x /etc/init.d/smsled
+	chmod +x /sbin/cronsync.sh
+	chmod +x /sbin/set_sms_ports.sh
+	chmod +x /sbin/smsled-init.sh
+	chmod +x /sbin/smsled.sh
+fi
 
-# Add wegare123 stl tool
+# Add wegare123 stl tool permission
 # run "stl" using terminal for use
-chmod +x /usr/bin/gproxy
-chmod +x /usr/bin/stl
-chmod +x /root/akun/tunnel.py
-chmod +x /root/akun/ssh.py
-chmod +x /root/akun/inject.py
-chmod +x /usr/bin/autorekonek-stl
-mkdir -p /root/.ssh/
-touch /root/akun/ssl.conf
-touch /root/.ssh/config
-touch /root/akun/stl.txt
-touch /root/akun/ipmodem.txt 
+if [ -f "/usr/bin/gproxy" ]; then
+	chmod +x /usr/bin/gproxy
+	chmod +x /usr/bin/stl
+	chmod +x /root/akun/tunnel.py
+	chmod +x /root/akun/ssh.py
+	chmod +x /root/akun/inject.py
+	chmod +x /usr/bin/autorekonek-stl
+	mkdir -p /root/.ssh/
+	touch /root/akun/ssl.conf
+	touch /root/.ssh/config
+	touch /root/akun/stl.txt
+	touch /root/akun/ipmodem.txt 
+fi
 
-# Add wifi id seamless autologin by kopijahe
+# Add wifi id seamless autologin by kopijahe permission
 # run "kopijahe" using terminal for use
-chmod +x /bin/kopijahe
+[ -d "/bin/kopijahe" ] && chmod +x /bin/kopijahe
 
-# Fix telegrambot
-chmod +x /etc/init.d/telegrambot
-chmod -R +x /usr/lib/telegrambot/* /usr/lib/functions/*
+# Fix telegrambot permission
+if [ -f "/etc/init.d/telegrambot" ]; then
+	chmod +x /etc/init.d/telegrambot
+	chmod -R +x /usr/lib/telegrambot/* /usr/lib/functions/*
+fi
 
-# Fix nft-qos
-chmod +x /etc/init.d/nft-qos
-chmod -R +x /lib/nft-qos/*
-chmod +x /etc/hotplug.d/dhcp/00-nft-qos-monitor
-chmod +x /etc/hotplug.d/dhcp/01-nft-qos-dynamic
+# Fix nft-qos permission
+if [ -d "/etc/init.d/nft-qos" ]; then
+	chmod +x /etc/init.d/nft-qos
+	chmod -R +x /lib/nft-qos/*
+	chmod +x /etc/hotplug.d/dhcp/00-nft-qos-monitor
+	chmod +x /etc/hotplug.d/dhcp/01-nft-qos-dynamic
+fi
 
 # auto fix for bcm27xx
 if [ -e /bin/is_immortalwrt_based ] && grep -q "bcm27" /etc/openwrt_release; then
