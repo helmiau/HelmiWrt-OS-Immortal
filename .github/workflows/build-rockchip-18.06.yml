@@ -137,7 +137,7 @@ jobs:
       - name: Patches
         run: |
           cd $OPENWRT_ROOT_PATH
-          wget -O /target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch https://raw.githubusercontent.com/orangepi-xunlong/openwrt/openwrt-21.02/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch
+          wget -O $OPENWRT_ROOT_PATH/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch https://raw.githubusercontent.com/orangepi-xunlong/openwrt/openwrt-21.02/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch
 
       - name: Install Feeds
         if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
@@ -301,7 +301,7 @@ jobs:
       - name: Patches
         run: |
           cd $OPENWRT_ROOT_PATH
-          wget -O /target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch https://raw.githubusercontent.com/orangepi-xunlong/openwrt/openwrt-21.02/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch
+          wget -O $OPENWRT_ROOT_PATH/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch https://raw.githubusercontent.com/orangepi-xunlong/openwrt/openwrt-21.02/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch
 
       - name: Install Feeds
         run: |
