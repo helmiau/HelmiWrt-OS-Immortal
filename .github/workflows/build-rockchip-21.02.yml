@@ -134,6 +134,11 @@ jobs:
             echo "::set-output name=REBUILD_TOOLCHAIN::true"
           fi
 
+      - name: Patches
+        run: |
+          cd $OPENWRT_ROOT_PATH
+          wget -O /target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch https://raw.githubusercontent.com/orangepi-xunlong/openwrt/openwrt-21.02/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch
+
       - name: Install Feeds
         if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         run: |
@@ -292,6 +297,11 @@ jobs:
           sudo mount -t overlay overlay -o lowerdir=openwrt-ro,upperdir=overlay,workdir=workdir openwrt
           cd $OPENWRT_ROOT_PATH
           git pull
+
+      - name: Patches
+        run: |
+          cd $OPENWRT_ROOT_PATH
+          wget -O /target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch https://raw.githubusercontent.com/orangepi-xunlong/openwrt/openwrt-21.02/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch
 
       - name: Install Feeds
         run: |
