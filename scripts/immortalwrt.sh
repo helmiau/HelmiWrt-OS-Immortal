@@ -125,7 +125,8 @@ fi
 if [[ $TOOLCHAIN_IMAGE != *"bcm2711"* ]]; then
 	# Add bcm2711 patches
 	echo "non-bcm2711 target detected! Adding patches..."
-	rm -f $OPENWRT_ROOT_PATH/target/linux/bcm27xx/patches-5.4/950-0316-pinctrl-bcm2835-Add-support-for-BCM2711-pull-up-func.patch
+	pinctrl_bcm2835_dir=$OPENWRT_ROOT_PATH/target/linux/bcm27xx/patches-5.4/950-0316-pinctrl-bcm2835-Add-support-for-BCM2711-pull-up-func.patch
+	[ -f $pinctrl_bcm2835_dir ] && rm -f $pinctrl_bcm2835_dir
 fi
 
 if [[ "$SOURCE_BRANCH" == *"21.02"* ]]; then
