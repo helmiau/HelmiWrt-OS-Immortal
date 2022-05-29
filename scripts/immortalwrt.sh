@@ -114,6 +114,27 @@ if [[ $TOOLCHAIN_IMAGE == *"armvirt"* ]]; then
 	git clone --depth=1 https://github.com/ophub/luci-app-amlogic
 fi
 
+if [[ $TOOLCHAIN_IMAGE == *"sunxi"* ]]; then
+	# Add sunxi cortexa7
+	echo "sunxi cortexa7 target detected! Adding patches..."
+	sed -i "s|hostapd-utils=y|hostapd-utils=n|g" $OPENWRT_ROOT_PATH/.config
+	sed -i "s|hostapd-common=y|hostapd-common=n|g" $OPENWRT_ROOT_PATH/.config
+	sed -i "s|hostapd=y|hostapd=n|g" $OPENWRT_ROOT_PATH/.config
+fi
+
+if [[ $TOOLCHAIN_IMAGE != *"bcm2711"* ]]; then
+	# Add bcm2711 patches
+	echo "non-bcm2711 target detected! Adding patches..."
+	rm -f $OPENWRT_ROOT_PATH/target/linux/bcm27xx/patches-5.4/950-0316-pinctrl-bcm2835-Add-support-for-BCM2711-pull-up-func.patch
+fi
+
+if [[ "$SOURCE_BRANCH" == *"21.02"* ]]; then
+	echo "OpenWrt $SOURCE_BRANCH detected! adding openwrt-$SOURCE_BRANCH config..."
+	sed -i "s|argonv3=y|argon=y|g" $OPENWRT_ROOT_PATH/.config
+	sed -i "s|edge=y|edge=n|g" $OPENWRT_ROOT_PATH/.config
+	sed -i "s|neobird=y|neobird=n|g" $OPENWRT_ROOT_PATH/.config
+fi
+
 # Add Adguardhome
 git clone --depth=1 https://github.com/yang229/luci-app-adguardhome
 

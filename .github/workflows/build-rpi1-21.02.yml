@@ -305,12 +305,8 @@ jobs:
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_ROOT_PATH/.config
           cat $EXTRA_CONFIG_FILE >> $OPENWRT_ROOT_PATH/.config
           cat $UNIVERSAL_CONFIG_FILE >> $OPENWRT_ROOT_PATH/.config
-          if [[ "$SOURCE_BRANCH" == *"21.02"* ]]; then
-            echo -e "helmilog: using openwrt-$SOURCE_BRANCH config..."
-            sed -i "s|argonv3=y|argon=y|g" $OPENWRT_ROOT_PATH/.config
-            sed -i "s|edge=y|edge=n|g" $OPENWRT_ROOT_PATH/.config
-            sed -i "s|neobird=y|neobird=n|g" $OPENWRT_ROOT_PATH/.config
-          fi
+          export SOURCE_BRANCH=$SOURCE_BRANCH
+          echo "SOURCE_BRANCH=$SOURCE_BRANCH" >> $GITHUB_ENV
           cd $OPENWRT_ROOT_PATH
           chmod +x $GITHUB_WORKSPACE/scripts/*.sh
           $GITHUB_WORKSPACE/$DIY_SH
@@ -387,8 +383,6 @@ jobs:
         run: |
           export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-          export SOURCE_BRANCH=$SOURCE_BRANCH
-          echo "SOURCE_BRANCH=$SOURCE_BRANCH" >> $GITHUB_ENV
           cd $OPENWRT_ROOT_PATH/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
           rm -rf packages
           find . -type f -name 'helmiwrt-*' | while read FILE ; do
