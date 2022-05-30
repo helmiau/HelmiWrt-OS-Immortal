@@ -103,7 +103,7 @@ jobs:
         name: HelmiWrt OS ${{ env.BUILD_DATE }}
         token: ${{ secrets.HELMIWRT_RW }}
         tag: helmiwrt-${{ env.BUILD_DATE }}
-        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/helmiwrt-s9*
+        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/helmiwrt-*
         body: |
           **HelmiWrt is custom OpenWrt build for**
           - Raspberry Pi 1,2,3,4
