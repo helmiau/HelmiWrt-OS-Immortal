@@ -437,16 +437,18 @@ jobs:
           sudo -E apt-get -qq install wget curl
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
-          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
-          echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-          echo -e "$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-$BUILD_DATE | grep armvirt-64)" > armvirt64.txt
-          wget -i armvirt64.txt
 
       - name: Checking Files
         id: checkfiles
         run: |
           [ ! -d $GITHUB_WORKSPACE/kerjain ] && mkdir -p $GITHUB_WORKSPACE/kerjain
           cd $GITHUB_WORKSPACE/kerjain
+          export SOURCE_BRANCH=$SOURCE_BRANCH
+          echo "SOURCE_BRANCH=$SOURCE_BRANCH" >> $GITHUB_ENV
+          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
+          echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
+          echo -e "$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-$BUILD_DATE | grep $SOURCE_BRANCH-armvirt-64)" > armvirt64.txt
+          wget -i armvirt64.txt
           echo -e "=== helmilog: Below is work/kerjain contents.. ==="
           ls -R
           rm -f armvirt64.txt
@@ -469,13 +471,13 @@ jobs:
           token: ${{ secrets.HELMIWRT_RW }}
           artifacts: $GITHUB_WORKSPACE/kerjain/*
 
-      - name: Running s9xxx Build with armvirt64 base
+      - name: Running Amlogic s9xxx ${{ env.SOURCE_BRANCH }} build
         uses: convictional/trigger-workflow-and-wait@v1.5.0
         with:
           owner: ${{ env.REPO_OWNER }}
           repo: ${{ env.REPO_NAME }}
           github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-armvirt-s9xxx.yml
+          workflow_file_name: build-amlogic-s9xxx-${{ env.SOURCE_BRANCH }}.yml
           ref: ${{ env.BRANCH_NAME }}
           propagate_failure: ${{ env.FAILPROP }}
           trigger_workflow: ${{ env.TRIGGERWF }}
