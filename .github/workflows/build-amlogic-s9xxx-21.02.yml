@@ -84,7 +84,7 @@ jobs:
           export PACKAGED_OUTPUTPATH="${PWD}/out"
           echo "PACKAGED_OUTPUTPATH=$PACKAGED_OUTPUTPATH" >> $GITHUB_ENV
           find . -type f -name 'helmiwrt-s9*' | while read FILE ; do
-            newfile="$(echo ${FILE} | sed 's/helmiwrt/helmiwrt-$SOURCE_BRANCH/')" ;
+            newfile=$(echo ${FILE} | sed "s/helmiwrt/helmiwrt-$SOURCE_BRANCH/") ;
             echo -e $(readlink -f ${FILE}) ;
             mv "${FILE}" "${newfile}" ;
             echo -e $(readlink -f ${FILE}) ;
