@@ -112,6 +112,11 @@ if [[ $TOOLCHAIN_IMAGE == *"armvirt"* ]]; then
 	# Add luci-app-amlogic
 	echo "armvirt target detected! Adding amlogic service..."
 	git clone --depth=1 https://github.com/ophub/luci-app-amlogic
+	sed -i "CONFIG_PACKAGE_dosfstools=y" >> $OPENWRT_ROOT_PATH/.config
+	sed -i "CONFIG_PACKAGE_util-linux=y" >> $OPENWRT_ROOT_PATH/.config
+	sed -i "CONFIG_PACKAGE_uuidgen=y" >> $OPENWRT_ROOT_PATH/.config
+	sed -i "CONFIG_PACKAGE_luci-lib-fs=y" >> $OPENWRT_ROOT_PATH/.config
+	sed -i "CONFIG_PACKAGE_perl=y" >> $OPENWRT_ROOT_PATH/.config
 fi
 
 if [[ $TOOLCHAIN_IMAGE == *"sunxi"* ]]; then
