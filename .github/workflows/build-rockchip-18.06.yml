@@ -138,6 +138,7 @@ jobs:
         run: |
           cd $OPENWRT_ROOT_PATH
           wget -O $OPENWRT_ROOT_PATH/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch https://raw.githubusercontent.com/orangepi-xunlong/openwrt/openwrt-21.02/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch
+          sed -i "s|mmc_delay\(10\)|mmc_delay\(5\)|g" $OPENWRT_ROOT_PATH/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch
 
       - name: Install Feeds
         if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
@@ -302,6 +303,7 @@ jobs:
         run: |
           cd $OPENWRT_ROOT_PATH
           wget -O $OPENWRT_ROOT_PATH/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch https://raw.githubusercontent.com/orangepi-xunlong/openwrt/openwrt-21.02/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch
+          sed -i "s|mmc_delay\(10\)|mmc_delay\(5\)|g" $OPENWRT_ROOT_PATH/target/linux/rockchip/patches-5.4/809-Fix-reboot-with-UHS-cards.patch
 
       - name: Install Feeds
         run: |
