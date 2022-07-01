@@ -25,12 +25,18 @@ mkdir -p $COREDIR
 # - original core
 # - tun premium core
 # - tun game core
-clash_url=$(curl -sL $APIGIT/vernesong/OpenClash/releases/tags/Clash | grep /clash-linux-$1 | awk -F '"' '{print $4}')
-clash_tun_url=$(curl -sL $APIGIT/vernesong/OpenClash/releases/tags/TUN-Premium | grep /clash-linux-$1 | awk -F '"' '{print $4}')
+# - meta core <new>
+# old clash_url=$(curl -sL $APIGIT/vernesong/OpenClash/releases/tags/Clash | grep /clash-linux-$1 | awk -F '"' '{print $4}')
+# old clash_tun_url=$(curl -sL $APIGIT/vernesong/OpenClash/releases/tags/TUN-Premium | grep /clash-linux-$1 | awk -F '"' '{print $4}')
+clash_url="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lateset/dev/clash-linux-$1.tar.gz"
+tun_core_ver=$(curl -sL https://raw.githubusercontent.com/vernesong/OpenClash/dev/core_version | awk -F: 'NR==2 {print $1}')
+clash_tun_url="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lateset/premium/clash-linux-$1-$tun_core_ver.gz"
 clash_game_url=$(curl -sL $APIGIT/vernesong/OpenClash/releases/tags/TUN | grep /clash-linux-$1 | awk -F '"' '{print $4}')
+clash_meta="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lateset/meta/clash-linux-$1.tar.gz"
 wget -qO- $clash_url | tar xOvz > $COREDIR/clash
 wget -qO- $clash_tun_url | gunzip -c > $COREDIR/clash_tun
 wget -qO- $clash_game_url | tar xOvz > $COREDIR/clash_game
+wget -qO- $clash_meta | gunzip -c > $COREDIR/clash_meta
 
 # Dreamacro Core has:
 # - original core
@@ -45,8 +51,7 @@ wget -qO- $clash_tun_dreamacro | gunzip -c > $COREDIR/clash_tun_dreamacro
 # - tun premium core
 # Please use original and tun game core from Dreamacro or Vernesong core
 # Docs: https://github.com/MetaCubeX/Clash.Meta/tree/Dev
-clash_meta=$(curl -sL $APIGIT/MetaCubeX/Clash.Meta/releases | grep /Clash.Meta-linux-$1 | awk -F '"' '{print $4}' | sed -n '1p')
-wget -qO- $clash_meta | gunzip -c > $COREDIR/clash_meta
+# old clash_meta=$(curl -sL $APIGIT/MetaCubeX/Clash.Meta/releases | grep /Clash.Meta-linux-$1 | awk -F '"' '{print $4}' | sed -n '1p')
 
 chmod +x $COREDIR/clash*
 

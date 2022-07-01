@@ -140,6 +140,7 @@ if [[ "$SOURCE_BRANCH" == *"21.02"* ]]; then
 	sed -i "s|argonv3=y|argon=y|g" $OPENWRT_ROOT_PATH/.config
 	sed -i "s|edge=y|edge=n|g" $OPENWRT_ROOT_PATH/.config
 	sed -i "s|neobird=y|neobird=n|g" $OPENWRT_ROOT_PATH/.config
+	sed -i "s|app-vnstat=y|app-vnstat2=y|g" $OPENWRT_ROOT_PATH/.config
 fi
 
 # Add Adguardhome
