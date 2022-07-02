@@ -36,7 +36,7 @@ clash_meta="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lates
 wget -qO- $clash_url | tar xOvz > $COREDIR/clash
 wget -qO- $clash_tun_url | gunzip -c > $COREDIR/clash_tun
 wget -qO- $clash_game_url | tar xOvz > $COREDIR/clash_game
-wget -qO- $clash_meta | gunzip -c > $COREDIR/clash_meta
+wget -qO- $clash_meta | tar xOvz > $COREDIR/clash
 
 # Dreamacro Core has:
 # - original core
@@ -52,6 +52,7 @@ wget -qO- $clash_tun_dreamacro | gunzip -c > $COREDIR/clash_tun_dreamacro
 # Please use original and tun game core from Dreamacro or Vernesong core
 # Docs: https://github.com/MetaCubeX/Clash.Meta/tree/Dev
 # old clash_meta=$(curl -sL $APIGIT/MetaCubeX/Clash.Meta/releases | grep /Clash.Meta-linux-$1 | awk -F '"' '{print $4}' | sed -n '1p')
+# wget -qO- $clash_meta | gunzip -c > $COREDIR/clash_meta
 
 chmod +x $COREDIR/clash*
 
