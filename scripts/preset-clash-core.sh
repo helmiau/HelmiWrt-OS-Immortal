@@ -36,7 +36,7 @@ clash_meta="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lates
 wget -qO- $clash_url | tar xOvz > $COREDIR/clash
 wget -qO- $clash_tun_url | gunzip -c > $COREDIR/clash_tun
 wget -qO- $clash_game_url | tar xOvz > $COREDIR/clash_game
-wget -qO- $clash_meta | tar xOvz > $COREDIR/clash
+wget -qO- $clash_meta | tar xOvz > $COREDIR/clash_meta
 
 # Dreamacro Core has:
 # - original core
