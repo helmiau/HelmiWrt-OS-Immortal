@@ -25,8 +25,9 @@ helmiwrt
 
 # Run initial boot additions and add default interfaces
 helmiwrt initboot
-helmiwrt addinterfacefirewall
+helmiwrt addifacefw
 helmiwrt vn2root
+helmiwrt bm2root
 
 # auto fix for bcm27xx
 if [ -e /bin/is_immortalwrt_based ] && grep -q "bcm27" /etc/openwrt_release; then
