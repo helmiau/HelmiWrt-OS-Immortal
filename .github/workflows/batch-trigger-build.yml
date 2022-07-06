@@ -64,7 +64,7 @@ jobs:
           name: HelmiWrt OS ${{ env.BUILD_DATE }}
           token: ${{ secrets.HELMIWRT_RW }}
           tag: helmiwrt-${{ env.BUILD_DATE }}
-          body: release_body.txt
+          bodyFile: release_body.txt
 
       - name: Create Release Tag for DL Repository
         uses: ncipollo/release-action@v1
@@ -76,7 +76,7 @@ jobs:
           name: HelmiWrt OS ${{ env.BUILD_DATE }}
           token: ${{ secrets.HELMIWRT_RW }}
           tag: helmiwrt-${{ env.BUILD_DATE }}
-          body: release_body.txt
+          bodyFile: release_body.txt
 
       - name: Actions Checkout running succesfully, resuming build
         run: |
