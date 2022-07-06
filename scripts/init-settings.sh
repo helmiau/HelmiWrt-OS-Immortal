@@ -29,6 +29,7 @@ helmiwrt sshfix
 helmiwrt addifacefw
 helmiwrt vn2root
 helmiwrt bm2root
+helmiwrt unpw
 
 # auto fix for bcm27xx
 if [ -e /bin/is_immortalwrt_based ] && grep -q "bcm27" /etc/openwrt_release; then
