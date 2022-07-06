@@ -44,7 +44,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Checkout
+      - name: Set Timezone to Asia Jakarta
         uses: szenius/set-timezone@v1.0
         with:
           timezoneLinux: "Asia/Jakarta"
