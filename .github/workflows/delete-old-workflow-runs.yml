@@ -2,7 +2,6 @@ name: Delete Workflow Runs
 
 on:
   workflow_dispatch:
-
   schedule:
     - cron: "0 0 * * *"
 
@@ -14,4 +13,4 @@ jobs:
         uses: GitRML/delete-workflow-runs@main
         with:
           token: ${{ secrets.HELMIWRT_RW }}
-          retain_days: 14
+          retain_days: 7
