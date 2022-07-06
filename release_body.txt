@@ -4,4 +4,4 @@
 - NanoPi R2C, R2S and R4S
 - OrangePi R1 Plus, R1 Plus LTS
 - Set-top-box amlogic s9xxx chipset
-[Donation here](https://www.helmiau.com/pay/index_en.html) • [Read more firmware info and guides](https://www.google.com/search?q=helmi+wrt+os)
+[Donation here](https://www.helmiau.com/pay/index_en.html) • [Read more firmware info and guides](https://duckduckgo.com/?q=helmiwrt+os)
