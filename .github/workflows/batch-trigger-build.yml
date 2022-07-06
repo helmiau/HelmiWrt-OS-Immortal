@@ -44,6 +44,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
+      - name: Checkout
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "Asia/Jakarta"
+
       - name: Actions Checkout running succesfully, resuming build
         run: |
           echo "BUILD_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
