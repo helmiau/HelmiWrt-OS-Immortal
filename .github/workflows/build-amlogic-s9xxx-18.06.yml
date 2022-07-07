@@ -49,7 +49,7 @@ jobs:
         echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
         git config --global credential.helper store
         git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
-        export UP_USERNEW=$( grep user filex/up_info.txt | sed 's/user_new=//g' )
+        export UP_USERNEW=$( grep user_new filex/up_info.txt | sed 's/user_new=//g' )
         echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
         export UP_NEW=$( grep new_repo filex/up_info.txt | sed 's/new_repo=//g' )
         echo "UP_NEW=$UP_NEW" >> $GITHUB_ENV

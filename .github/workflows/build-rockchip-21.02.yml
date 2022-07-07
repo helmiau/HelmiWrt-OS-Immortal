@@ -339,7 +339,7 @@ jobs:
           git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
           rm -rf filex/{README.md,LICENSE,runbashing.sh}
           cp -r filex/* package/base-files/files/
-          export UP_USERNEW=$( grep user filex/up_info.txt | sed 's/user_new=//g' )
+          export UP_USERNEW=$( grep user_new filex/up_info.txt | sed 's/user_new=//g' )
           echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
           export UP_NEW=$( grep new_repo filex/up_info.txt | sed 's/new_repo=//g' )
           echo "UP_NEW=$UP_NEW" >> $GITHUB_ENV

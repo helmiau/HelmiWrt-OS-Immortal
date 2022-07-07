@@ -53,9 +53,9 @@ jobs:
           cd workspace
           git config --global credential.helper store
           git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
-          export UP_USEROLD=$( grep user filex/up_info.txt | sed 's/user_old=//g' )
+          export UP_USEROLD=$( grep user_old filex/up_info.txt | sed 's/user_old=//g' )
           echo "UP_USEROLD=$UP_USEROLD" >> $GITHUB_ENV
-          export UP_USERNEW=$( grep user filex/up_info.txt | sed 's/user_new=//g' )
+          export UP_USERNEW=$( grep user_new filex/up_info.txt | sed 's/user_new=//g' )
           echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
           export UP_OLD=$( grep old_repo filex/up_info.txt | sed 's/old_repo=//g' )
           echo "UP_OLD=$UP_OLD" >> $GITHUB_ENV
