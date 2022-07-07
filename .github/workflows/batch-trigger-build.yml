@@ -65,7 +65,8 @@ jobs:
           echo "UP_DEL_OLD=$UP_DEL_OLD" >> $GITHUB_ENV
           export OLD_BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[1] | .tag_name' | sed 's/helmiwrt-//g')
           echo "OLD_BUILD_DATE=$OLD_BUILD_DATE" >> $GITHUB_ENV
-          echo "BUILD_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+          export BUILD_DATE=$(date +"%Y.%m.%d")
+          echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           sleep 15
           echo "Actions Checkout running succesfully, resuming build"
           echo "=============================="
