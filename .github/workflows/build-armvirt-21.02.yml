@@ -332,11 +332,16 @@ jobs:
           git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
           rm -rf filex/{README.md,LICENSE,runbashing.sh}
           cp -r filex/* package/base-files/files/
+          export UP_USERNEW=$( grep user filex/up_info.txt | sed 's/user_new=//g' )
+          echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
+          export UP_NEW=$( grep new_repo filex/up_info.txt | sed 's/new_repo=//g' )
+          echo "UP_NEW=$UP_NEW" >> $GITHUB_ENV
           rm -rf filex
           sed -i -e 's/\r$//' $(grep -rli "/bin/bash" "package/base-files/files/bin")
           chmod +x package/base-files/files/bin/*
           mv package/base-files/files/root/.oh-my-zsh/themes/ys.zsh-theme files/root/.oh-my-zsh/themes/ys.zsh-theme
-          echo "this is immortalwrt base build" > package/base-files/files/bin/is_immortalwrt_based
+          echo -e "this is immortalwrt base build" > package/base-files/files/bin/is_immortalwrt_based
+          echo -e "this is $SOURCE_BRANCH build" > package/base-files/files/bin/is-$SOURCE_BRANCH-build
 
       - name: Download DL Package
         id: download
@@ -390,7 +395,7 @@ jobs:
 
       - name: Organize Files
         run: |
-          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
+          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[0] | .tag_name' | sed 's/helmiwrt-//g')
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           cd $OPENWRT_ROOT_PATH/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
           rm -rf packages
@@ -413,6 +418,8 @@ jobs:
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
+          owner: ${{ env.UP_USERNEW }}
+          repo: ${{ env.UP_NEW }}
           name: HelmiWrt OS ${{ env.BUILD_DATE }}
           tag: helmiwrt-${{ env.BUILD_DATE }}
           bodyFile: release_body.txt
@@ -438,6 +445,19 @@ jobs:
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
 
+      - name: Load HelmiWrt Mods
+        id: mods
+        run: |
+          mkdir -p workspace
+          cd workspace
+          git config --global credential.helper store
+          git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
+          export UP_USERNEW=$( grep user filex/up_info.txt | sed 's/user_new=//g' )
+          echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
+          export UP_NEW=$( grep new_repo filex/up_info.txt | sed 's/new_repo=//g' )
+          echo "UP_NEW=$UP_NEW" >> $GITHUB_ENV
+          rm -rf filex
+
       - name: Checking Files
         id: checkfiles
         run: |
@@ -445,9 +465,9 @@ jobs:
           cd $GITHUB_WORKSPACE/kerjain
           export SOURCE_BRANCH=$SOURCE_BRANCH
           echo "SOURCE_BRANCH=$SOURCE_BRANCH" >> $GITHUB_ENV
-          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
+          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[0] | .tag_name' | sed 's/helmiwrt-//g')
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-          echo -e "$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-$BUILD_DATE | grep $SOURCE_BRANCH-armvirt-64)" > armvirt64.txt
+          echo -e "$(curl -sL https://api.github.com/repos/$UP_USERNEW/$UP_NEW/releases | grep browser_download_url | sed -e 's/ //g' -e 's|\"||g' -e 's|browser_download_url:||g' | grep helmiwrt-$BUILD_DATE | grep $SOURCE_BRANCH-armvirt-64)" > armvirt64.txt
           wget -i armvirt64.txt
           echo -e "=== helmilog: Below is work/kerjain contents.. ==="
           ls -R
@@ -455,15 +475,15 @@ jobs:
           echo -e "=== helmilog: Upper is work/kerjain contents.. ==="
           echo "::set-output name=status::success"
 
-      - name: Deploy Files To Release DL Repo
-        id: upload
+      - name: Deploy Files To Release
         uses: ncipollo/release-action@v1.8.0
-        if: steps.checkfiles.outputs.status == 'success' && !cancelled()
+        if: env.FIRMWARE_RELEASE_UPLOAD == 'true' && steps.checkfiles.outputs.status == 'success' && !cancelled()
         with:
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
-          repo: dl
+          owner: ${{ env.UP_USERNEW }}
+          repo: ${{ env.UP_NEW }}
           name: HelmiWrt OS ${{ env.BUILD_DATE }}
           tag: helmiwrt-${{ env.BUILD_DATE }}
           bodyFile: release_body.txt

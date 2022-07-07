@@ -45,9 +45,16 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
         echo "COMPILE_STARTINGTIME=$(date +"%Y.%m.%d.%H:%M")" >> $GITHUB_ENV
-        export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
+        export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[0] | .tag_name' | sed 's/helmiwrt-//g')
         echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-        export HELMIWRT_REL="https://github.com/helmiau/HelmiWrt-OS-Immortal/releases/download/helmiwrt"
+        git config --global credential.helper store
+        git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
+        export UP_USERNEW=$( grep user filex/up_info.txt | sed 's/user_new=//g' )
+        echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
+        export UP_NEW=$( grep new_repo filex/up_info.txt | sed 's/new_repo=//g' )
+        echo "UP_NEW=$UP_NEW" >> $GITHUB_ENV
+        rm -rf filex
+        export HELMIWRT_REL="https://github.com/$UP_USERNEW/$UP_NEW/releases/download/helmiwrt"
         echo "HELMIWRT_REL=$HELMIWRT_REL" >> $GITHUB_ENV
         export SOURCE_BRANCH=$SOURCE_BRANCH
         echo "SOURCE_BRANCH=$SOURCE_BRANCH" >> $GITHUB_ENV
@@ -99,7 +106,8 @@ jobs:
         prerelease: true
         allowUpdates: true
         replacesArtifacts: true
-        repo: dl
+        owner: ${{ env.UP_USERNEW }}
+        repo: ${{ env.UP_NEW }}
         name: HelmiWrt OS ${{ env.BUILD_DATE }}
         token: ${{ secrets.HELMIWRT_RW }}
         tag: helmiwrt-${{ env.BUILD_DATE }}
