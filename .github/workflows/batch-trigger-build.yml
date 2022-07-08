@@ -53,18 +53,12 @@ jobs:
           cd workspace
           git config --global credential.helper store
           git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
-          export UP_USEROLD=$( grep user_old filex/up_info.txt | sed 's/user_old=//g' )
-          echo "UP_USEROLD=$UP_USEROLD" >> $GITHUB_ENV
           export UP_USERNEW=$( grep user_new filex/up_info.txt | sed 's/user_new=//g' )
           echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
-          export UP_OLD=$( grep old_repo filex/up_info.txt | sed 's/old_repo=//g' )
-          echo "UP_OLD=$UP_OLD" >> $GITHUB_ENV
           export UP_NEW=$( grep new_repo filex/up_info.txt | sed 's/new_repo=//g' )
           echo "UP_NEW=$UP_NEW" >> $GITHUB_ENV
           export UP_DEL_OLD=$( grep old_del filex/up_info.txt | sed 's/old_del=//g' )
           echo "UP_DEL_OLD=$UP_DEL_OLD" >> $GITHUB_ENV
-          export OLD_BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[1] | .tag_name' | sed 's/helmiwrt-//g')
-          echo "OLD_BUILD_DATE=$OLD_BUILD_DATE" >> $GITHUB_ENV
           rm -rf filex
           export BUILD_DATE=$(date +"%Y.%m.%d")
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
@@ -94,16 +88,6 @@ jobs:
           token: ${{ secrets.HELMIWRT_RW }}
           tag: helmiwrt-${{ env.BUILD_DATE }}
           bodyFile: release_body.txt
-
-      - name: Delete Older Release
-        if: ${{ env.UP_DEL_OLD == 'true' }}
-        uses: dev-drprasad/delete-tag-and-release@v0.2.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.HELMIWRT_RW }}
-        with:
-          delete_release: true
-          tag_name: helmiwrt-${{ env.OLD_BUILD_DATE }}
-          repo: ${{ env.UP_USEROLD }}/${{ env.UP_OLD }}
 
       - name: Actions Checkout running succesfully, resuming build
         run: |
