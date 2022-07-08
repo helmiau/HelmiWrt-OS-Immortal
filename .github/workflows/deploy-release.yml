@@ -50,7 +50,7 @@ jobs:
           echo "UP_DEL_OLD=$UP_DEL_OLD" >> $GITHUB_ENV
           export OLD_BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[1] | .tag_name' | sed 's/helmiwrt-//g')
           echo "OLD_BUILD_DATE=$OLD_BUILD_DATE" >> $GITHUB_ENV
-          export BUILD_DATE=$(date +"%Y.%m.%d")
+          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[0] | .tag_name' | sed 's/helmiwrt-//g')
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           #####################
           export BSITE=$( grep blog_site filex/up_info.txt | sed 's/blog_site=//g' )
