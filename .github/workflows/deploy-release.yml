@@ -94,6 +94,7 @@ jobs:
           name: HelmiWrt OS ${{ env.BUILD_DATE }}
           token: ${{ secrets.HELMIWRT_RW }}
           tag: helmiwrt-${{ env.BUILD_DATE }}
+          artifacts: release_body.txt
           bodyFile: release_body.txt
 
       - name: Delete Older Release
