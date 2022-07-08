@@ -65,20 +65,11 @@ jobs:
           echo "UP_DEL_OLD=$UP_DEL_OLD" >> $GITHUB_ENV
           export OLD_BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[1] | .tag_name' | sed 's/helmiwrt-//g')
           echo "OLD_BUILD_DATE=$OLD_BUILD_DATE" >> $GITHUB_ENV
+          rm -rf filex
           export BUILD_DATE=$(date +"%Y.%m.%d")
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           sleep 15
-          echo "Actions Checkout running succesfully, resuming build"
-          echo "=============================="
-          echo "old user= $UP_USEROLD"
-          echo "new user= $UP_USERNEW"
-          echo "old rel= $UP_OLD"
-          echo "new rel= $UP_NEW"
-          echo "old build date= $OLD_BUILD_DATE"
-          echo "new build date= $BUILD_DATE"
-          echo "delete old build= $UP_DEL_OLD"
-          echo "=============================="
-          rm -rf filex
+          echo "Mods loaded succesfully, resuming build..."
 
       - name: Create Release Tag for This Repository
         uses: ncipollo/release-action@v1
