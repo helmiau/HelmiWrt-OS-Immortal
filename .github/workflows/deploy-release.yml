@@ -78,6 +78,7 @@ jobs:
           source_file: workspace/${{ env.BPOST }}
           destination_repo: ${{ env.REPO_OWNER }}/${{ env.BSITE }}
           destination_folder: '_posts'
+          destination_branch: master
           user_email: ${{ env.BMAIL }}
           user_name: ${{ env.REPO_OWNER }}
           commit_message: 'Update HelmiWrt OS posts'
