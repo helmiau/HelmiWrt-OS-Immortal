@@ -83,6 +83,19 @@ jobs:
           user_name: ${{ env.REPO_OWNER }}
           commit_message: 'Update HelmiWrt OS posts'
 
+      - name: Publish Release
+        uses: ncipollo/release-action@v1
+        with:
+          prerelease: false
+          allowUpdates: true
+          replacesArtifacts: true
+          owner: ${{ env.UP_USERNEW }}
+          repo: ${{ env.UP_NEW }}
+          name: HelmiWrt OS ${{ env.BUILD_DATE }}
+          token: ${{ secrets.HELMIWRT_RW }}
+          tag: helmiwrt-${{ env.BUILD_DATE }}
+          bodyFile: release_body.txt
+
       - name: Delete Older Release
         if: ${{ env.UP_DEL_OLD == 'true' }}
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
