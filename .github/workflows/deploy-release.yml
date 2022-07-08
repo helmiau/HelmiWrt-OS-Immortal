@@ -54,8 +54,17 @@ jobs:
           export BUILD_DATE=$(date +"%Y.%m.%d")
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           #####################
-          wget ${{ secrets.HELMIWRT_RAW }}/${{ secrets.HELMIWRT_MD }}
-          sed -i "s|$UP_USEROLD/$UP_OLD|$UP_USERNEW/$UP_NEW|g" ${{ secrets.HELMIWRT_MD }}
+          export BSITE=$( grep blog_site filex/up_info.txt | sed 's/blog_site=//g' )
+          echo "BSITE=$BSITE" >> $GITHUB_ENV
+          export BPOST=$( grep blog_post filex/up_info.txt | sed 's/blog_post=//g' )
+          echo "BPOST=$BPOST" >> $GITHUB_ENV
+          export BRAW=$( grep blog_raw filex/up_info.txt | sed 's/blog_raw=//g' )
+          echo "BRAW=$BRAW" >> $GITHUB_ENV
+          export BMAIL=$( grep mailku filex/up_info.txt | sed 's/mailku=//g' )
+          echo "BMAIL=$BMAIL" >> $GITHUB_ENV
+          #####################
+          wget $BRAW/$BPOST
+          sed -i "s|$UP_USEROLD/$UP_OLD|$UP_USERNEW/$UP_NEW|g" $BPOST
           sleep 15
           echo "Mods loaded succesfully, resuming build"
           echo "::set-output name=status::success"
@@ -66,10 +75,10 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.HELMIWRT_RW }}
         with:
-          source_file: workspace/${{ secrets.HELMIWRT_MD }}
-          destination_repo: ${{ env.REPO_OWNER }}/${{ secrets.HELMIWRT_POST }}
+          source_file: workspace/${{ env.BPOST }}
+          destination_repo: ${{ env.REPO_OWNER }}/${{ env.BSITE }}
           destination_folder: '_posts'
-          user_email: ${{ secrets.MAILKU }}
+          user_email: ${{ env.BMAIL }}
           user_name: ${{ env.REPO_OWNER }}
           commit_message: 'Update HelmiWrt OS posts'
 
