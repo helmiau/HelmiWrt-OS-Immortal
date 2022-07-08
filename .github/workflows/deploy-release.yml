@@ -103,5 +103,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.HELMIWRT_RW }}
         with:
           delete_release: true
-          tag_name: helmiwrt-${{ env.BUILD_DATE }}
+          tag_name: helmiwrt-${{ env.OLD_BUILD_DATE }}
           repo: ${{ env.UP_USEROLD }}/${{ env.UP_OLD }}
