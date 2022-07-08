@@ -16,9 +16,7 @@ on:
 #    types: started
 
 env:
-  REPO_OWNER: helmiau
-  REPO_NAME: HelmiWrt-OS-Immortal
-  
+  REPO_OWNER: helmiau  
 
 jobs:
   Build:
@@ -72,7 +70,7 @@ jobs:
           destination_repo: ${{ env.UP_USERNEW }}/${{ env.UP_NEW }}
           destination_folder: '_posts'
           user_email: ${{ secrets.MAILKU }}
-          user_name: ${{ env.UP_USERNEW }}
+          user_name: ${{ env.REPO_OWNER }}
           commit_message: 'Update HelmiWrt OS Posts'
 
       - name: Delete Older Release
