@@ -54,8 +54,8 @@ jobs:
           export BUILD_DATE=$(date +"%Y.%m.%d")
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           #####################
-          wget https://raw.githubusercontent.com/helmiau/helmiau.github.io/master/_posts/2021-09-03-helmiwrt-os.md
-          sed -i "s|$UP_USEROLD/$UP_OLD|$UP_USERNEW/$UP_NEW|g" 2021-09-03-helmiwrt-os.md
+          wget ${{ secrets.HELMIWRT_RAW }}/${{ secrets.HELMIWRT_MD }}
+          sed -i "s|$UP_USEROLD/$UP_OLD|$UP_USERNEW/$UP_NEW|g" ${{ secrets.HELMIWRT_MD }}
           sleep 15
           echo "Mods loaded succesfully, resuming build"
           echo "::set-output name=status::success"
@@ -66,12 +66,12 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.HELMIWRT_RW }}
         with:
-          source_file: 'workspace/2021-09-03-helmiwrt-os.md'
-          destination_repo: ${{ env.UP_USERNEW }}/${{ env.UP_NEW }}
+          source_file: workspace/${{ secrets.HELMIWRT_MD }}
+          destination_repo: ${{ env.REPO_OWNER }}/${{ secrets.HELMIWRT_POST }}
           destination_folder: '_posts'
           user_email: ${{ secrets.MAILKU }}
           user_name: ${{ env.REPO_OWNER }}
-          commit_message: 'Update HelmiWrt OS Posts'
+          commit_message: 'Update HelmiWrt OS posts'
 
       - name: Delete Older Release
         if: ${{ env.UP_DEL_OLD == 'true' }}
