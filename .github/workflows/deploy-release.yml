@@ -109,10 +109,11 @@ jobs:
 
   Commit:
     needs: [Build]
+    name: Generate Commit for ${{ matrix.BSITE }} repo
     runs-on: ubuntu-latest
     strategy:
       matrix:
-      include:
+        include:
           - BSITE: dl1
           - BSITE: dl2
           - BSITE: dl3
@@ -164,6 +165,10 @@ jobs:
           - BSITE: dl49
           - BSITE: dl50
 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
       - name: Set Timezone to Asia Jakarta
         uses: szenius/set-timezone@v1.0
         with:
@@ -191,7 +196,7 @@ jobs:
           echo "Mods loaded succesfully, resuming build"
           echo "::set-output name=status::success"
 
-      - name: Pushing Content Update
+      - name: Pushing Content Update for ${{ matrix.BSITE }}
         if: steps.helmimods.outputs.status == 'success' && !cancelled()
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
