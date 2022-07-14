@@ -65,7 +65,7 @@ jobs:
           rm -rf filex
           wget $BRAW/$BPOST
           sed -i "s|$UP_USEROLD/$UP_OLD|$UP_USERNEW/$UP_NEW|g" $BPOST
-          sleep 15
+          sleep 10
           echo "Mods loaded succesfully, resuming build"
           echo "::set-output name=status::success"
 
