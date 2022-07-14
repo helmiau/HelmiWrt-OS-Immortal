@@ -19,7 +19,7 @@ env:
   REPO_OWNER: helmiau  
 
 jobs:
-  Build:
+  Deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -106,3 +106,100 @@ jobs:
           delete_release: true
           tag_name: helmiwrt-${{ env.OLD_BUILD_DATE }}
           repo: ${{ env.UP_USEROLD }}/${{ env.UP_OLD }}
+
+  Commit:
+    needs: [Build]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+      include:
+          - BSITE: dl1
+          - BSITE: dl2
+          - BSITE: dl3
+          - BSITE: dl4
+          - BSITE: dl5
+          - BSITE: dl6
+          - BSITE: dl7
+          - BSITE: dl8
+          - BSITE: dl9
+          - BSITE: dl0
+          - BSITE: dl11
+          - BSITE: dl12
+          - BSITE: dl13
+          - BSITE: dl14
+          - BSITE: dl15
+          - BSITE: dl16
+          - BSITE: dl17
+          - BSITE: dl18
+          - BSITE: dl19
+          - BSITE: dl20
+          - BSITE: dl21
+          - BSITE: dl22
+          - BSITE: dl23
+          - BSITE: dl24
+          - BSITE: dl25
+          - BSITE: dl26
+          - BSITE: dl27
+          - BSITE: dl28
+          - BSITE: dl29
+          - BSITE: dl30
+          - BSITE: dl31
+          - BSITE: dl32
+          - BSITE: dl33
+          - BSITE: dl34
+          - BSITE: dl35
+          - BSITE: dl36
+          - BSITE: dl37
+          - BSITE: dl38
+          - BSITE: dl39
+          - BSITE: dl40
+          - BSITE: dl41
+          - BSITE: dl42
+          - BSITE: dl43
+          - BSITE: dl44
+          - BSITE: dl45
+          - BSITE: dl46
+          - BSITE: dl47
+          - BSITE: dl48
+          - BSITE: dl49
+          - BSITE: dl50
+
+      - name: Set Timezone to Asia Jakarta
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "Asia/Jakarta"
+
+      - name: Load HelmiWrt Mods
+        id: helmimods
+        run: |
+          mkdir -p workspace
+          cd workspace
+          git config --global credential.helper store
+          git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
+          export UP_USEROLD=$( grep user_old filex/up_info.txt | sed 's/user_old=//g' )
+          echo "UP_USEROLD=$UP_USEROLD" >> $GITHUB_ENV
+          export UP_USERNEW=$( grep user_new filex/up_info.txt | sed 's/user_new=//g' )
+          echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
+          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[0] | .tag_name' | sed 's/helmiwrt-//g')
+          echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
+          #####################
+          export BMAIL=$( grep mailku filex/up_info.txt | sed 's/mailku=//g' )
+          echo "BMAIL=$BMAIL" >> $GITHUB_ENV
+          #####################
+          rm -rf filex
+          wget https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/README.md
+          echo "Mods loaded succesfully, resuming build"
+          echo "::set-output name=status::success"
+
+      - name: Pushing Content Update
+        if: steps.helmimods.outputs.status == 'success' && !cancelled()
+        uses: dmnemec/copy_file_to_another_repo_action@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.HELMIWRT_RW }}
+        with:
+          source_file: workspace/README.md
+          destination_repo: ${{ env.UP_USERNEW }}/${{ matrix.BSITE }}
+          destination_branch: master
+          user_email: ${{ env.BMAIL }}
+          user_name: ${{ env.REPO_OWNER }}
+          commit_message: 'Update HelmiWrt OS ${{ env.BUILD_DATE }}'
