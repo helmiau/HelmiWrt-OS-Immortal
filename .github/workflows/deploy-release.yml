@@ -109,7 +109,7 @@ jobs:
 
   Commit:
     needs: [Deploy]
-    name: Generate Commit for ${{ matrix.BSITE }} repo
+    name: Generate Commit for ${{ matrix.BSITE }} Repo
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -196,7 +196,7 @@ jobs:
           echo "Mods loaded succesfully, resuming build"
           echo "::set-output name=status::success"
 
-      - name: Pushing Content Update for ${{ matrix.BSITE }}
+      - name: Pushing Content Update for ${{ matrix.BSITE }} Repo
         if: steps.helmimods.outputs.status == 'success' && !cancelled()
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
@@ -204,7 +204,7 @@ jobs:
         with:
           source_file: workspace/README.md
           destination_repo: ${{ env.UP_USERNEW }}/${{ matrix.BSITE }}
-          destination_branch: master
+          destination_branch: main
           user_email: ${{ env.BMAIL }}
           user_name: ${{ env.REPO_OWNER }}
           commit_message: 'Update HelmiWrt OS ${{ env.BUILD_DATE }}'
