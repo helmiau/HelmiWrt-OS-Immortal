@@ -108,7 +108,7 @@ jobs:
           repo: ${{ env.UP_USEROLD }}/${{ env.UP_OLD }}
 
   Commit:
-    needs: [Build]
+    needs: [Deploy]
     name: Generate Commit for ${{ matrix.BSITE }} repo
     runs-on: ubuntu-latest
     strategy:
