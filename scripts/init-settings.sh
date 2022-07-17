@@ -31,6 +31,9 @@ helmiwrt vn2root
 helmiwrt bm2root
 helmiwrt unpw
 
+/etc/init.d/dropbear restart
+/etc/init.d/ttyd restart
+
 # auto fix for bcm27xx
 if [ -e /bin/is_immortalwrt_based ] && grep -q "bcm27" /etc/openwrt_release; then
 	helmiwrt fixov
