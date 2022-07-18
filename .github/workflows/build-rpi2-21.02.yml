@@ -24,7 +24,7 @@ env:
   #Binaries Platform
   CLASH_BINARY: armv7
   V2RAYA_BINARY: arm32-v7a
-  SPEEDTEST_CLI_BINARY: arm
+  SPEEDTEST_CLI_BINARY: armel
   #Workflow Infos
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
   SOURCE_BRANCH: 21.02
