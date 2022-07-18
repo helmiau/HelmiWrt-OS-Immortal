@@ -7,7 +7,7 @@
 # HelmiWrt OS by helmiau.com
 #=================================================
 
-name: Build x86 64 21.02
+name: Build x86 64bit 21.02
 
 on:
   workflow_dispatch:

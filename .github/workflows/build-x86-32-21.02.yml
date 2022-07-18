@@ -7,7 +7,7 @@
 # HelmiWrt OS by helmiau.com
 #=================================================
 
-name: Build x86 64bit 18.06
+name: Build x86 32bit 21.02
 
 on:
   workflow_dispatch:
@@ -18,16 +18,16 @@ on:
 
 env:
   #Config Files
-  CONFIG_FILE: config/x86-64-target.config
+  CONFIG_FILE: config/x86-32-target.config
   EXTRA_CONFIG_FILE: config/x86-extra.config
   UNIVERSAL_CONFIG_FILE: config/universal.config
   #Binaries Platform
-  CLASH_BINARY: amd64
-  V2RAYA_BINARY: 64
-  SPEEDTEST_CLI_BINARY: x86_64
+  CLASH_BINARY: 386
+  V2RAYA_BINARY: 32
+  SPEEDTEST_CLI_BINARY: i386
   #Workflow Infos
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
-  SOURCE_BRANCH: 18.06-k5.4
+  SOURCE_BRANCH: 21.02
   DIY_SH: scripts/immortalwrt.sh
   TOOLCHAIN_TAG: toolchain
   TOOLCHAIN_RELEASE_UPLOAD: true
@@ -309,7 +309,7 @@ jobs:
           echo "SOURCE_BRANCH=$SOURCE_BRANCH" >> $GITHUB_ENV
           # Add Configs to Kernel Config
           [ -f $OPENWRTROOT/target/linux/x86/config-5.4 ] && cat config/x86-kernel.config >> $OPENWRTROOT/target/linux/x86/config-5.4
-          [ -f $OPENWRTROOT/target/linux/x86/64/config-5.4 ] && cat config/x86-kernel.config >> $OPENWRTROOT/target/linux/x86/64/config-5.4
+          [ -f $OPENWRTROOT/target/linux/x86/generic/config-5.4 ] && cat config/x86-kernel.config >> $OPENWRTROOT/target/linux/x86/generic/config-5.4
           cd $OPENWRT_ROOT_PATH
           chmod +x $GITHUB_WORKSPACE/scripts/*.sh
           $GITHUB_WORKSPACE/$DIY_SH
