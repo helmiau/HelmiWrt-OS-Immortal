@@ -174,11 +174,11 @@ jobs:
         with:
           timezoneLinux: "Asia/Jakarta"
 
-      - name: Load HelmiWrt Mods
-        id: helmimods
+      - name: Create Dummy Text
+        id: reforged
         run: |
-          mkdir -p workspace
-          cd workspace
+          mkdir -p $GITHUB_WORKSPACE/workspace
+          cd $GITHUB_WORKSPACE/workspace
           git config --global credential.helper store
           git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
           export UP_USEROLD=$( grep user_old filex/up_info.txt | sed 's/user_old=//g' )
@@ -192,11 +192,33 @@ jobs:
           echo "BMAIL=$BMAIL" >> $GITHUB_ENV
           #####################
           rm -rf filex
+          echo -e "Next build will be released" > README.md
+          echo "Mods loaded succesfully, resuming build"
+          echo "::set-output name=status::success"
+
+      - name: Pushing Dummy Commit to ${{ matrix.BSITE }} Repo
+        if: steps.reforged.outputs.status == 'success' && !cancelled()
+        uses: dmnemec/copy_file_to_another_repo_action@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.HELMIWRT_RW }}
+        with:
+          source_file: workspace/README.md
+          destination_repo: ${{ env.UP_USERNEW }}/${{ matrix.BSITE }}
+          destination_branch: main
+          user_email: ${{ env.BMAIL }}
+          user_name: ${{ env.REPO_OWNER }}
+          commit_message: 'Update Dummy Commit ${{ env.BUILD_DATE }}'
+
+      - name: Load HelmiWrt Mods
+        id: helmimods
+        run: |
+          cd $GITHUB_WORKSPACE/workspace
+          rm -f $GITHUB_WORKSPACE/workspace/README.md
           wget https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/README.md
           echo "Mods loaded succesfully, resuming build"
           echo "::set-output name=status::success"
 
-      - name: Pushing Content Update for ${{ matrix.BSITE }} Repo
+      - name: Pushing Update for ${{ matrix.BSITE }} Repo
         if: steps.helmimods.outputs.status == 'success' && !cancelled()
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
