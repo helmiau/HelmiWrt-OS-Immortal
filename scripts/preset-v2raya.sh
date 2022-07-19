@@ -21,8 +21,8 @@
 # Add v2ray-core for v2rayA build
 VAETCBIN="files/etc/v2raya/bin"
 VUSRSHARE="files/usr/share/v2ray"
-echo -e "${G}  Installing v2ray core by v2fly...."
-echo -e "${G}  Architecture detected : ${R}$1....${Y}"
+echo -e "  Installing v2ray core by v2fly...."
+echo -e "  Architecture detected : $1...."
 # Check etc/v2raya/bin directory
 if [[ ! -d $VAETCBIN ]]; then
 	mkdir -p $VAETCBIN
@@ -40,9 +40,9 @@ if [[ -s $VAETCBIN ]]; then
 	find $VAETCBIN -type f -name '*.dat' -exec rm $VAETCBIN/*.dat \;
 	find $VAETCBIN -type f -name '*.zip' -exec rm $VAETCBIN/*.zip \;
 	rm -rf $VAETCBIN/systemd
-	echo -e "${G}  v2ray core by v2fly installed....${N}"
+	echo -e "  v2ray core by v2fly installed...."
 else
-	echo -e "${R}  v2ray core by v2fly install failed....${N}"
+	echo -e "  v2ray core by v2fly install failed...."
 fi
 # Check usr/bin/v2raya directory
 if [[ ! -d $VUSRSHARE ]]; then
@@ -55,7 +55,7 @@ if [[ -d $VUSRSHARE ]]; then
 	wget -O $VUSRSHARE/geoip.dat $VARULES/geoip.dat
 	wget -O $VUSRSHARE/LoyalsoldierSite.dat $VARULES/geosite.dat
 else
-	echo -e "${R}  v2ray core by v2fly install failed....${N}"
+	echo -e "  v2ray core by v2fly install failed...."
 fi
 
 chmod +x $VAETCBIN/* $VUSRSHARE

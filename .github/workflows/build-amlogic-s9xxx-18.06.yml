@@ -18,8 +18,8 @@ on:
 env:
   REPO_URL: https://github.com/radityabh/amlogic-s9xxx-openwrt
   REPO_BRANCH: main
-  PROC_LISTS: s905x3_s905x2_s905x_s905w_s905d_s922x_s912
-  KERNEL_VR: 5.4.0_5.15.15
+  PROC_LISTS: s905x3_s905x2_s905x_s905w_s905d_s922x_s912_s905
+  KERNEL_VR: 5.4.0_5.15.51
   SOURCE_BRANCH: 18.06-k5.4
   UPLOAD_RELEASE: true
   TZ: Asia/Jakarta
