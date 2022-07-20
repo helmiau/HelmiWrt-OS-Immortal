@@ -7,7 +7,7 @@
 # HelmiWrt OS by helmiau.com
 #=================================================
 
-name: Build Sunxi Cortexa7 21.02
+name: Build Sunxi Cortex A7 21.02
 
 on:
   workflow_dispatch:
