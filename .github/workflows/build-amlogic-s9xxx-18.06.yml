@@ -113,3 +113,18 @@ jobs:
         tag: helmiwrt-${{ env.BUILD_DATE }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/helmiwrt-*
         bodyFile: release_body.txt
+
+    - name: Upload RootFS File to Current Repo
+      uses: ncipollo/release-action@v1
+      if: steps.build.outputs.status == 'success' && !cancelled()
+      with:
+        prerelease: true
+        allowUpdates: true
+        replacesArtifacts: true
+        owner: helmiau
+        repo: HelmiWrt-OS-Immortal
+        name: HelmiWrt OS ${{ env.BUILD_DATE }}
+        token: ${{ secrets.HELMIWRT_RW }}
+        tag: helmiwrt-${{ env.BUILD_DATE }}
+        artifacts: ${{ env.OPENWRTROOT }}/openwrt-armvirt/${{ env.HELMIWRT_FILENAME }}
+        bodyFile: release_body.txt
