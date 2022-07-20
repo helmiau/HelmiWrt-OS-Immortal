@@ -108,15 +108,22 @@ git clone --depth=1 https://github.com/zxlhhyccc/luci-app-v2raya
 # Add luci-theme-neobird theme
 git clone --depth=1 https://github.com/helmiau/luci-theme-neobird
 
+if [[ $TOOLCHAIN_IMAGE == *"x86"* ]]; then
+	echo "x86 target detected! Adding patches..."
+	# Add rtl8723bu for x86
+	svn co https://github.com/radityabh/raditya-package/trunk/rtl8723bu kernel/rtl8723bu
+	echo -e "CONFIG_PACKAGE_kmod-rtl8723bu=y" >> $OPENWRT_ROOT_PATH/.config
+fi
+
 if [[ $TOOLCHAIN_IMAGE == *"armvirt"* ]]; then
 	# Add luci-app-amlogic
 	echo "armvirt target detected! Adding amlogic service..."
 	git clone --depth=1 https://github.com/ophub/luci-app-amlogic
-	sed -i "CONFIG_PACKAGE_dosfstools=y" >> $OPENWRT_ROOT_PATH/.config
-	sed -i "CONFIG_PACKAGE_util-linux=y" >> $OPENWRT_ROOT_PATH/.config
-	sed -i "CONFIG_PACKAGE_uuidgen=y" >> $OPENWRT_ROOT_PATH/.config
-	sed -i "CONFIG_PACKAGE_luci-lib-fs=y" >> $OPENWRT_ROOT_PATH/.config
-	sed -i "CONFIG_PACKAGE_perl=y" >> $OPENWRT_ROOT_PATH/.config
+	echo -e "CONFIG_PACKAGE_dosfstools=y" >> $OPENWRT_ROOT_PATH/.config
+	echo -e "CONFIG_PACKAGE_util-linux=y" >> $OPENWRT_ROOT_PATH/.config
+	echo -e "CONFIG_PACKAGE_uuidgen=y" >> $OPENWRT_ROOT_PATH/.config
+	echo -e "CONFIG_PACKAGE_luci-lib-fs=y" >> $OPENWRT_ROOT_PATH/.config
+	echo -e "CONFIG_PACKAGE_perl=y" >> $OPENWRT_ROOT_PATH/.config
 fi
 
 if [[ $TOOLCHAIN_IMAGE == *"sunxi"* ]]; then
