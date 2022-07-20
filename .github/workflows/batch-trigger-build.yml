@@ -298,7 +298,7 @@ jobs:
           sleep $DELAY_INT
           echo "Previous build running succesfully, resuming build"
 
-      - name: Running Sunxi Cortexa7 18.06 Build
+      - name: Running Sunxi CortexA7 18.06 Build
         uses: convictional/trigger-workflow-and-wait@v1.5.0
         with:
           owner: ${{ env.REPO_OWNER }}
@@ -315,13 +315,47 @@ jobs:
           sleep $DELAY_INT
           echo "Previous build running succesfully, resuming build"
 
-      - name: Running Sunxi Cortexa7 21.02 Build
+      - name: Running Sunxi CortexA7 21.02 Build
         uses: convictional/trigger-workflow-and-wait@v1.5.0
         with:
           owner: ${{ env.REPO_OWNER }}
           repo: ${{ env.REPO_NAME }}
           github_token: ${{ secrets.HELMIWRT_RW }}
           workflow_file_name: build-sunxi-21.02.yml
+          ref: ${{ env.BRANCH_NAME }}
+          propagate_failure: ${{ env.FAILPROP }}
+          trigger_workflow: ${{ env.TRIGGERWF }}
+          wait_workflow: ${{ env.WAITWF }}
+
+      - name: Previous build running succesfully, resuming build
+        run: |
+          sleep $DELAY_INT
+          echo "Previous build running succesfully, resuming build"
+
+      - name: Running Sunxi CortexA53 18.06 Build
+        uses: convictional/trigger-workflow-and-wait@v1.5.0
+        with:
+          owner: ${{ env.REPO_OWNER }}
+          repo: ${{ env.REPO_NAME }}
+          github_token: ${{ secrets.HELMIWRT_RW }}
+          workflow_file_name: build-sunxi-a53-18.06.yml
+          ref: ${{ env.BRANCH_NAME }}
+          propagate_failure: ${{ env.FAILPROP }}
+          trigger_workflow: ${{ env.TRIGGERWF }}
+          wait_workflow: ${{ env.WAITWF }}
+
+      - name: Previous build running succesfully, resuming build
+        run: |
+          sleep $DELAY_INT
+          echo "Previous build running succesfully, resuming build"
+
+      - name: Running Sunxi CortexA53 21.02 Build
+        uses: convictional/trigger-workflow-and-wait@v1.5.0
+        with:
+          owner: ${{ env.REPO_OWNER }}
+          repo: ${{ env.REPO_NAME }}
+          github_token: ${{ secrets.HELMIWRT_RW }}
+          workflow_file_name: build-sunxi-a53-21.02.yml
           ref: ${{ env.BRANCH_NAME }}
           propagate_failure: ${{ env.FAILPROP }}
           trigger_workflow: ${{ env.TRIGGERWF }}
