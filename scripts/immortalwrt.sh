@@ -111,8 +111,8 @@ git clone --depth=1 https://github.com/helmiau/luci-theme-neobird
 if [[ $TOOLCHAIN_IMAGE == *"x86"* ]]; then
 	echo "x86 target detected! Adding patches..."
 	# Add rtl8723bu for x86
-	# svn co https://github.com/radityabh/raditya-package/trunk/rtl8723bu kernel/rtl8723bu
-	# echo -e "CONFIG_PACKAGE_kmod-rtl8723bu=y" >> $OPENWRT_ROOT_PATH/.config
+	svn co https://github.com/radityabh/raditya-package/trunk/rtl8723bu kernel/rtl8723bu
+	echo -e "CONFIG_PACKAGE_kmod-rtl8723bu=y" >> $OPENWRT_ROOT_PATH/.config
 fi
 
 if [[ $TOOLCHAIN_IMAGE == *"armvirt"* ]]; then
