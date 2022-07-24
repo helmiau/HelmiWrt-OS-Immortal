@@ -7,4 +7,5 @@ bcm27xx/bcm2711
 ipq40xx/generic
 rockchip/armv8
 sunxi/cortexa7
+sunxi/cortexa53
 x86/64

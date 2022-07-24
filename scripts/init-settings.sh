@@ -25,11 +25,11 @@ helmiwrt
 
 # Run initial boot additions and add default interfaces
 helmiwrt initboot
-helmiwrt sshfix
 helmiwrt addifacefw
 helmiwrt vn2root
 helmiwrt bm2root
 helmiwrt unpw
+helmiwrt sshfix
 
 # auto fix for bcm27xx
 if [ -e /bin/is_immortalwrt_based ] && grep -q "bcm27" /etc/openwrt_release; then
