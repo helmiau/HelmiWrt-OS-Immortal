@@ -87,6 +87,7 @@ else
 	# Add 3ginfo, luci-app-3ginfo
 	echo "Adding luci-app-3ginfo..."
 	git clone --depth=1 https://github.com/4IceG/luci-app-3ginfo
+	sed -i 's/luci-app-3ginfo-lite/luci-app-3ginfo/g' $OPENWRT_ROOT_PATH/.config
 fi
 
 # Add luci-app-sms-tool
