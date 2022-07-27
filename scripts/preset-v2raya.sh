@@ -1,9 +1,8 @@
 #!/bin/bash
 #=================================================
 # File name: preset-v2raya.sh
-# Usage: <preset-v2raya.sh $platform> | example: <preset-v2raya.sh armv8>
+# Usage: preset-v2raya.sh $platform
 # System Required: Linux
-# Version: 1.0
 # Lisence: MIT
 # Author: Helmi Amirudin <https://www.helmiau.com>
 #=================================================

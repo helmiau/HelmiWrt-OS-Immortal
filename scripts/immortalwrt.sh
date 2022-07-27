@@ -114,6 +114,12 @@ if [[ $TOOLCHAIN_IMAGE == *"x86"* ]]; then
 	# Add rtl8723bu for x86
 	# svn co https://github.com/radityabh/raditya-package/trunk/rtl8723bu kernel/rtl8723bu
 	# echo -e "CONFIG_PACKAGE_kmod-rtl8723bu=y" >> $OPENWRT_ROOT_PATH/.config
+	# Fix USB to LAN
+	# sed -i 's/kmod-usb-net-rtl8152=/kmod-usb-net-rtl8152-vendor=/g' $OPENWRT_ROOT_PATH/.config
+	# Add Configs to Kernel Config
+	[ -f $OPENWRT_ROOT_PATH/target/linux/x86/config-5.4 ] && cat $GITHUB_WORKSPACE/config/x86-kernel.config >> $OPENWRT_ROOT_PATH/target/linux/x86/config-5.4
+	[ -f $OPENWRT_ROOT_PATH/target/linux/x86/generic/config-5.4 ] && cat $GITHUB_WORKSPACE/config/x86-kernel.config >> $OPENWRT_ROOT_PATH/target/linux/x86/generic/config-5.4
+	[ -f $OPENWRT_ROOT_PATH/target/linux/x86/64/config-5.4 ] && cat $GITHUB_WORKSPACE/config/x86-kernel.config >> $OPENWRT_ROOT_PATH/target/linux/x86/64/config-5.4
 fi
 
 if [[ $TOOLCHAIN_IMAGE == *"armvirt"* ]]; then
@@ -125,9 +131,25 @@ if [[ $TOOLCHAIN_IMAGE == *"armvirt"* ]]; then
 	echo -e "CONFIG_PACKAGE_uuidgen=y" >> $OPENWRT_ROOT_PATH/.config
 	echo -e "CONFIG_PACKAGE_luci-lib-fs=y" >> $OPENWRT_ROOT_PATH/.config
 	echo -e "CONFIG_PACKAGE_perl=y" >> $OPENWRT_ROOT_PATH/.config
+	# Fix USB to LAN
+	# sed -i 's/kmod-usb-net-rtl8152=/kmod-usb-net-rtl8152-vendor=/g' $OPENWRT_ROOT_PATH/.config
 fi
 
-if [[ $TOOLCHAIN_IMAGE == *"sunxi"* ]]; then
+if [[ $TOOLCHAIN_IMAGE == *"rockchip-armv8"* ]]; then
+	# Add rockchip-armv8 patches
+	echo "rockchip-armv8 target detected! Adding patches..."
+	sed -i "s|Shadowsocks_Libev_Client=y|Shadowsocks_Libev_Client=n|g" $OPENWRT_ROOT_PATH/.config
+	sed -i "s|Shadowsocks_Libev_Server=y|Shadowsocks_Libev_Server=n|g" $OPENWRT_ROOT_PATH/.config
+	sed -i "s|Shadowsocks_Rust_Client=n|Shadowsocks_Rust_Client=y|g" $OPENWRT_ROOT_PATH/.config
+	sed -i "s|Shadowsocks_Rust_Client=n|Shadowsocks_Rust_Client=y|g" $OPENWRT_ROOT_PATH/.config
+fi
+
+if [[ $TOOLCHAIN_IMAGE == *"sunxi-cortexa53"* ]]; then
+	# Add sunxi cortexa53
+	echo "sunxi cortexa53 target detected! Adding patches..."
+fi
+
+if [[ $TOOLCHAIN_IMAGE == *"sunxi-cortexa7"* ]]; then
 	# Add sunxi cortexa7
 	echo "sunxi cortexa7 target detected! Adding patches..."
 	sed -i "s|hostapd-utils=y|hostapd-utils=n|g" $OPENWRT_ROOT_PATH/.config
@@ -136,8 +158,13 @@ if [[ $TOOLCHAIN_IMAGE == *"sunxi"* ]]; then
 	sed -i "s|wpa-supplicant=y|wpa-supplicant=n|g" $OPENWRT_ROOT_PATH/.config
 fi
 
-if [[ $TOOLCHAIN_IMAGE != *"bcm2711"* ]]; then
+if [[ $TOOLCHAIN_IMAGE == *"bcm2711"* ]]; then
 	# Add bcm2711 patches
+	echo "bcm2711 target detected! Adding patches..."
+	echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> $OPENWRT_ROOT_PATH/target/linux/bcm27xx/bcm2711/config-5.4
+	sed -i 's/36/44/g;s/VHT80/VHT20/g' $OPENWRT_ROOT_PATH/package/kernel/mac80211/files/lib/wifi/mac80211.sh
+else
+	# Add non-bcm2711 patches
 	echo "non-bcm2711 target detected! Adding patches..."
 	pinctrl_bcm2835_dir=$OPENWRT_ROOT_PATH/target/linux/bcm27xx/patches-5.4/950-0316-pinctrl-bcm2835-Add-support-for-BCM2711-pull-up-func.patch
 	[ -f $pinctrl_bcm2835_dir ] && rm -f $pinctrl_bcm2835_dir

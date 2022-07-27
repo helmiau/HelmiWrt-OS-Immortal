@@ -1,9 +1,8 @@
 #!/bin/bash
 #=================================================
 # File name: preset-speedtest-cli.sh
-# Usage: <preset-speedtest-cli.sh $platform> | example: <preset-speedtest-cli.sh aarch64>
+# Usage: preset-speedtest-cli.sh $platform
 # System Required: Linux
-# Version: 1.0
 # Lisence: MIT
 # Author: Helmi Amirudin <https://www.helmiau.com>
 # Source: Speedtest by Ookla <https://www.speedtest.net/apps/cli> (scroll down until u find "Linux" under "Download Speedtest CLI" section.
@@ -34,13 +33,13 @@ SPEEDTESTBIN="speedtest"
 echo -e "  Installing Speedtest Core by Ookla...."
 echo -e "  Architecture detected : $1...."
 
-# Check etc/speedtest/bin directory
+# Check files/bin directory
 if [[ ! -d $SPEEDTESTDIR ]]; then
 	mkdir -p $SPEEDTESTDIR
 fi
 
 echo -e "  Downloading ookla-speedtest-$SPEEDTESTVER-$1-linux.tgz...."
-wget -qO- $SPEEDTESTURL | tar xOvz > files/bin/speedtest
+wget -qO- $SPEEDTESTURL | tar xOvz > $SPEEDTESTDIR/$SPEEDTESTBIN
 echo -e "  Installing...."
 
 chmod +x $SPEEDTESTDIR/$SPEEDTESTBIN

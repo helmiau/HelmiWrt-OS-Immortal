@@ -1,9 +1,8 @@
 #!/bin/bash
 #=================================================
 # File name: preset-filebrowser.sh
-# Usage: <preset-filebrowser.sh $platform> | example: <preset-v2raya.sh armv8>
+# Usage: preset-filebrowser.sh $platform
 # System Required: Linux
-# Version: 1.0
 # Lisence: MIT
 # Author: Helmi Amirudin <https://www.helmiau.com>
 #=================================================

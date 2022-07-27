@@ -1,9 +1,8 @@
 #!/bin/bash
 #=================================================
 # File name: preset-clash-core.sh
-# Usage: <preset-clash-core.sh $platform> | example: <preset-clash-core.sh armv8>
+# Usage: preset-clash-core.sh $platform
 # System Required: Linux
-# Version: 3.0
 # Lisence: MIT
 # Author: SuLingGG, Helmi Amirudin
 # Blog: https://helmiau.com
@@ -59,8 +58,8 @@ chmod +x $COREDIR/clash*
 # Offline images sources
 YACD="files/www/luci-static/resources/openclash"
 mkdir -p $YACD
-wget -qO $YACD/Wiki.svg https://img.shields.io/badge/Wiki--lightgrey?logo=GitBook&style=social
-wget -qO $YACD/Tutorials.svg https://img.shields.io/badge/Tutorials--lightgrey?logo=Wikipedia&style=social
-wget -qO $YACD/Star.svg https://img.shields.io/badge/Star--lightgrey?logo=github&style=social
-wget -qO $YACD/Telegram.svg https://img.shields.io/badge/Telegram--lightgrey?logo=Telegram&style=social
-wget -qO $YACD/Sponsor.svg https://img.shields.io/badge/Sponsor--lightgrey?logo=ko-fi&style=social
+wget -qO "$YACD/Wiki.svg" "https://img.shields.io/badge/Wiki--lightgrey?logo=GitBook&style=social"
+wget -qO "$YACD/Tutorials.svg" "https://img.shields.io/badge/Tutorials--lightgrey?logo=Wikipedia&style=social"
+wget -qO "$YACD/Star.svg" "https://img.shields.io/badge/Star--lightgrey?logo=github&style=social"
+wget -qO "$YACD/Telegram.svg" "https://img.shields.io/badge/Telegram--lightgrey?logo=Telegram&style=social"
+wget -qO "$YACD/Sponsor.svg" "https://img.shields.io/badge/Sponsor--lightgrey?logo=ko-fi&style=social"

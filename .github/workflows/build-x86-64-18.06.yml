@@ -25,6 +25,7 @@ env:
   CLASH_BINARY: amd64
   V2RAYA_BINARY: 64
   SPEEDTEST_CLI_BINARY: x86_64
+  SUBFINDER_BINARY: amd64
   #Workflow Infos
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
   SOURCE_BRANCH: 18.06-k5.4
@@ -307,14 +308,12 @@ jobs:
           cat $UNIVERSAL_CONFIG_FILE >> $OPENWRT_ROOT_PATH/.config
           export SOURCE_BRANCH=$SOURCE_BRANCH
           echo "SOURCE_BRANCH=$SOURCE_BRANCH" >> $GITHUB_ENV
-          # Add Configs to Kernel Config
-          [ -f $OPENWRTROOT/target/linux/x86/config-5.4 ] && cat config/x86-kernel.config >> $OPENWRTROOT/target/linux/x86/config-5.4
-          [ -f $OPENWRTROOT/target/linux/x86/64/config-5.4 ] && cat config/x86-kernel.config >> $OPENWRTROOT/target/linux/x86/64/config-5.4
           cd $OPENWRT_ROOT_PATH
           chmod +x $GITHUB_WORKSPACE/scripts/*.sh
           $GITHUB_WORKSPACE/$DIY_SH
           $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_BINARY
-          # $GITHUB_WORKSPACE/scripts/preset-v2raya.sh $V2RAYA_BINARY
+          $GITHUB_WORKSPACE/scripts/preset-v2raya.sh $V2RAYA_BINARY
+          $GITHUB_WORKSPACE/scripts/preset-subfinder.sh $SUBFINDER_BINARY
           $GITHUB_WORKSPACE/scripts/preset-speedtest-cli.sh $SPEEDTEST_CLI_BINARY
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
 
@@ -377,7 +376,6 @@ jobs:
             mv key-build.pub $(usign -F -p key-build.pub)
           fi
           cd $OPENWRT_ROOT_PATH
-          echo "dtparam=i2c_arm=on,audio=on" >> target/linux/bcm27xx/image/config.txt
           mkdir -p files/etc/uci-defaults/
           cp $GITHUB_WORKSPACE/scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
           mkdir -p files/www/snapshots

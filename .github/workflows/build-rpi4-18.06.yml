@@ -25,6 +25,7 @@ env:
   CLASH_BINARY: armv8
   V2RAYA_BINARY: arm64-v8a
   SPEEDTEST_CLI_BINARY: aarch64
+  SUBFINDER_BINARY: arm64
   #Workflow Infos
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
   SOURCE_BRANCH: 18.06-k5.4
@@ -308,12 +309,11 @@ jobs:
           export SOURCE_BRANCH=$SOURCE_BRANCH
           echo "SOURCE_BRANCH=$SOURCE_BRANCH" >> $GITHUB_ENV
           cd $OPENWRT_ROOT_PATH
-          echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
-          sed -i 's/36/44/g;s/VHT80/VHT20/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
           chmod +x $GITHUB_WORKSPACE/scripts/*.sh
           $GITHUB_WORKSPACE/$DIY_SH
           $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_BINARY
-          # $GITHUB_WORKSPACE/scripts/preset-v2raya.sh $V2RAYA_BINARY
+          $GITHUB_WORKSPACE/scripts/preset-v2raya.sh $V2RAYA_BINARY
+          $GITHUB_WORKSPACE/scripts/preset-subfinder.sh $SUBFINDER_BINARY
           $GITHUB_WORKSPACE/scripts/preset-speedtest-cli.sh $SPEEDTEST_CLI_BINARY
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
 
