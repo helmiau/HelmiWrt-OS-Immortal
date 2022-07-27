@@ -25,7 +25,7 @@ env:
   CLASH_BINARY: armv7
   V2RAYA_BINARY: arm32-v7a
   SPEEDTEST_CLI_BINARY: armel
-  SUBFINDER_BINARY: armv6
+  SUBFINDER_BINARY: armv7
   #Workflow Infos
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
   SOURCE_BRANCH: 21.02
@@ -313,7 +313,7 @@ jobs:
           $GITHUB_WORKSPACE/$DIY_SH
           $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_BINARY
           $GITHUB_WORKSPACE/scripts/preset-v2raya.sh $V2RAYA_BINARY
-          $GITHUB_WORKSPACE/scripts/preset-subfinder.sh $SUBFINDER_BINARY
+          $GITHUB_WORKSPACE/scripts/preset-bugscrsubfd.sh $SUBFINDER_BINARY
           $GITHUB_WORKSPACE/scripts/preset-speedtest-cli.sh $SPEEDTEST_CLI_BINARY
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
 
