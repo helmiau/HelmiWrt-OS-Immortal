@@ -147,6 +147,10 @@ fi
 if [[ $TOOLCHAIN_IMAGE == *"sunxi-cortexa53"* ]]; then
 	# Add sunxi cortexa53
 	echo "sunxi cortexa53 target detected! Adding patches..."
+	sed -i "s|hostapd-utils=y|hostapd-utils=n|g" $OPENWRT_ROOT_PATH/.config
+	sed -i "s|hostapd-common=y|hostapd-common=n|g" $OPENWRT_ROOT_PATH/.config
+	sed -i "s|hostapd=y|hostapd=n|g" $OPENWRT_ROOT_PATH/.config
+	sed -i "s|wpa-supplicant=y|wpa-supplicant=n|g" $OPENWRT_ROOT_PATH/.config
 fi
 
 if [[ $TOOLCHAIN_IMAGE == *"sunxi-cortexa7"* ]]; then
