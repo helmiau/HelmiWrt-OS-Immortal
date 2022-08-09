@@ -27,7 +27,7 @@ helmiwrt
 helmiwrt initboot
 helmiwrt addifacefw
 helmiwrt vn2root
-helmiwrt bm2root
+#helmiwrt bm2root
 helmiwrt unpw
 helmiwrt sshfix
 

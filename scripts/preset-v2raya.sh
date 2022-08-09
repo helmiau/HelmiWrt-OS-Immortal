@@ -35,9 +35,9 @@ wget -qO $VAETCBIN/v2ray-core.zip "https://github.com/v2fly/v2ray-core/releases/
 if [[ -s $VAETCBIN ]]; then
 	echo -e "  $VABIN downloaded, installing...."
 	unzip -d $VAETCBIN $VAETCBIN/v2ray-core.zip
-	find $VAETCBIN -type f -name '*.json' -exec rm $VAETCBIN/*.json \;
-	find $VAETCBIN -type f -name '*.dat' -exec rm $VAETCBIN/*.dat \;
-	find $VAETCBIN -type f -name '*.zip' -exec rm $VAETCBIN/*.zip \;
+	#find $VAETCBIN -type f -name '*.json' -exec rm $VAETCBIN/*.json ;
+	#find $VAETCBIN -type f -name '*.dat' -exec rm $VAETCBIN/*.dat ;
+	find $VAETCBIN -type f -name '*.zip' -exec rm $VAETCBIN/*.zip ;
 	rm -rf $VAETCBIN/systemd
 	echo -e "  v2ray core by v2fly installed...."
 else
