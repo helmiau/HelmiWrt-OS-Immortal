@@ -35,7 +35,7 @@ clash_meta="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lates
 wget -qO- $clash_url | tar xOvz > $COREDIR/clash
 wget -qO- $clash_tun_url | gunzip -c > $COREDIR/clash_tun
 wget -qO- $clash_game_url | tar xOvz > $COREDIR/clash_game
-wget -qO- $clash_meta | tar xOvz > $COREDIR/clash_meta_ofc
+wget -qO- $clash_meta | tar xOvz > $COREDIR/clash_meta
 
 # Dreamacro Core has:
 # - original core
@@ -59,7 +59,9 @@ if [[ $1 = "386" ]]; then
 else
 	clash_meta_wss_url=$(curl -sL https://api.github.com/repos/djoeni/Clash.Meta/releases/tags/Prerelease-WSS | sed -e 's|"||g' -e 's| ||g' | grep "browser_download_url:*.*Clash.Meta-linux-$1" | sed -e's|browser_download_url:||g' -e 's|,||g' )
 fi
-wget -qO- $clash_meta_wss_url | gunzip -c > $COREDIR/clash_meta
+sleep 5 #pause
+echo -e "Download URL: $clash_meta_wss_url"
+wget -qO- "$clash_meta_wss_url" | gunzip -c > $COREDIR/clash_meta_wss
 
 chmod +x $COREDIR/clash*
 
