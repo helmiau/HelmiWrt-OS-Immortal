@@ -54,11 +54,13 @@ wget -qO- $clash_tun_dreamacro | gunzip -c > $COREDIR/clash_tun_dreamacro
 # Clash Meta Core WSS has:
 # - tun premium core
 # Docs: https://github.com/djoeni/Clash.Meta
-clash_meta_wss_url=$(curl -sL $APIGIT/djoeni/Clash.Meta/releases/tags/Prerelease-WSS | grep Prerelease-WSS/Clash.Meta-linux-$1 | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 if [[ $1 == "386" ]]; then
 	clash_meta_wss_url=$(curl -sL $APIGIT/djoeni/Clash.Meta/releases/tags/Prerelease-WSS | grep Prerelease-WSS/Clash.Meta-linux-amd64-compatible | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
+if [[ $1 == "armv8" ]]; then
+	clash_meta_wss_url=$(curl -sL $APIGIT/djoeni/Clash.Meta/releases/tags/Prerelease-WSS | grep Prerelease-WSS/Clash.Meta-linux-arm64 | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
+else
+	clash_meta_wss_url=$(curl -sL $APIGIT/djoeni/Clash.Meta/releases/tags/Prerelease-WSS | grep Prerelease-WSS/Clash.Meta-linux-$1 | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 fi
-sleep 5 #pause
 echo -e "Download URL: $clash_meta_wss_url"
 wget -qO- $clash_meta_wss_url | gunzip -c > $COREDIR/clash_meta
 [ -f $COREDIR/clash_meta ] && ls -lh $COREDIR/clash_meta
