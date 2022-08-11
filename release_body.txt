@@ -1,7 +1,8 @@
-**HelmiWrt is custom OpenWrt build for**
-- Raspberry Pi 1,2,3,4
-- x86/64 (PC)
-- NanoPi R2C, R2S and R4S
-- OrangePi R1 Plus, R1 Plus LTS
-- Set-top-box amlogic s9xxx chipset
-[Donation here](https://www.helmiau.com/pay/index_en.html) • [Read more firmware info and guides](https://duckduckgo.com/?q=helmiwrt+os)
+**HelmiWrt is custom OpenWrt build for various devices:**
+- Raspberry Pi: 1A/1B/1B+/Zero/W, 2/2B, 3/3B/3B+, 4/4B/400/CM4.
+- x86/64 PC/Laptop/Notebook.
+- NanoPi: R1S H5, R2C, R2S, R4S, M1 Plus, Neo, Neo 2, Neo Air, Neo Plus 2, R1, 2.
+- OrangePi: 2, One, One Plus, Plus, Zero, Zero Plus, PC, PC 2, PC Plus, R1, R1 Plus, R1 Plus LTS.
+- Set-top-box amlogic: s905, s905d, s905w, s905x, s905x2, s905x3, s912, s922x.
+- ZeroPi
+[Download Here](https://www.helmiau.com/blog/helmiwrt-os) • [Donation Here](https://www.helmiau.com/pay/index_en.html)

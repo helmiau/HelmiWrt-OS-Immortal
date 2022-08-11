@@ -215,6 +215,10 @@ rawgit="https://raw.githubusercontent.com"
 # run "ram" using terminal to check ram usage
 wget -qO $HWOSDIR/bin/ram "$rawgit/wegare123/ram/main/ram.sh"
 
+# Add ocwss: "OpenClash Websocket Mod Core" script downloader
+# run "ocwss" using terminal to check ram usage
+wget -qO $HWOSDIR/bin/ocwss "$rawgit/helmiau/openwrt-config/main/others/ocmetawss"
+
 # Add fix download file.php for xderm and libernet
 # run "fixphp" using terminal for use
 wget -qO $HWOSDIR/bin/fixphp "$rawgit/helmiau/openwrt-config/main/fix-xderm-libernet-gui"
