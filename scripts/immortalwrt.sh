@@ -174,7 +174,7 @@ else
 	[ -f $pinctrl_bcm2835_dir ] && rm -f $pinctrl_bcm2835_dir
 fi
 
-if [[ "$SOURCE_BRANCH" == *"21.02"* ]]; then
+if [[ $SOURCE_BRANCH == *"21.02"* ]]; then
 	echo "OpenWrt $SOURCE_BRANCH detected! adding openwrt-$SOURCE_BRANCH config..."
 	sed -i "s|argonv3=y|argon=y|g" $OPENWRT_ROOT_PATH/.config
 	sed -i "s|edge=y|edge=n|g" $OPENWRT_ROOT_PATH/.config
