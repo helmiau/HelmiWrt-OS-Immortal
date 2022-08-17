@@ -58,7 +58,7 @@ APIGITWSS="https://api.github.com/repos/helmiau/Clash.Meta/releases/tags/Prerele
 TAGWSS="Prerelease-WSS/Clash.Meta-linux"
 if [[ $1 == "amd64" ]] && [[ $1 != "amd64-compatible" ]]; then
 	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-c0d" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
-elif [[ $1 == "386" ]]; then
+elif [[ $1 == "amd64-compatible" ]]; then
 	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-compatible" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 elif [[ $1 == "armv8" ]]; then
 	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-arm64" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
