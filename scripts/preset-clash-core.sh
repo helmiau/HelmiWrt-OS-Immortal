@@ -56,10 +56,9 @@ wget -qO- $clash_tun_dreamacro | gunzip -c > $COREDIR/clash_tun_dreamacro
 # Docs: https://github.com/djoeni/Clash.Meta
 APIGITWSS="https://api.github.com/repos/helmiau/Clash.Meta/releases/tags/Prerelease-WSS"
 TAGWSS="Prerelease-WSS/Clash.Meta-linux"
-if [[ $1 == "amd64" ]] && [[ $1 != "amd64-compatible" ]]; then
+if [[ $1 == "amd64" ]]; then
 	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-c0d" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
-elif [[ $1 == "amd64-compatible" ]]; then
-	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-compatible" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
+	clash_meta_wss_url_compat=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-compatible" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 elif [[ $1 == "armv8" ]]; then
 	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-arm64" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 else
@@ -68,6 +67,12 @@ fi
 echo -e "Download URL: $clash_meta_wss_url"
 wget -qO- $clash_meta_wss_url | gunzip -c > $COREDIR/clash_meta
 [ -f $COREDIR/clash_meta ] && ls -lh $COREDIR/clash_meta
+
+if [[ $clash_meta_wss_url_compat =~ "amd64-compatible" ]]; then
+	echo -e "Download URL: $clash_meta_wss_url_compat"
+	wget -qO- $clash_meta_wss_url_compat | gunzip -c > $COREDIR/clash_meta_compat
+	[ -f $COREDIR/clash_meta_compat ] && ls -lh $COREDIR/clash_meta_compat
+fi
 
 chmod +x $COREDIR/clash*
 
