@@ -56,14 +56,14 @@ wget -qO- $clash_tun_dreamacro | gunzip -c > $COREDIR/clash_tun_dreamacro
 # Docs: https://github.com/djoeni/Clash.Meta
 APIGITWSS="https://api.github.com/repos/djoeni/Clash.Meta/releases/tags/Prerelease-WSS"
 TAGWSS="Prerelease-WSS/Clash.Meta-linux"
-if [[ $1 == "amd64" ]]; then
-	clash_meta_wss_url=$(curl -sL $APIGIT | grep "$TAGWSS-amd64-3" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
+if [[ $1 == "amd64" ]] && [[ $1 != "amd64-compatible" ]]; then
+	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-3" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 elif [[ $1 == "386" ]]; then
-	clash_meta_wss_url=$(curl -sL $APIGIT | grep "$TAGWSS-amd64-compatible" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
+	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-compatible" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 elif [[ $1 == "armv8" ]]; then
-	clash_meta_wss_url=$(curl -sL $APIGIT | grep "$TAGWSS-arm64" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
+	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-arm64" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 else
-	clash_meta_wss_url=$(curl -sL $APIGIT | grep "$TAGWSS-$1" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
+	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-$1" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 fi
 echo -e "Download URL: $clash_meta_wss_url"
 wget -qO- $clash_meta_wss_url | gunzip -c > $COREDIR/clash_meta
