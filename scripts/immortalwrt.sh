@@ -206,6 +206,7 @@ sed -i 's|/bin/ash|/usr/bin/zsh|g' package/base-files/files/etc/passwd
 #-----------------------------------------------------------------------------
 HWOSDIR="package/base-files/files"
 rawgit="https://raw.githubusercontent.com"
+[ ! -d $HWOSDIR/usr/bin ] && mkdir -p $HWOSDIR/usr/bin
 
 # Add vmess creator account from racevpn.com
 # run "vmess" using terminal to create free vmess account
@@ -213,30 +214,37 @@ rawgit="https://raw.githubusercontent.com"
 
 # Add ram checker from wegare123
 # run "ram" using terminal to check ram usage
-wget -qO $HWOSDIR/bin/ram "$rawgit/wegare123/ram/main/ram.sh"
+wget --no-check-certificate -qO $HWOSDIR/bin/ram "$rawgit/wegare123/ram/main/ram.sh"
 
-# Add ocwss: "OpenClash Websocket Mod Core" script downloader
-# run "ocwss" using terminal to check ram usage
-wget -qO $HWOSDIR/bin/ocwss "$rawgit/helmiau/openwrt-config/main/others/ocmetawss"
+# Add ocmetawss: "OpenClash Websocket Mod Core" script downloader
+# run "ocmetawss" using terminal to check ram usage
+wget --no-check-certificate -qO $HWOSDIR/bin/ocmetawss "$rawgit/helmiau/openwrt-config/main/others/ocmetawss"
+
+# Add ocmetawss: "OpenClash Websocket Mod Core" script downloader
+# run "ocmetawss" using terminal to check ram usage
+wget --no-check-certificate -qO $HWOSDIR/usr/bin/jam.sh "$rawgit/helmiau/sync-date-openwrt-with-bug/main/jam.sh"
 
 # Add fix download file.php for xderm and libernet
 # run "fixphp" using terminal for use
-wget -qO $HWOSDIR/bin/fixphp "$rawgit/helmiau/openwrt-config/main/fix-xderm-libernet-gui"
+wget --no-check-certificate -qO $HWOSDIR/bin/fixphp "$rawgit/helmiau/openwrt-config/main/fix-xderm-libernet-gui"
 
 # Add wegare123 stl tools
 # run "stl" using terminal for use
 usergit="wegare123"
 mkdir -p $HWOSDIR/root/akun $HWOSDIR/usr/bin
-wget -qO $HWOSDIR/usr/bin/stl "$rawgit/$usergit/stl/main/stl/stl.sh"
-wget -qO $HWOSDIR/usr/bin/gproxy "$rawgit/$usergit/stl/main/stl/gproxy.sh"
-wget -qO $HWOSDIR/usr/bin/autorekonek-stl "$rawgit/$usergit/stl/main/stl/autorekonek-stl.sh"
-wget -qO $HWOSDIR/root/akun/tunnel.py "$rawgit/$usergit/stl/main/stl/tunnel.py"
-wget -qO $HWOSDIR/root/akun/ssh.py "$rawgit/$usergit/stl/main/stl/ssh.py"
-wget -qO $HWOSDIR/root/akun/inject.py "$rawgit/$usergit/stl/main/stl/inject.py"
+wget --no-check-certificate -qO $HWOSDIR/usr/bin/stl "$rawgit/$usergit/stl/main/stl/stl.sh"
+wget --no-check-certificate -qO $HWOSDIR/usr/bin/gproxy "$rawgit/$usergit/stl/main/stl/gproxy.sh"
+wget --no-check-certificate -qO $HWOSDIR/usr/bin/autorekonek-stl "$rawgit/$usergit/stl/main/stl/autorekonek-stl.sh"
+wget --no-check-certificate -qO $HWOSDIR/root/akun/tunnel.py "$rawgit/$usergit/stl/main/stl/tunnel.py"
+wget --no-check-certificate -qO $HWOSDIR/root/akun/ssh.py "$rawgit/$usergit/stl/main/stl/ssh.py"
+wget --no-check-certificate -qO $HWOSDIR/root/akun/inject.py "$rawgit/$usergit/stl/main/stl/inject.py"
 
 # Add wifi id seamless autologin by kopijahe
 # run "kopijahe" using terminal for use
-wget -qO $HWOSDIR/bin/kopijahe "$rawgit/kopijahe/wifiid-openwrt/master/scripts/kopijahe"
+wget --no-check-certificate -qO $HWOSDIR/bin/kopijahe "$rawgit/kopijahe/wifiid-openwrt/master/scripts/kopijahe"
+
+chmod 0755 -R $HWOSDIR/bin/*
+chmod 0755 -R $HWOSDIR/usr/bin/*
 
 #-----------------------------------------------------------------------------
 #   End of @helmiau terminal scripts additionals menu
