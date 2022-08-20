@@ -193,7 +193,7 @@ jobs:
         if: env.TOOLCHAIN_RELEASE_UPLOAD == 'true' && steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         uses: ncipollo/release-action@v1.8.0
         with:
-          name: ImmortalWrt Toolchains
+          name: HelmiWrt OS Toolchains
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
