@@ -111,9 +111,9 @@ git clone --depth=1 https://github.com/helmiau/luci-theme-neobird
 
 if [[ $TOOLCHAIN_IMAGE == *"x86"* ]]; then
 	echo "x86 target detected! Adding patches..."
-	# Add rtl8723bu for x86
-	# svn co https://github.com/radityabh/raditya-package/trunk/rtl8723bu kernel/rtl8723bu
-	# echo -e "CONFIG_PACKAGE_kmod-rtl8723bu=y" >> $OPENWRT_ROOT_PATH/.config
+	# Add rtl8723bu (tismart ds686) for x86
+	svn co https://github.com/radityabh/raditya-package/branches/Kernel_5.4/rtl8723bu kernel/rtl8723bu
+	echo -e "CONFIG_PACKAGE_kmod-rtl8723bu=y" >> $OPENWRT_ROOT_PATH/.config
 	# Fix USB to LAN
 	# sed -i 's/kmod-usb-net-rtl8152=/kmod-usb-net-rtl8152-vendor=/g' $OPENWRT_ROOT_PATH/.config
 	# Add Configs to Kernel Config
