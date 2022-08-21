@@ -1,4 +1,4 @@
-**HelmiWrt is custom OpenWrt build for various devices:**
+**HelmiWrt is custom OpenWrt build for up to 20 various devices:**
 - Raspberry Pi: 1A/1B/1B+/Zero/W, 2/2B, 3/3B/3B+, 4/4B/400/CM4.
 - x86/64 PC/Laptop/Notebook.
 - NanoPi: R1S H5, R2C, R2S, R4S, M1 Plus, Neo, Neo 2, Neo Air, Neo Plus 2, R1, 2.
