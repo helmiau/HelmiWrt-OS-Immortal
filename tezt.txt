@@ -1,0 +1,81 @@
+########################
+Catatan:
+- Semua device mendapatkan update, kecuali jika ada info "tidak ada update untuk device A"
+- STB HG dan ZTE yang pake kernel 5.15 kalau wifinya belum on, bisa ganti dtb p212. Link dan dokumentasi nama dtb ada disini https://t.me/c/1365888382/46279 untuk cara ganti dtbnya silahkan menggugel indahoy.
+- PASSWORD ADA DI WEB, SILAHKAN DIBACA DENGAN CERMAT DAN TELITI !!!!! NANYA PASSWORD = MUTE!!!!
+- Download di helmiau.com/blog/helmiwrt-os
+- Dukung dengan donasi di helmiau.com/pay
+########################
+
+########################
+##   NEW CHANGELOGS  ##
+########################
+#update - 23 Agustus 2022:
+########################
+- Add: mactoiface - software untuk mengunci mac device ke interface tertentu
+- Add: git-http, jam.sh in cron
+- Replaced php7 with php8
+- x86: kmod-ath9k, kmod-r8101, kmod-r8169, r8169-firmware, kmod-i2c-i801, kmod-rtl8723bu
+- x86: Fix for wrong url server for 21.02 builds
+
+#######################
+##  OLDER CHANGELOGS ##
+#######################
+#update - 18 Agustus 2022:
+########################
+- [Untested] Core meta wss x86 32bit a.k.a generic.
+- [Untested] x86 64bit ada 2 core meta, silahkan di coba.
+- add kmod-r8101
+- add script jam.sh https://github.com/vitoharhari/sync-date-openwrt-with-bug
+
+########################
+#update helmiwrt 11 Agustus 2022:
+#######################
+- Penambahan core meta WSS sebagai core meta default.
+     Kalau mau ganti core meta official, tinggal ke OpenClash - File Manager - masuk ke folder "core" - rename "clash_meta" jadi "clash_meta_wss" - lalu rename "clash_meta_ofc" jadi "clash_meta".
+- Removed Bandwith Monitor.
+- Added vnstati, mikhmon v4, ocmetawss script.
+
+#######################
+#update helmiwrt 28 Juli 2022:
+#######################
+- Libernet Plus adalah libernet default di firmware HelmiWrt OS, kalau mau ganti ke libernet biasa, ini tutornya:
+    - Buka terminal
+    - Jalankan perintah: wget https://github.com/helmiau/helmiwrt-packages/releases/download/ipk/luci-app-libernet-plus_1.9-1_all.ipk -O libernet-plus.ipk && opkg remove $(opkg list-installed | grep "libernet") && opkg install libernet-plus.ipk
+    - Enter
+- penambahan beberapa device sunxi cortex a7: 
+    - ZeroPi
+- penambahan bugsc (buat scan bug) src: https://github.com/helmiau/subfinder dan https://github.com/helmiau/bugscanner-go
+
+#######################
+#update helmiwrt 25 Juli 2022
+#######################
+- ganti libernet plus ke libernet biasa (tapi malah ngebug, lol), kalau mau ganti ke libernet plus:
+    - Buka terminal
+    - Jalankan perintah: wget https://github.com/helmiau/helmiwrt-packages/releases/download/ipk/luci-app-libernet-plus_1.9-2_all.ipk -O libernet-plus.ipk && opkg remove $(opkg list-installed | grep "libernet") && opkg install libernet-plus.ipk
+    - Enter
+- ganti kernel stb ke 5.15.51
+- penambahan beberapa device sunxi cortex a53: 
+    - NanoPi Neo Plus 2
+    - NanoPi Neo 2
+    - NanoPi R1S H5
+    - OrangePi PC 2
+    - OrangePi Zero Plus
+    - OrangePi One Plus
+    - OrangePi 3
+
+#######################
+#update helmiwrt 18 Juli 2022
+#######################
+- fix koneksi internet gak sampai client (khususnya stb)
+- firewall: seluruh firewall interface diarahkan ke firewall "wan", bukan sendiri-sendiri
+- penambahan x86 arch 32bit
+
+#######################
+#update info helmiwrt 30 mei 2022
+#######################
+- fix opkg update
+- tambah docker, samba4
+- fix reboot nanopi r1 plus lts (belum ada yang test)
+- tambah beberapa device sunxi cortexa7
+- dan lainnya lupa.
