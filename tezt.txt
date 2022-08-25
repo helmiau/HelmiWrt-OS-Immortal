@@ -17,6 +17,7 @@ Catatan:
 - Replaced php7 with php8
 - x86: kmod-ath9k, kmod-r8101, kmod-r8169, r8169-firmware, kmod-i2c-i801, kmod-rtl8723bu
 - x86: Fix for wrong url server for 21.02 builds
+- Updated LuCI password !! check again !!
 
 #######################
 ##  OLDER CHANGELOGS ##
