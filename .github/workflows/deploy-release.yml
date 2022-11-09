@@ -67,7 +67,7 @@ jobs:
           sed -i "s|$UP_USEROLD/$UP_OLD|$UP_USERNEW/$UP_NEW|g" $BPOST
           sleep 10
           echo "Mods loaded succesfully, resuming build"
-          echo "::set-output name=status::success"
+          echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Pushing Content Update
         if: steps.mods.outputs.status == 'success' && !cancelled()
@@ -194,7 +194,7 @@ jobs:
           rm -rf filex
           echo -e "Next build will be released" > README.md
           echo "Mods loaded succesfully, resuming build"
-          echo "::set-output name=status::success"
+          echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Pushing Dummy Commit to ${{ matrix.BSITE }} Repo
         if: steps.reforged.outputs.status == 'success' && !cancelled()
@@ -216,7 +216,7 @@ jobs:
           rm -f $GITHUB_WORKSPACE/workspace/README.md
           wget https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/README.md
           echo "Mods loaded succesfully, resuming build"
-          echo "::set-output name=status::success"
+          echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Pushing Update for ${{ matrix.BSITE }} Repo
         if: steps.helmimods.outputs.status == 'success' && !cancelled()

@@ -96,7 +96,7 @@ jobs:
             mv "${FILE}" "${newfile}" ;
             echo -e $(readlink -f ${FILE}) ;
           done
-          echo "::set-output name=status::success"
+          echo "status=success" >> $GITHUB_OUTPUT
         fi
 
     - name: Upload Firmware Files to GitHub Release
