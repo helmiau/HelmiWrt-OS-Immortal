@@ -188,7 +188,7 @@ jobs:
 
       - name: Upload Toolchain Image To Release
         if: env.TOOLCHAIN_RELEASE_UPLOAD == 'true' && steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
-        uses: ncipollo/release-action@v1.8.0
+        uses: ncipollo/release-action@v1.11.1
         with:
           name: HelmiWrt OS Toolchains
           prerelease: true
@@ -416,7 +416,7 @@ jobs:
           df -hT $PWD
 
       - name: Deploy Files To Release
-        uses: ncipollo/release-action@v1.8.0
+        uses: ncipollo/release-action@v1.11.1
         if: env.FIRMWARE_RELEASE_UPLOAD == 'true'
         with:
           prerelease: true

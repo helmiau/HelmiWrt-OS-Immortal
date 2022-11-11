@@ -84,7 +84,7 @@ jobs:
           commit_message: 'Update HelmiWrt OS posts'
 
       - name: Publish Release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1.11.1
         with:
           prerelease: false
           allowUpdates: true
