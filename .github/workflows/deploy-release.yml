@@ -46,6 +46,10 @@ jobs:
           echo "UP_OLD=$UP_OLD" >> $GITHUB_ENV
           export UP_NEW=$( grep new_repo filex/up_info.txt | sed 's/new_repo=//g' )
           echo "UP_NEW=$UP_NEW" >> $GITHUB_ENV
+          export UP_PASS_OLD=$( grep old_fw_pass filex/up_info.txt | sed 's/old_fw_pass=//g' )
+          echo "UP_PASS_OLD=$UP_PASS_OLD" >> $GITHUB_ENV
+          export UP_PASS_NEW=$( grep new_fw_pass filex/up_info.txt | sed 's/new_fw_pass=//g' )
+          echo "UP_PASS_NEW=$UP_PASS_NEW" >> $GITHUB_ENV
           export UP_DEL_OLD=$( grep old_del filex/up_info.txt | sed 's/old_del=//g' )
           echo "UP_DEL_OLD=$UP_DEL_OLD" >> $GITHUB_ENV
           export OLD_BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[1] | .tag_name' | sed 's/helmiwrt-//g')
@@ -65,6 +69,8 @@ jobs:
           rm -rf filex
           wget $BRAW/$BPOST
           sed -i "s|$UP_USEROLD/$UP_OLD|$UP_USERNEW/$UP_NEW|g" $BPOST
+          sleep 3
+          sed -i "s|$UP_PASS_OLD|$UP_PASS_NEW|g" $BPOST
           sleep 10
           echo "Mods loaded succesfully, resuming build"
           echo "status=success" >> $GITHUB_OUTPUT
