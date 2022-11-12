@@ -10,6 +10,14 @@ Catatan:
 ########################
 ##   NEW CHANGELOGS  ##
 ########################
+#update - 12 November 2022:
+########################
+- Updated all dependencies
+- Fix some bugs
+- etc
+- Updated LuCI password !! check again !!
+
+########################
 #update - 23 Agustus 2022:
 ########################
 - Add: mactoiface - software untuk mengunci mac device ke interface tertentu
