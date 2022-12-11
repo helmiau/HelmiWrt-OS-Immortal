@@ -16,7 +16,7 @@ on:
 #    types: started
 
 env:
-  REPO_OWNER: helmiau  
+  REPO_OWNER: helmiau
 
 jobs:
   Deploy:
@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@main
 
       - name: Set Timezone to Asia Jakarta
-        uses: szenius/set-timezone@v1.0
+        uses: szenius/set-timezone@master
         with:
           timezoneLinux: "Asia/Jakarta"
 
@@ -182,7 +182,7 @@ jobs:
         uses: actions/checkout@main
 
       - name: Set Timezone to Asia Jakarta
-        uses: szenius/set-timezone@v1.0
+        uses: szenius/set-timezone@master
         with:
           timezoneLinux: "Asia/Jakarta"
 

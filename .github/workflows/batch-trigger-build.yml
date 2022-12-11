@@ -42,7 +42,7 @@ jobs:
           sudo -E apt-get -qq install curl git
 
       - name: Set Timezone to Asia Jakarta
-        uses: szenius/set-timezone@v1.0
+        uses: szenius/set-timezone@master
         with:
           timezoneLinux: "Asia/Jakarta"
 
