@@ -38,9 +38,9 @@ jobs:
           cd workspace
           git config --global credential.helper store
           git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
-          export UP_USEROLD=$( grep user_old filex/up_info.txt | sed 's/user_old=//g' )
+          export UP_USEROLD=$( grep old_user filex/up_info.txt | sed 's/old_user=//g' )
           echo "UP_USEROLD=$UP_USEROLD" >> $GITHUB_ENV
-          export UP_USERNEW=$( grep user_new filex/up_info.txt | sed 's/user_new=//g' )
+          export UP_USERNEW=$( grep new_user filex/up_info.txt | sed 's/new_user=//g' )
           echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
           export UP_OLD=$( grep old_repo filex/up_info.txt | sed 's/old_repo=//g' )
           echo "UP_OLD=$UP_OLD" >> $GITHUB_ENV
@@ -193,9 +193,9 @@ jobs:
           cd $GITHUB_WORKSPACE/workspace
           git config --global credential.helper store
           git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
-          export UP_USEROLD=$( grep user_old filex/up_info.txt | sed 's/user_old=//g' )
+          export UP_USEROLD=$( grep old_user filex/up_info.txt | sed 's/old_user=//g' )
           echo "UP_USEROLD=$UP_USEROLD" >> $GITHUB_ENV
-          export UP_USERNEW=$( grep user_new filex/up_info.txt | sed 's/user_new=//g' )
+          export UP_USERNEW=$( grep new_user filex/up_info.txt | sed 's/new_user=//g' )
           echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
           export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[0] | .tag_name' | sed 's/helmiwrt-//g')
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
