@@ -6,6 +6,9 @@
 # Blog: https://p3terx.com
 #=================================================
 
+# Fix issue --Global symbol "@mrirors" requires explicit package name (did you forget to declare "my @mrirors"?) at tools/xz failed to build.
+sed -i 's/mrirors/mirrors/g' $OPENWRT_ROOT_PATH/scripts/download.pl
+
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
