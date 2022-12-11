@@ -6,9 +6,27 @@ Catatan:
 - Download di helmiau.com/blog/helmiwrt-os
 - Dukung dengan donasi di helmiau.com/pay
 ########################
+Notes:
+- Once update, all devices will be updated, except excluded device informed by note "Update excluded for device 'A'"
+- STB HG and ZTE with 5.15 kernel, if wireless not on active state, try to change to p212 dtb. Read link and docs from https://t.me/c/1365888382/46279 then find how to change dtb by google.
+- PASSWORD ALREADY MENTIONED AT WEB POST, PLEASE READ CAREFULLY !!!!! ASKING FOR PASSWORD = MUTE!!!!
+- Download firmware from helmiau.com/blog/helmiwrt-os
+- Support me by donating via helmiau.com/pay
+########################
+
 
 ########################
 ##   NEW CHANGELOGS  ##
+########################
+#update - 13 Desember 2022:
+########################
+- Updated all dependencies
+- Updated OpenClash META core with new path support
+- Fix USB Hub/To LAN Replug
+- Fix some bugs
+- etc
+- Updated LuCI password !! check again !!
+
 ########################
 #update - 12 November 2022:
 ########################
