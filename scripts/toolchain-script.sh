@@ -9,4 +9,4 @@
 #=================================================
 
 # Fix issue --Global symbol "@mrirors" requires explicit package name (did you forget to declare "my @mrirors"?) at tools/xz failed to build.
-sed -i 's/mrirors/mirrors/g' $OPENWRT_ROOT_PATH/scripts/download.pl
+# sed -i 's/mrirors/mirrors/g' $OPENWRT_ROOT_PATH/scripts/download.pl
