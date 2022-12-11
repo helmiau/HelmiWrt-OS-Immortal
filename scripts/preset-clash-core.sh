@@ -57,7 +57,7 @@ wget -qO- $clash_tun_dreamacro | gunzip -c > $COREDIR/clash_tun_dreamacro
 APIGITWSS="https://api.github.com/repos/helmiau/Clash.Meta/releases/tags/Prerelease-WSS"
 TAGWSS="Prerelease-WSS/Clash.Meta-linux"
 if [[ $1 == "amd64" ]]; then
-	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-efcf" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
+	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-c00977c" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 	clash_meta_wss_url_compat=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-compatible" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 elif [[ $1 == "armv8" ]]; then
 	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-arm64" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
