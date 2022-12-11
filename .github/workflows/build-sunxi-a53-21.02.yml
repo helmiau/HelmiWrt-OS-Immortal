@@ -121,6 +121,12 @@ jobs:
           echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE"
           echo "==========================================="
 
+      - name: Run Custom Toolchain Script
+        run: |
+          cd $OPENWRT_ROOT_PATH
+          chmod +x $GITHUB_WORKSPACE/scripts/*.sh
+          $GITHUB_WORKSPACE/scripts/toolchain-script.sh
+
       - name: Compare Toolchain Hash
         id: hash
         run: |
