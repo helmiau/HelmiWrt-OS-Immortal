@@ -66,7 +66,7 @@ jobs:
           echo "Mods loaded succesfully, resuming build..."
 
       - name: Create Release Tag for This Repository
-        uses: ncipollo/release-action@v1.11.1
+        uses: ncipollo/release-action@v1.12.0
         with:
           prerelease: true
           allowUpdates: true
@@ -77,7 +77,7 @@ jobs:
           bodyFile: release_body.txt
 
       - name: Create Release Tag for Upload Repository
-        uses: ncipollo/release-action@v1.11.1
+        uses: ncipollo/release-action@v1.12.0
         with:
           prerelease: true
           allowUpdates: true
