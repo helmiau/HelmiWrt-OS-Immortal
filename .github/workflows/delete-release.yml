@@ -12,6 +12,10 @@ name: Delete Release
 on:
   workflow_dispatch:
     inputs:
+      owner-repo:
+        description: 'Owner and Repository target. Ex. helmiau/HelmiWrt-OS-Immortal.'
+        required: true
+        default: helmiau/HelmiWrt-OS-Immortal
       build-date:
         description: 'Release build date. Ex: 2022.12.01'
         required: false
@@ -37,6 +41,7 @@ jobs:
         if: ${{ github.event.inputs.del-opt == 'Assets Only' }}
         uses: mknejp/delete-release-assets@v1
         with:
+          repository: ${{ github.event.inputs.owner-repo }}
           token: ${{ secrets.HELMIWRT_RW }}
           tag: helmiwrt-${{ github.event.inputs.build-date }}
           fail-if-no-assets: false
@@ -50,5 +55,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.HELMIWRT_RW }}
         with:
+          repo: ${{ github.event.inputs.owner-repo }}
           delete_release: true
           tag_name: helmiwrt-${{ github.event.inputs.build-date }}
