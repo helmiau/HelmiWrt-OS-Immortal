@@ -11,18 +11,19 @@ name: Delete Latest Release
 
 on:
   workflow_dispatch:
-  #schedule:
-  #  - cron: 0 17 * * *
-  # watch:
-  #   types: started
-
-env:
-  # Trigger build s9xxx environments
-  REPO_OWNER: helmiau
-  REPO_NAME: HelmiWrt-OS-Immortal
-  BRANCH_NAME: main
-  DELETE_ASSETS: true
-  DELETE_RELEASE: false
+    inputs:
+      build-date:
+        description: 'Release build date. Ex: 2022.12.01'
+        required: false
+        default: 2022.12.01
+      del-opt:
+        description: 'Select delete release option.'
+        required: false
+        default: "Assets Only"
+        type: choice
+        options:
+          - "Assets Only"
+          - "Assets and Tags"
 
 jobs:
   Delete:
@@ -32,27 +33,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Initialization Environment
-        run: |
-          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r 'first | .tag_name' | sed 's/helmiwrt-//g')
-          echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-
       - name: Delete Release Assets Only
-        if: ${{ env.DELETE_ASSETS == 'true' }}
+        if: ${{ github.event.inputs.del-opt == 'Assets Only' }}
         uses: mknejp/delete-release-assets@v1
         with:
           token: ${{ secrets.HELMIWRT_RW }}
-          tag: helmiwrt-${{ env.BUILD_DATE }}
+          tag: helmiwrt-${{ github.event.inputs.build-date }}
           fail-if-no-assets: false
           fail-if-no-release: false
           assets: | 
             helmiwrt-*
 
       - name: Delete Release Assets and Tags
-        if: ${{ env.DELETE_RELEASE == 'true' }}
+        if: ${{ github.event.inputs.del-opt == 'Assets and Tags' }}
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.HELMIWRT_RW }}
         with:
           delete_release: true
-          tag_name: helmiwrt-${{ env.BUILD_DATE }}
+          tag_name: helmiwrt-${{ github.event.inputs.build-date }}
