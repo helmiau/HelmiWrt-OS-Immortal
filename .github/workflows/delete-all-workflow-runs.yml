@@ -3,10 +3,6 @@ name: Delete All Workflow Runs
 on:
   workflow_dispatch:
     inputs:
-      repo:
-        description: 'Repository path.'
-        required: true
-        default: ${{ github.repository }}
       days:
         description: 'Number of days.'
         required: true
@@ -53,7 +49,7 @@ jobs:
         uses: InfraWay/delete-workflow-runs@v2.1.2
         with:
           token: ${{ secrets.HELMIWRT_RW }}
-          repository: ${{ github.event.inputs.repo }}
+          repository: ${{ github.repository }}
           retain_days: ${{ github.event.inputs.days }}
           keep_minimum_runs: ${{ github.event.inputs.minimum_runs }}
           delete_workflow_pattern: ${{ github.event.inputs.delete_workflow_pattern }}
