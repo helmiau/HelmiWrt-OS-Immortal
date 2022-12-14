@@ -26,7 +26,7 @@ jobs:
       - name: Delete Workflow Runs
         uses: MajorScruffy/delete-old-workflow-runs@main
         env:
-          token: ${{ secrets.HELMIWRT_RW }}
+          GITHUB_TOKEN: ${{ secrets.HELMIWRT_RW }}
         with:
           repository: ${{ github.repository }}
           older-than-seconds: ${{ github.event.inputs.older-than-seconds }}
