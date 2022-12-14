@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       older-than-seconds:
-        description: 'Older than (seconds) (3600s = 1h). example: 86400'
+        description: 'OT: Older than (seconds) (3600s = 1h). example: 86400. Skip this if you use CB option below.'
         required: false
         default: 3600
       created-before:
-        description: 'Date of workflow created before. example: 2021-12-08'
+        description: 'CB: Date of workflow created before. example: 2021-12-08. Skip this if you use OT option above.'
         required: false
         default: 2022-12-12
       what-if:
