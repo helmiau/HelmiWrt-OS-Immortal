@@ -16,6 +16,7 @@ on:
         description: 'Owner and Repository target. Ex. helmiau/HelmiWrt-OS-Immortal.'
         required: true
         default: helmiau/HelmiWrt-OS-Immortal
+        # kalau mau hapus release di git satunya, liat tanggal release dulu di https://github.com/helmiau/HelmiWrt-OS-Immortal/releases terus liat history changelog up_info.txt tujuan upload di repo "Plus"
       build-date:
         description: 'Release build date. Ex: 2022.12.01'
         required: false
