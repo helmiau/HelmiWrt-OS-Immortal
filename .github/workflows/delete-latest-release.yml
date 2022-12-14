@@ -7,7 +7,7 @@
 # HelmiWrt OS by helmiau.com
 #=================================================
 
-name: Delete Latest Release
+name: Delete Release
 
 on:
   workflow_dispatch:
