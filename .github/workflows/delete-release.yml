@@ -52,7 +52,7 @@ jobs:
 
       - name: Delete Release Assets and Tags
         if: ${{ github.event.inputs.del-opt == 'Assets and Tags' }}
-        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        uses: dev-drprasad/delete-tag-and-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.HELMIWRT_RW }}
         with:
