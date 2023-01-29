@@ -22,7 +22,7 @@ env:
   EXTRA_CONFIG_FILE: config/rpi-extra.config
   UNIVERSAL_CONFIG_FILE: config/universal.config
   #Binaries Platform
-  CLASH_BINARY: armv8
+  CLASH_BINARY: arm64
   V2RAYA_BINARY: arm64-v8a
   SPEEDTEST_CLI_BINARY: aarch64
   SUBFINDER_BINARY: arm64

@@ -30,11 +30,9 @@ mkdir -p $COREDIR
 clash_url="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lateset/dev/clash-linux-$1.tar.gz"
 tun_core_ver=$(curl -sL https://raw.githubusercontent.com/vernesong/OpenClash/dev/core_version | awk -F: 'NR==2 {print $1}')
 clash_tun_url="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lateset/premium/clash-linux-$1-$tun_core_ver.gz"
-clash_game_url=$(curl -sL $APIGIT/vernesong/OpenClash/releases/tags/TUN | grep /clash-linux-$1 | awk -F '"' '{print $4}')
 clash_meta="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lateset/meta/clash-linux-$1.tar.gz"
 wget -qO- $clash_url | tar xOvz > $COREDIR/clash
 wget -qO- $clash_tun_url | gunzip -c > $COREDIR/clash_tun
-wget -qO- $clash_game_url | tar xOvz > $COREDIR/clash_game
 wget -qO- $clash_meta | tar xOvz > $COREDIR/clash_meta_ofc
 
 # Dreamacro Core has:
@@ -59,8 +57,6 @@ TAGWSS="Prerelease-WSS/Clash.Meta-linux"
 if [[ $1 == "amd64" ]]; then
 	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-c00977c" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 	clash_meta_wss_url_compat=$(curl -sL $APIGITWSS | grep "$TAGWSS-amd64-compatible" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
-elif [[ $1 == "armv8" ]]; then
-	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-arm64" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 else
 	clash_meta_wss_url=$(curl -sL $APIGITWSS | grep "$TAGWSS-$1" | sed -e 's|"||g' -e 's| ||g' -e 's|browser_download_url:||g')
 fi
