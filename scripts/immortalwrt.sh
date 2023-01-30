@@ -99,6 +99,10 @@ git clone --depth=1 https://github.com/4IceG/luci-app-sms-tool
 
 # Add luci-app-atinout
 svn co https://github.com/koshev-msk/modemfeed/trunk/luci/applications/luci-app-atinout koshev-msk/luci-app-atinout
+svn co https://github.com/koshev-msk/modemfeed/trunk/packages/telephony/atinout koshev-msk/atinout
+
+# Add qtools (Tools modems based on the Qualcomm chipset)
+svn co https://github.com/koshev-msk/modemfeed/trunk/packages/telephony/qtools koshev-msk/qtools
 
 # HelmiWrt packages
 git clone --depth=1 https://github.com/helmiau/helmiwrt-packages
