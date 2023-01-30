@@ -66,16 +66,17 @@ git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 git clone --depth=1 -b dev https://github.com/vernesong/OpenClash
 
 # Add modeminfo
-git clone --depth=1 https://github.com/koshev-msk/luci-app-modeminfo
+svn co https://github.com/koshev-msk/modemfeed/trunk/luci/applications/luci-app-modeminfo koshev-msk/luci-app-modeminfo
+svn co https://github.com/koshev-msk/modemfeed/trunk/packages/net/modeminfo koshev-msk/modeminfo
 
 # Add luci-app-smstools3
-git clone --depth=1 https://github.com/koshev-msk/luci-app-smstools3
+svn co https://github.com/koshev-msk/modemfeed/trunk/luci/applications/luci-app-smstools3 koshev-msk/luci-app-smstools3
 
 # Add luci-app-mmconfig : configure modem cellular bands via mmcli utility
-git clone --depth=1 https://github.com/koshev-msk/luci-app-mmconfig
+svn co https://github.com/koshev-msk/modemfeed/trunk/luci/applications/luci-app-mmconfig koshev-msk/luci-app-mmconfig
 
 # Add support for Fibocom L860-GL l850/l860 ncm
-git clone --depth=1 https://github.com/koshev-msk/xmm-modem
+svn co https://github.com/koshev-msk/modemfeed/trunk/packages/net/xmm-modem koshev-msk/xmm-modem
 
 if [[ $SOURCE_BRANCH == *"21.02"* ]]; then
 	echo "21.02 branch detected! Adding 21.02 repos..."
@@ -96,8 +97,8 @@ fi
 # Add luci-app-sms-tool
 git clone --depth=1 https://github.com/4IceG/luci-app-sms-tool
 
-# Add luci-app-atinout-mod
-git clone --depth=1 https://github.com/4IceG/luci-app-atinout-mod
+# Add luci-app-atinout
+svn co https://github.com/koshev-msk/modemfeed/trunk/luci/applications/luci-app-atinout koshev-msk/luci-app-atinout
 
 # HelmiWrt packages
 git clone --depth=1 https://github.com/helmiau/helmiwrt-packages
