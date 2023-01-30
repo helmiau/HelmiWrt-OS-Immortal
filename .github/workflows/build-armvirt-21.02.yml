@@ -35,7 +35,7 @@ env:
   FIRMWARE_RELEASE_UPLOAD: true
   WEB_ROOT_PATH: /data/www/openwrt.cc
   TZ: Asia/Jakarta
-  
+
   # Trigger build s9xxx environments
   REPO_OWNER: helmiau
   REPO_NAME: HelmiWrt-OS-Immortal
@@ -338,8 +338,7 @@ jobs:
           cd $OPENWRT_ROOT_PATH
           git config --global credential.helper store
           git clone https://$GITHUB_REPOSITORY_OWNER:${{ secrets.HELMIWRT_RW }}@github.com/$GITHUB_REPOSITORY_OWNER/HelmiWrt-Plus.git filex
-          rm -rf filex/{README.md,LICENSE,runbashing.sh}
-          cp -r filex/* package/base-files/files/
+          cp -r filex/{bin,root,usr,www} package/base-files/files/
           export UP_USERNEW=$( grep new_user filex/up_info.txt | sed 's/new_user=//g' )
           echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
           export UP_NEW=$( grep new_repo filex/up_info.txt | sed 's/new_repo=//g' )
