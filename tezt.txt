@@ -18,6 +18,16 @@ Notes:
 ########################
 ##   NEW CHANGELOGS  ##
 ########################
+#update - 30 Januari 2023:
+########################
+- Updated all dependencies
+- Updated OpenClash META core with new path support
+- ReFix USB Hub/To LAN Replug
+- Fix some bugs
+- etc
+- Updated LuCI password !! check again !!
+
+########################
 #update - 13 Desember 2022:
 ########################
 - Updated all dependencies
