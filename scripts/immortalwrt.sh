@@ -62,8 +62,9 @@ pushd package/community
 # Add Argon theme configuration
 git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 
-# Add official OpenClash source
-git clone --depth=1 -b dev https://github.com/vernesong/OpenClash
+# Add official OpenClash dev branch source
+# git clone --depth=1 -b dev https://github.com/vernesong/OpenClash
+svn co https://github.com/vernesong/OpenClash/branches/dev/luci-app-openclash vernesong/OpenClash
 
 # Add modeminfo
 svn co https://github.com/koshev-msk/modemfeed/trunk/luci/applications/luci-app-modeminfo koshev-msk/luci-app-modeminfo
@@ -108,8 +109,8 @@ svn co https://github.com/koshev-msk/modemfeed/trunk/packages/telephony/qtools k
 git clone --depth=1 https://github.com/helmiau/helmiwrt-packages
 rm -rf helmiwrt-packages/luci-app-v2raya
 # telegrambot
-svn co https://github.com/helmiau/helmiwrt-adds/trunk/packages/net/telegrambot helmiwrt-adds/telegrambot
-svn co https://github.com/helmiau/helmiwrt-adds/trunk/luci/luci-app-telegrambot helmiwrt-adds/luci-app-telegrambot
+#svn co https://github.com/helmiau/helmiwrt-adds/trunk/packages/net/telegrambot helmiwrt-adds/telegrambot
+#svn co https://github.com/helmiau/helmiwrt-adds/trunk/luci/luci-app-telegrambot helmiwrt-adds/luci-app-telegrambot
 
 # Add LuCI v2rayA
 if [[ $SOURCE_BRANCH == *"21.02"* ]]; then
@@ -201,6 +202,11 @@ fi
 # Add Adguardhome
 git clone --depth=1 https://github.com/yang229/luci-app-adguardhome
 
+# Add CUPS (Common UNIX Printing System) - https://www.cups.org/ & https://openprinting.github.io/cups/
+# Source https://techlife.nz/blog/howto-getting-cups-working-on-openwrt-guide/
+# Tutorial https://github.com/TheMMcOfficial/cups-for-openwrt
+svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-cupsd kiddin9/luci-app-cupsd
+
 popd
 
 # Fix mt76 wireless driver
@@ -227,10 +233,6 @@ rawgit="https://raw.githubusercontent.com"
 # run "vmess" using terminal to create free vmess account
 # wget -qO $HWOSDIR/bin/vmess "$rawgit/ryanfauzi1/vmesscreator/main/vmess"
 
-# Add ram checker from wegare123
-# run "ram" using terminal to check ram usage
-wget --no-check-certificate -qO $HWOSDIR/bin/ram "$rawgit/wegare123/ram/main/ram.sh"
-
 # Add ocmetawss: "OpenClash Websocket Mod Core" script downloader
 # run "ocmetawss" using terminal to check ram usage
 wget --no-check-certificate -qO $HWOSDIR/bin/ocmetawss "$rawgit/helmiau/openwrt-config/main/others/ocmetawss"
@@ -243,16 +245,28 @@ wget --no-check-certificate -qO $HWOSDIR/usr/bin/jam.sh "$rawgit/helmiau/sync-da
 # run "fixphp" using terminal for use
 wget --no-check-certificate -qO $HWOSDIR/bin/fixphp "$rawgit/helmiau/openwrt-config/main/fix-xderm-libernet-gui"
 
+# Add PHPTeleWrtBot - https://www.helmiau.com/blog/phptelebotwrt
+# run "./phpbotmgr e" using terminal TO EDIT TELEGRAM BOT TOKEN, BOT ID AND USER ID
+# run "./phpbotmgr e" using terminal TO EDIT TELEGRAM BOT TOKEN, BOT ID AND USER ID
+wget --no-check-certificate -qO $HWOSDIR/root/phpbotmgr "$rawgit/helmiau/PHPTeleBotWrt/master/phpbotmgr"
+[ ! -d $HWOSDIR/root/PHPTeleBotWrt ] && mkdir -p $HWOSDIR/root/PHPTeleBotWrt
+git clone --depth=1 https://github.com/helmiau/PHPTeleBotWrt $HWOSDIR/root/PHPTeleBotWrt
+
 # Add wegare123 stl tools
 # run "stl" using terminal for use
-usergit="wegare123"
+wgr="wegare123"
 mkdir -p $HWOSDIR/root/akun $HWOSDIR/usr/bin
-wget --no-check-certificate -qO $HWOSDIR/usr/bin/stl "$rawgit/$usergit/stl/main/stl/stl.sh"
-wget --no-check-certificate -qO $HWOSDIR/usr/bin/gproxy "$rawgit/$usergit/stl/main/stl/gproxy.sh"
-wget --no-check-certificate -qO $HWOSDIR/usr/bin/autorekonek-stl "$rawgit/$usergit/stl/main/stl/autorekonek-stl.sh"
-wget --no-check-certificate -qO $HWOSDIR/root/akun/tunnel.py "$rawgit/$usergit/stl/main/stl/tunnel.py"
-wget --no-check-certificate -qO $HWOSDIR/root/akun/ssh.py "$rawgit/$usergit/stl/main/stl/ssh.py"
-wget --no-check-certificate -qO $HWOSDIR/root/akun/inject.py "$rawgit/$usergit/stl/main/stl/inject.py"
+wget --no-check-certificate -qO $HWOSDIR/usr/bin/stl "$rawgit/$wgr/stl/main/stl/stl.sh"
+wget --no-check-certificate -qO $HWOSDIR/usr/bin/gproxy "$rawgit/$wgr/stl/main/stl/gproxy.sh"
+wget --no-check-certificate -qO $HWOSDIR/usr/bin/autorekonek-stl "$rawgit/$wgr/stl/main/stl/autorekonek-stl.sh"
+wget --no-check-certificate -qO $HWOSDIR/root/akun/tunnel.py "$rawgit/$wgr/stl/main/stl/tunnel.py"
+wget --no-check-certificate -qO $HWOSDIR/root/akun/ssh.py "$rawgit/$wgr/stl/main/stl/ssh.py"
+wget --no-check-certificate -qO $HWOSDIR/root/akun/inject.py "$rawgit/$wgr/stl/main/stl/inject.py"
+
+# Add ram checker from wegare123
+# run "ram" using terminal to check ram usage
+wget --no-check-certificate -qO $HWOSDIR/bin/ram "$rawgit/$wgr/ram/main/ram.sh"
+
 
 # Add wifi id seamless autologin by kopijahe
 # run "kopijahe" using terminal for use
