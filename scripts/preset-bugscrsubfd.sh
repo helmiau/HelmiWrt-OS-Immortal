@@ -125,6 +125,10 @@ else
 fi
 
 if [[ ${cf_archie} != "unsupported" ]]; then
+	# Make dir if not exist
+	[[ ! -d files/usr/bin ]] && mkdir -p files/usr/bin
+	[[ ! -d files/etc/init.d ]] && mkdir -p files/etc/init.d
+	
 	# Install Cloudflared
 	echo -e "  Architecture detected: ${cf_archie}"
 	wget -qO ${cf_bin} "https://github.com/${cf_repo}/releases/download/${cf_latest_bin}/cloudflared-linux-${cf_archie}"
