@@ -227,6 +227,10 @@ sed -i 's|/bin/ash|/usr/bin/zsh|g' package/base-files/files/etc/passwd
 #-----------------------------------------------------------------------------
 HWOSDIR="package/base-files/files"
 rawgit="https://raw.githubusercontent.com"
+# Make dir if not exist
+[ ! -d $HWOSDIR/bin ] && mkdir -p $HWOSDIR/bin
+[ ! -d $HWOSDIR/etc/init.d ] && mkdir -p $HWOSDIR/etc/init.d
+[ ! -d $HWOSDIR/root ] && mkdir -p $HWOSDIR/root
 [ ! -d $HWOSDIR/usr/bin ] && mkdir -p $HWOSDIR/usr/bin
 
 # Add vmess creator account from racevpn.com
@@ -247,7 +251,6 @@ wget --no-check-certificate -qO $HWOSDIR/bin/fixphp "$rawgit/helmiau/openwrt-con
 
 # Add PHPTeleWrtBot - https://www.helmiau.com/blog/phptelebotwrt
 # run "./phpbotmgr e" using terminal TO EDIT TELEGRAM BOT TOKEN, BOT ID AND USER ID
-# run "./phpbotmgr e" using terminal TO EDIT TELEGRAM BOT TOKEN, BOT ID AND USER ID
 wget --no-check-certificate -qO $HWOSDIR/root/phpbotmgr "$rawgit/helmiau/PHPTeleBotWrt/master/phpbotmgr"
 [ ! -d $HWOSDIR/root/PHPTeleBotWrt ] && mkdir -p $HWOSDIR/root/PHPTeleBotWrt
 git clone --depth=1 https://github.com/helmiau/PHPTeleBotWrt $HWOSDIR/root/PHPTeleBotWrt
@@ -255,7 +258,7 @@ git clone --depth=1 https://github.com/helmiau/PHPTeleBotWrt $HWOSDIR/root/PHPTe
 # Add wegare123 stl tools
 # run "stl" using terminal for use
 wgr="wegare123"
-mkdir -p $HWOSDIR/root/akun $HWOSDIR/usr/bin
+[ ! -d $HWOSDIR/root/akun ] && mkdir -p $HWOSDIR/root/akun
 wget --no-check-certificate -qO $HWOSDIR/usr/bin/stl "$rawgit/$wgr/stl/main/stl/stl.sh"
 wget --no-check-certificate -qO $HWOSDIR/usr/bin/gproxy "$rawgit/$wgr/stl/main/stl/gproxy.sh"
 wget --no-check-certificate -qO $HWOSDIR/usr/bin/autorekonek-stl "$rawgit/$wgr/stl/main/stl/autorekonek-stl.sh"
