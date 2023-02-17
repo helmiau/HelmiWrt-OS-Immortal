@@ -276,6 +276,8 @@ wget --no-check-certificate -qO $HWOSDIR/bin/ram "$rawgit/$wgr/ram/main/ram.sh"
 wget --no-check-certificate -qO $HWOSDIR/bin/kopijahe "$rawgit/kopijahe/wifiid-openwrt/master/scripts/kopijahe"
 
 chmod 0755 -R $HWOSDIR/bin/*
+chmod 0755 -R $HWOSDIR/etc/init.d/*
+chmod 0755 -R $HWOSDIR/root/*
 chmod 0755 -R $HWOSDIR/usr/bin/*
 
 #-----------------------------------------------------------------------------
