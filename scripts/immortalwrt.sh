@@ -142,11 +142,47 @@ if [[ $TOOLCHAIN_IMAGE == *"armvirt"* ]]; then
 	# Add luci-app-amlogic
 	echo "armvirt target detected! Adding amlogic service..."
 	git clone --depth=1 https://github.com/ophub/luci-app-amlogic
-	echo -e "CONFIG_PACKAGE_dosfstools=y" >> $OPENWRT_ROOT_PATH/.config
-	echo -e "CONFIG_PACKAGE_util-linux=y" >> $OPENWRT_ROOT_PATH/.config
-	echo -e "CONFIG_PACKAGE_uuidgen=y" >> $OPENWRT_ROOT_PATH/.config
-	echo -e "CONFIG_PACKAGE_luci-lib-fs=y" >> $OPENWRT_ROOT_PATH/.config
-	echo -e "CONFIG_PACKAGE_perl=y" >> $OPENWRT_ROOT_PATH/.config
+	cat << 'EOF' >> $OPENWRT_ROOT_PATH/.config
+# Packages for Amlogic Service
+CONFIG_PACKAGE_dosfstools=y
+CONFIG_PACKAGE_util-linux=y
+CONFIG_PACKAGE_uuidgen=y
+CONFIG_PACKAGE_luci-lib-fs=y
+CONFIG_PACKAGE_perl=y
+CONFIG_PERL_NOCOMMENT=y
+CONFIG_PACKAGE_perl-http-date=y
+CONFIG_PACKAGE_perlbase-base=y
+CONFIG_PACKAGE_perlbase-bytes=y
+CONFIG_PACKAGE_perlbase-charnames=y
+CONFIG_PACKAGE_perlbase-class=y
+CONFIG_PACKAGE_perlbase-config=y
+CONFIG_PACKAGE_perlbase-cwd=y
+CONFIG_PACKAGE_perlbase-dynaloader=y
+CONFIG_PACKAGE_perlbase-errno=y
+CONFIG_PACKAGE_perlbase-essential=y
+CONFIG_PACKAGE_perlbase-fcntl=y
+CONFIG_PACKAGE_perlbase-file=y
+CONFIG_PACKAGE_perlbase-filehandle=y
+CONFIG_PACKAGE_perlbase-getopt=y
+CONFIG_PACKAGE_perlbase-i18n=y
+CONFIG_PACKAGE_perlbase-integer=y
+CONFIG_PACKAGE_perlbase-io=y
+CONFIG_PACKAGE_perlbase-list=y
+CONFIG_PACKAGE_perlbase-locale=y
+CONFIG_PACKAGE_perlbase-params=y
+CONFIG_PACKAGE_perlbase-posix=y
+CONFIG_PACKAGE_perlbase-re=y
+CONFIG_PACKAGE_perlbase-scalar=y
+CONFIG_PACKAGE_perlbase-selectsaver=y
+CONFIG_PACKAGE_perlbase-socket=y
+CONFIG_PACKAGE_perlbase-symbol=y
+CONFIG_PACKAGE_perlbase-tie=y
+CONFIG_PACKAGE_perlbase-time=y
+CONFIG_PACKAGE_perlbase-unicode=y
+CONFIG_PACKAGE_perlbase-unicore=y
+CONFIG_PACKAGE_perlbase-utf8=y
+CONFIG_PACKAGE_perlbase-xsloader=y
+EOF
 	# Fix USB to LAN
 	# sed -i 's/kmod-usb-net-rtl8152=/kmod-usb-net-rtl8152-vendor=/g' $OPENWRT_ROOT_PATH/.config
 fi
