@@ -12,11 +12,9 @@
 # Apply your own customization on boot features
 if grep -q "helmiwrt.sh" /boot/helmiwrt.sh; then
 	logger "  helmilog : detected helmiwrt.sh boot script, running script..."
-	echo -e "  helmilog : detected helmiwrt.sh boot script, running script..."
 	chmod +x /boot/helmiwrt.sh
 	./boot/helmiwrt.sh
 	logger "  helmilog : helmiwrt.sh boot script running done!"
-	echo -e "  helmilog : helmiwrt.sh boot script running done!"
 fi
 
 # HelmiWrt Patches
