@@ -27,10 +27,10 @@ mkdir -p $COREDIR
 # - meta core <new>
 # old clash_url=$(curl -sL $APIGIT/vernesong/OpenClash/releases/tags/Clash | grep /clash-linux-$1 | awk -F '"' '{print $4}')
 # old clash_tun_url=$(curl -sL $APIGIT/vernesong/OpenClash/releases/tags/TUN-Premium | grep /clash-linux-$1 | awk -F '"' '{print $4}')
-clash_url="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lateset/dev/clash-linux-$1.tar.gz"
-tun_core_ver=$(curl -sL https://raw.githubusercontent.com/vernesong/OpenClash/dev/core_version | awk -F: 'NR==2 {print $1}')
-clash_tun_url="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lateset/premium/clash-linux-$1-$tun_core_ver.gz"
-clash_meta="https://raw.githubusercontent.com/vernesong/OpenClash/dev/core-lateset/meta/clash-linux-$1.tar.gz"
+clash_url="https://raw.githubusercontent.com/vernesong/OpenClash/core/dev/dev/clash-linux-$1.tar.gz"
+tun_core_ver=$(curl -sL https://raw.githubusercontent.com/vernesong/OpenClash/core/dev/core_version | awk -F: 'NR==2 {print $1}')
+clash_tun_url="https://raw.githubusercontent.com/vernesong/OpenClash/core/dev/premium/clash-linux-$1-$tun_core_ver.gz"
+clash_meta="https://raw.githubusercontent.com/vernesong/OpenClash/core/dev/meta/clash-linux-$1.tar.gz"
 wget -qO- $clash_url | tar xOvz > $COREDIR/clash
 wget -qO- $clash_tun_url | gunzip -c > $COREDIR/clash_tun
 wget -qO- $clash_meta | tar xOvz > $COREDIR/clash_meta_ofc
