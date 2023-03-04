@@ -22,24 +22,25 @@
 #=================================================
 # Version: 1.1.0 <https://install.speedtest.net/app/cli/ookla-speedtest-1.1.0-aarch64-linux.tgz>
 # Version: 1.1.1 <https://install.speedtest.net/app/cli/ookla-speedtest-1.1.1-linux-aarch64.tgz>
+# Version: 1.2.0 <https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-i386.tgz>
 
 #=================================================
 # Add SpeedTest CLI Core by Ookla
 #=================================================
-SPEEDTESTVER="1.1.1"
-SPEEDTESTURL="https://install.speedtest.net/app/cli/ookla-speedtest-$SPEEDTESTVER-linux-$1.tgz"
-SPEEDTESTDIR="files/bin"
-SPEEDTESTBIN="speedtest"
+SPDTVER="1.2.0"
+SPDTURL="https://install.speedtest.net/app/cli/ookla-speedtest-$SPDTVER-linux-$1.tgz"
+SPDTDIR="files/bin"
+SPDTBIN="speedtest"
 echo -e "  Installing Speedtest Core by Ookla...."
 echo -e "  Architecture detected : $1...."
 
 # Check files/bin directory
-if [[ ! -d $SPEEDTESTDIR ]]; then
-	mkdir -p $SPEEDTESTDIR
+if [[ ! -d $SPDTDIR ]]; then
+	mkdir -p $SPDTDIR
 fi
 
-echo -e "  Downloading ookla-speedtest-$SPEEDTESTVER-$1-linux.tgz...."
-wget -qO- $SPEEDTESTURL | tar xOvz > $SPEEDTESTDIR/$SPEEDTESTBIN
+echo -e "  Downloading ookla-speedtest-$SPDTVER-$1-linux.tgz...."
+wget -qO- $SPDTURL | tar xOvz > $SPDTDIR/$SPDTBIN
 echo -e "  Installing...."
 
-chmod +x $SPEEDTESTDIR/$SPEEDTESTBIN
+chmod +x $SPDTDIR/$SPDTBIN
