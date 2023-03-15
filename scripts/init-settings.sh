@@ -10,7 +10,7 @@
 #--------------------------------------------------------
 
 # Apply your own customization on boot features
-if grep -q "helmiwrt.sh" /boot/helmiwrt.sh; then
+if [[ -e /boot/helmiwrt.sh ]]; then
 	logger "  helmilog : detected helmiwrt.sh boot script, running script..."
 	chmod +x /boot/helmiwrt.sh
 	./boot/helmiwrt.sh
@@ -19,7 +19,8 @@ fi
 
 # HelmiWrt Patches
 chmod +x /bin/helmiwrt
-helmiwrt
+chmod +x /etc/init.d/zzzwrtmi
+/etc/init.d/zzzwrtmi enable
 
 # Run initial boot additions and add default interfaces
 helmiwrt initboot
