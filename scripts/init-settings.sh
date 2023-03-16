@@ -21,6 +21,7 @@ fi
 chmod +x /bin/helmiwrt
 chmod +x /etc/init.d/zzzwrtmi
 /etc/init.d/zzzwrtmi enable
+helmiwrt
 
 # Run initial boot additions and add default interfaces
 helmiwrt initboot
