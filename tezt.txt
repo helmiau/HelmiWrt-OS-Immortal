@@ -18,6 +18,15 @@ Notes:
 ########################
 ##   NEW CHANGELOGS  ##
 ########################
+#update - 17 Maret 2023:
+########################
+- Updated speedtest, bugsc, tinyfm offline, and other dependencies
+- Increase default rootfs to 3GB
+- Fix some bugs
+- etc
+- Updated LuCI password !! check again !!
+
+########################
 #update - 30 Januari 2023:
 ########################
 - Updated all dependencies
