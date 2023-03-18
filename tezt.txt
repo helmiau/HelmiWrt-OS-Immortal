@@ -27,6 +27,18 @@ Notes:
 - Updated LuCI password !! check again !!
 
 ########################
+#update - 17 Februari 2023:
+########################
+- Add PHPTeleBotWrt https://www.helmiau.com/blog/phptelebotwrt (cukup edit token)
+- Add Cloudflare Zero Trust https://www.helmiau.com/blog/remote-openwrt-via-cloudflared-zerotrust (cukup edit token)
+- Updated all depends, apps, etc.
+- Fix install emmc amlogic.
+- ReFix USB Hub/To LAN (usage  tutorial youtube (https://www.youtube.com/watch?v=aVH-xlBWG2o) ).
+- Fix some bugs.
+- etc.
+- Updated LuCI password !! check again !!
+
+########################
 #update - 30 Januari 2023:
 ########################
 - Updated all dependencies
