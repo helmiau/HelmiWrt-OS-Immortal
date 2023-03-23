@@ -226,6 +226,12 @@ else
 	[ -f $pinctrl_bcm2835_dir ] && rm -f $pinctrl_bcm2835_dir
 fi
 
+if [[ $TOOLCHAIN_IMAGE == *"bcm27xx"* ]]; then
+	# Fix USB to LAN for bcm27xx devices
+	echo "non-bcm2711 target detected! Adding patches..."
+	sed -i 's/kmod-usb-net-rtl8152=/kmod-usb-net-rtl8152-vendor=/g' $OPENWRT_ROOT_PATH/.config
+fi
+
 if [[ $SOURCE_BRANCH == *"21.02"* ]]; then
 	echo "OpenWrt $SOURCE_BRANCH detected! adding openwrt-$SOURCE_BRANCH config..."
 	sed -i "s|argonv3=y|argon=y|g" $OPENWRT_ROOT_PATH/.config
