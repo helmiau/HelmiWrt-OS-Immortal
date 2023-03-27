@@ -95,10 +95,7 @@ jobs:
           sudo ./make -b $PROC_LISTS -k $KERNEL_VR -s $ROOTFS_SIZE -a false
           export PACKAGED_OUTPUTPATH="${PWD}/out"
           echo "PACKAGED_OUTPUTPATH=$PACKAGED_OUTPUTPATH" >> $GITHUB_ENV
-          find . -type f -name 'helmiwrt-build-*' | while read FILE ; do
-            # newfile=$(echo ${FILE} | sed "s/helmiwrt-build/helmiwrt-$SOURCE_BRANCH/") ;
-            # echo -e $(readlink -f ${FILE}) ;
-            # mv "${FILE}" "${newfile}" ;
+          find . -type f -name 'helmiwrt-$SOURCE_BRANCH-*' | while read FILE ; do
             echo -e $(readlink -f ${FILE}) ;
           done
           echo "status=success" >> $GITHUB_OUTPUT
