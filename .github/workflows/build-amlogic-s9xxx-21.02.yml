@@ -19,7 +19,7 @@ env:
   REPO_URL: https://github.com/helmiau/Amlogic-Openwrt.git
   REPO_BRANCH: main
   PROC_LISTS: s905x3_s905x2_s905x_s905x-b860h_s905w_s905d_s922x_s912_s905_s905l2_s905l3_s905l3a_s905l3b_s905lb
-  KERNEL_VR: 5.4.238_5.10.176_5.15.104_6.1.21
+  KERNEL_VR: 5.4.238_5.15.104_6.1.21
   SOURCE_BRANCH: 21.02
   UPLOAD_RELEASE: true
   TZ: Asia/Jakarta
