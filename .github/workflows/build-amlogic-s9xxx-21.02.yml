@@ -77,7 +77,7 @@ jobs:
       run: |
         cd $OPENWRTROOT
         # Get ROOTFS size from helmiwrt build config
-        export ROOTFS_SIZE="curl -v --silent https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/config/universal.config 2>&1 | grep 'CONFIG_TARGET_ROOTFS_PARTSIZE=' | sed 's|CONFIG_TARGET_ROOTFS_PARTSIZE=||g'"
+        export ROOTFS_SIZE="$(curl -v --silent https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/config/universal.config 2>&1 | grep 'CONFIG_TARGET_ROOTFS_PARTSIZE=' | sed 's|CONFIG_TARGET_ROOTFS_PARTSIZE=||g')"
         echo "ROOTFS_SIZE=$ROOTFS_SIZE" >> $GITHUB_ENV
         # Output build name
         sed -i "/HelmiWrt_/c\ build_image_file=\"${out_path}/helmiwrt-$SOURCE_BRANCH-\${board}-k\${kernel}.img\"" make
