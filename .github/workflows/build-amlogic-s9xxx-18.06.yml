@@ -80,7 +80,7 @@ jobs:
         export ROOTFS_SIZE="$(curl -v --silent https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/config/universal.config 2>&1 | grep 'CONFIG_TARGET_ROOTFS_PARTSIZE=' | sed 's|CONFIG_TARGET_ROOTFS_PARTSIZE=||g')"
         echo "ROOTFS_SIZE=$ROOTFS_SIZE" >> $GITHUB_ENV
         # Output build name
-        sed -i "/HelmiWrt_/c\ build_image_file=\"\${out_path}/helmiwrt-build-\${board}-k\${kernel}.img\"" make
+        sed -i "/HelmiWrt_/c\ build_image_file=\"\${out_path}/helmiwrt-$SOURCE_BRANCH-\${board}-k\${kernel}.img\"" make
         grep "build_image_file=" make
         # Start Build s9xxx based on $SOURCE_BRANCH source.
         export HELMIWRT_FILENAME="helmiwrt-$SOURCE_BRANCH-armvirt-64-default-rootfs.tar.gz"
@@ -96,9 +96,9 @@ jobs:
           export PACKAGED_OUTPUTPATH="${PWD}/out"
           echo "PACKAGED_OUTPUTPATH=$PACKAGED_OUTPUTPATH" >> $GITHUB_ENV
           find . -type f -name 'helmiwrt-build-*' | while read FILE ; do
-            newfile=$(echo ${FILE} | sed "s/helmiwrt-build/helmiwrt-$SOURCE_BRANCH/") ;
-            echo -e $(readlink -f ${FILE}) ;
-            mv "${FILE}" "${newfile}" ;
+            # newfile=$(echo ${FILE} | sed "s/helmiwrt-build/helmiwrt-$SOURCE_BRANCH/") ;
+            # echo -e $(readlink -f ${FILE}) ;
+            # mv "${FILE}" "${newfile}" ;
             echo -e $(readlink -f ${FILE}) ;
           done
           echo "status=success" >> $GITHUB_OUTPUT
