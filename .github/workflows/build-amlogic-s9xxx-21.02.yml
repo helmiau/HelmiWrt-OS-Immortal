@@ -16,17 +16,18 @@ on:
 #    types: started
 
 env:
-  REPO_URL: https://github.com/helmiau/amlogic-s9xxx-openwrt
+  REPO_URL: https://github.com/helmiau/Amlogic-Openwrt.git
   REPO_BRANCH: main
-  PROC_LISTS: s905x3_s905x2_s905x_s905w_s905d_s922x_s912_s905
-  KERNEL_VR: 5.4.0_5.15.51
+  PROC_LISTS: s905x3_s905x2_s905x_s905x-b860h_s905w_s905d_s922x_s912_s905_s905l2_s905l3_s905l3a_s905l3b_s905lb
+  KERNEL_VR: 5.4.238_5.10.176_5.15.104_6.1.21
+  ROOTFS_SIZE: 3072
   SOURCE_BRANCH: 21.02
   UPLOAD_RELEASE: true
   TZ: Asia/Jakarta
 
 jobs:
   Build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout
@@ -38,7 +39,7 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(curl -fsSL git.io/ubuntu-2004-openwrt)
+        sudo -E apt-get -qq install $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
@@ -64,7 +65,6 @@ jobs:
       run: |
         df -hT $PWD
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
-        sed -i '/HelmiWrt_/c\ build_image_file="${out_path}/helmiwrt-\${build_op}-k\${kernel}.img"' openwrt/makeHelmi
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: Install Feeds
@@ -77,6 +77,8 @@ jobs:
       id: build
       run: |
         cd $OPENWRTROOT
+        sed -i "/HelmiWrt_/c\ build_image_file=\"${out_path}/helmiwrt-$SOURCE_BRANCH-\${board}-k\${kernel}.img\"" openwrt/make
+        grep "build_image_file=" openwrt/make
         [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
         # Start Build s9xxx based on $SOURCE_BRANCH source.
         export HELMIWRT_FILENAME="helmiwrt-$SOURCE_BRANCH-armvirt-64-default-rootfs.tar.gz"
@@ -86,11 +88,11 @@ jobs:
           echo "$HELMIWRT_FILENAME rootfs found under $BUILD_DATE tag! Start downloading..."
           wget -q -P openwrt-armvirt "$HELMIWRT_REL-$BUILD_DATE/$HELMIWRT_FILENAME"
           # Build Firmware $SOURCE_BRANCH
-          sudo chmod +x makeHelmi
-          sudo ./makeHelmi -d -b $PROC_LISTS -k $KERNEL_VR -a false
+          sudo chmod +x make
+          sudo ./make -b $PROC_LISTS -k $KERNEL_VR -s $ROOTFS_SIZE -a false
           export PACKAGED_OUTPUTPATH="${PWD}/out"
           echo "PACKAGED_OUTPUTPATH=$PACKAGED_OUTPUTPATH" >> $GITHUB_ENV
-          find . -type f -name 'helmiwrt-s9*' | while read FILE ; do
+          find . -type f -name 'helmiwrt-s*' | while read FILE ; do
             newfile=$(echo ${FILE} | sed "s/helmiwrt/helmiwrt-$SOURCE_BRANCH/") ;
             echo -e $(readlink -f ${FILE}) ;
             mv "${FILE}" "${newfile}" ;
