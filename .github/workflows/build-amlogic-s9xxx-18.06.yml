@@ -80,7 +80,7 @@ jobs:
         export ROOTFS_SIZE="$(curl -v --silent https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/config/universal.config 2>&1 | grep 'CONFIG_TARGET_ROOTFS_PARTSIZE=' | sed 's|CONFIG_TARGET_ROOTFS_PARTSIZE=||g')"
         echo "ROOTFS_SIZE=$ROOTFS_SIZE" >> $GITHUB_ENV
         # Output build name
-        sed -i "/HelmiWrt_/c\ build_image_file=\"${out_path}/helmiwrt-build-\${board}-k\${kernel}.img\"" make
+        sed -i "/HelmiWrt_/c\ build_image_file=\"\${out_path}/helmiwrt-build-\${board}-k\${kernel}.img\"" make
         grep "build_image_file=" make
         # Start Build s9xxx based on $SOURCE_BRANCH source.
         export HELMIWRT_FILENAME="helmiwrt-$SOURCE_BRANCH-armvirt-64-default-rootfs.tar.gz"
