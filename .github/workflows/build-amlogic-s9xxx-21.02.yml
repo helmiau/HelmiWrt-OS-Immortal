@@ -16,7 +16,7 @@ on:
 #    types: started
 
 env:
-  REPO_URL: https://github.com/helmiau/Amlogic-Openwrt.git
+  REPO_URL: https://github.com/helmiau/amlogic-openwrt
   REPO_BRANCH: main
   PROC_LISTS: s905x3_s905x2_s905x_s905x-b860h_s905w_s905d_s922x_s912_s905_s905l2_s905l3_s905l3a_s905l3b
   KERNEL_VR: 5.4.238_5.15.104_6.1.21
@@ -80,7 +80,7 @@ jobs:
         export ROOTFS_SIZE="$(curl -v --silent https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/config/universal.config 2>&1 | grep 'CONFIG_TARGET_ROOTFS_PARTSIZE=' | sed 's|CONFIG_TARGET_ROOTFS_PARTSIZE=||g')"
         echo "ROOTFS_SIZE=$ROOTFS_SIZE" >> $GITHUB_ENV
         # Output build name
-        sed -i "/HelmiWrt_/c\ build_image_file=\"\${out_path}/helmiwrt-$SOURCE_BRANCH-\${board}-k\${kernel}.img\"" make
+        sed -i "/build_image_file=/c\ build_image_file=\"\${out_path}/helmiwrt-$SOURCE_BRANCH-\${board}-k\${kernel}.img\"" make
         grep "build_image_file=" make
         # Start Build s9xxx based on $SOURCE_BRANCH source.
         export HELMIWRT_FILENAME="helmiwrt-$SOURCE_BRANCH-armvirt-64-default-rootfs.tar.gz"
