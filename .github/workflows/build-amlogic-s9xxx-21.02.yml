@@ -19,7 +19,8 @@ env:
   REPO_URL: https://github.com/helmiau/amlogic-openwrt
   REPO_BRANCH: main
   PROC_LISTS: s905x3_s905x2_s905x_s905x-b860h_s905w_s905d_s922x_s912_s905_s905l2_s905l3_s905l3a_s905l3b
-  KERNEL_VR: 5.4.238_5.15.104_6.1.21
+  KERNEL_VR: 5.4.238_5.10.176_5.15.105_6.1.22
+  KERNEL_REPO: helmiau/amlogic-kernel
   SOURCE_BRANCH: 21.02
   UPLOAD_RELEASE: true
   TZ: Asia/Jakarta
@@ -92,7 +93,7 @@ jobs:
           wget -q -P openwrt-armvirt "$HELMIWRT_REL-$BUILD_DATE/$HELMIWRT_FILENAME"
           # Build Firmware $SOURCE_BRANCH
           sudo chmod +x make
-          sudo ./make -b $PROC_LISTS -k $KERNEL_VR -s $ROOTFS_SIZE -a false
+          sudo ./make -b $PROC_LISTS -k $KERNEL_VR -s $ROOTFS_SIZE -r $KERNEL_REPO -a false
           export PACKAGED_OUTPUTPATH="${PWD}/out"
           echo "PACKAGED_OUTPUTPATH=$PACKAGED_OUTPUTPATH" >> $GITHUB_ENV
           find . -type f -name 'helmiwrt-$SOURCE_BRANCH-*' | while read FILE ; do
