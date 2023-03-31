@@ -358,6 +358,7 @@ jobs:
           make download -j64
 
       - name: Compile Packages
+        id: compile
         run: |
           cd $OPENWRT_ROOT_PATH
           echo -e "$(nproc) thread compile"
@@ -401,6 +402,7 @@ jobs:
           make checksum
 
       - name: Organize Files
+        id: organize_files
         run: |
           export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[0] | .tag_name' | sed 's/helmiwrt-//g')
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
@@ -417,12 +419,26 @@ jobs:
           [ -f version.buildinfo ] && mv version.buildinfo helmiwrt-$SOURCE_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-version.buildinfo
           [ -f sha256sums ] && mv sha256sums helmiwrt-$SOURCE_BRANCH-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-sha256sums
           df -hT $PWD
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Checking Release Status
+        id: release_status
+        if: env.FIRMWARE_RELEASE_UPLOAD == 'true' && steps.organize_files.outputs.status == 'success' && !cancelled()
+        run: |
+          REL_STATS="$(curl -s https://github.com/$UP_USERNEW/$UP_NEW/releases | grep -c 'Latest')"
+          if [[ $REL_STATS -lt 1 ]]; then
+              echo "PRE_RELEASE_STATS=true" >> $GITHUB_ENV
+              echo "status=success" >> $GITHUB_OUTPUT
+          else
+              echo "PRE_RELEASE_STATS=false" >> $GITHUB_ENV
+              echo "status=success" >> $GITHUB_OUTPUT
+          fi
 
       - name: Deploy Files To Release
         uses: ncipollo/release-action@v1.12.0
-        if: env.FIRMWARE_RELEASE_UPLOAD == 'true'
+        if: env.FIRMWARE_RELEASE_UPLOAD == 'true' && steps.release_status.outputs.status == 'success' && !cancelled()
         with:
-          prerelease: true
+          prerelease: ${{ env.PRE_RELEASE_STATS }}
           allowUpdates: true
           replacesArtifacts: true
           owner: ${{ env.UP_USERNEW }}
@@ -480,11 +496,23 @@ jobs:
           ls -R
           rm -f armvirt64.txt
           echo -e "=== helmilog: Upper is work/kerjain contents.. ==="
-          echo "status=success"
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Checking Release Status
+        id: release_status
+        run: |
+          REL_STATS="$(curl -s https://github.com/$UP_USERNEW/$UP_NEW/releases | grep -c 'Latest')"
+          if [[ $REL_STATS -lt 1 ]]; then
+              echo "PRE_RELEASE_STATS=true" >> $GITHUB_ENV
+              echo "status=success" >> $GITHUB_OUTPUT
+          else
+              echo "PRE_RELEASE_STATS=false" >> $GITHUB_ENV
+              echo "status=success" >> $GITHUB_OUTPUT
+          fi
 
       - name: Deploy Files To Release
         uses: ncipollo/release-action@v1.12.0
-        if: env.FIRMWARE_RELEASE_UPLOAD == 'true' && steps.checkfiles.outputs.status == 'success' && !cancelled()
+        if: env.FIRMWARE_RELEASE_UPLOAD == 'true' && steps.checkfiles.outputs.status == 'success' && steps.release_status.outputs.status == 'success' && !cancelled()
         with:
           prerelease: true
           allowUpdates: true
