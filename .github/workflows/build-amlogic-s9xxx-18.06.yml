@@ -94,6 +94,8 @@ jobs:
           echo "$HELMIWRT_FILENAME rootfs found under $BUILD_DATE tag! Start downloading..."
           [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
           wget -q -P openwrt-armvirt "$HELMIWRT_REL-$BUILD_DATE/$HELMIWRT_FILENAME"
+          [ -f make ] || rm -f make
+          wget -q https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/scripts/make-amlogic -O make
           # Build Firmware $SOURCE_BRANCH
           sudo chmod +x make
           sudo ./make -b $PROC_LISTS -k $KERNEL_VR -s $ROOTFS_SIZE -r $KERNEL_REPO -a false
