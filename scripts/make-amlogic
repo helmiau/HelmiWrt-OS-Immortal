@@ -1056,7 +1056,7 @@ init_var "${@}"
 # Find OpenWrt file
 find_openwrt
 # Download the dependency files
-#download_depends
+download_depends
 # Query the latest kernel version
 [[ "${auto_kernel}" == "true" ]] && query_version
 # Download the kernel files
