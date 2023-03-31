@@ -80,31 +80,30 @@ jobs:
       id: build
       run: |
         cd $OPENWRTROOT
-        # Get ROOTFS size from helmiwrt build config
-        export ROOTFS_SIZE="$(curl -v --silent https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/config/universal.config 2>&1 | grep 'CONFIG_TARGET_ROOTFS_PARTSIZE=' | sed 's|CONFIG_TARGET_ROOTFS_PARTSIZE=||g')"
-        echo "ROOTFS_SIZE=$ROOTFS_SIZE" >> $GITHUB_ENV
-        # Output build name
-        sed -i "/build_image_file=/c\ build_image_file=\"\${out_path}/helmiwrt-$SOURCE_BRANCH-\${board}-k\${kernel}.img\"" make
-        grep "build_image_file=" make
-        # Start Build s9xxx based on $SOURCE_BRANCH source.
         export HELMIWRT_FILENAME="helmiwrt-$SOURCE_BRANCH-armvirt-64-default-rootfs.tar.gz"
         echo "HELMIWRT_FILENAME=$HELMIWRT_FILENAME" >> $GITHUB_ENV
+        # Set ROOTFS size from helmiwrt build config
+        export ROOTFS_SIZE="$(curl -v --silent https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/config/universal.config 2>&1 | grep 'CONFIG_TARGET_ROOTFS_PARTSIZE=' | sed 's|CONFIG_TARGET_ROOTFS_PARTSIZE=||g')"
+        echo "ROOTFS_SIZE=$ROOTFS_SIZE" >> $GITHUB_ENV
+        # Start Build s9xxx based on $SOURCE_BRANCH source.
         if wget -q --method=HEAD "$HELMIWRT_REL-$BUILD_DATE/$HELMIWRT_FILENAME"; then
-          # Download Firmware $SOURCE_BRANCH
-          echo "$HELMIWRT_FILENAME rootfs found under $BUILD_DATE tag! Start downloading..."
-          [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
-          wget -q -P openwrt-armvirt "$HELMIWRT_REL-$BUILD_DATE/$HELMIWRT_FILENAME"
-          [ -f make ] || rm -f make
-          wget -q https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/scripts/make-amlogic -O make
-          # Build Firmware $SOURCE_BRANCH
-          sudo chmod +x make
-          sudo ./make -b $PROC_LISTS -k $KERNEL_VR -s $ROOTFS_SIZE -r $KERNEL_REPO -a false
-          export PACKAGED_OUTPUTPATH="${PWD}/out"
-          echo "PACKAGED_OUTPUTPATH=$PACKAGED_OUTPUTPATH" >> $GITHUB_ENV
-          find . -type f -name 'helmiwrt-$SOURCE_BRANCH-*' | while read FILE ; do
-            echo -e $(readlink -f ${FILE}) ;
-          done
-          echo "status=success" >> $GITHUB_OUTPUT
+            # Using modified make file, then modify output file name
+            [ -f make ] && rm -f make && wget -q https://raw.githubusercontent.com/helmiau/HelmiWrt-OS-Immortal/main/scripts/make-amlogic -O make
+            sed -i "/build_image_file=/c\ build_image_file=\"\${out_path}/helmiwrt-$SOURCE_BRANCH-\${board}-k\${kernel}.img\"" make
+            grep "build_image_file=" make
+            # Download Firmware $SOURCE_BRANCH
+            echo "$HELMIWRT_FILENAME rootfs found under $BUILD_DATE tag! Start downloading..."
+            [ -d openwrt-armvirt ] || mkdir -p openwrt-armvirt
+            wget -q -P openwrt-armvirt "$HELMIWRT_REL-$BUILD_DATE/$HELMIWRT_FILENAME"
+            # Build Firmware $SOURCE_BRANCH
+            sudo chmod +x make
+            sudo ./make -b $PROC_LISTS -k $KERNEL_VR -s $ROOTFS_SIZE -r $KERNEL_REPO -a false
+            export PACKAGED_OUTPUTPATH="${PWD}/out"
+            echo "PACKAGED_OUTPUTPATH=$PACKAGED_OUTPUTPATH" >> $GITHUB_ENV
+            find . -type f -name 'helmiwrt-$SOURCE_BRANCH-*' | while read FILE ; do
+                echo -e $(readlink -f ${FILE}) ;
+            done
+            echo "status=success" >> $GITHUB_OUTPUT
         fi
 
     - name: Checking Release Status
