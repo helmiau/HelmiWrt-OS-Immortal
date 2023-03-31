@@ -102,11 +102,23 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
         fi
 
+    - name: Checking Release Status
+      id: release_status
+      run: |
+        REL_STATS="$(curl -s https://github.com/$UP_USERNEW/$UP_NEW/releases | grep -c 'Latest')"
+        if [[ $REL_STATS -lt 1 ]]; then
+            echo "PRE_RELEASE_STATS=true" >> $GITHUB_ENV
+            echo "status=success" >> $GITHUB_OUTPUT
+        else
+            echo "PRE_RELEASE_STATS=false" >> $GITHUB_ENV
+            echo "status=success" >> $GITHUB_OUTPUT
+        fi
+
     - name: Upload Firmware Files to GitHub Release
       uses: ncipollo/release-action@v1.12.0
-      if: steps.build.outputs.status == 'success' && !cancelled()
+      if: steps.build.outputs.status == 'success' && steps.build.release_status.status == 'success' && !cancelled()
       with:
-        prerelease: true
+        prerelease: ${{ env.PRE_RELEASE_STATS }}
         allowUpdates: true
         replacesArtifacts: true
         owner: ${{ env.UP_USERNEW }}
@@ -119,9 +131,9 @@ jobs:
 
     - name: Upload RootFS File to Current Repo
       uses: ncipollo/release-action@v1.12.0
-      if: steps.build.outputs.status == 'success' && !cancelled()
+      if: steps.build.outputs.status == 'success' && steps.build.release_status.status == 'success' && !cancelled()
       with:
-        prerelease: true
+        prerelease: ${{ env.PRE_RELEASE_STATS }}
         allowUpdates: true
         replacesArtifacts: true
         owner: helmiau
