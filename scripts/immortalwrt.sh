@@ -69,6 +69,9 @@ svn co https://github.com/vernesong/OpenClash/branches/dev/luci-app-openclash ve
 # Add modeminfo
 svn co https://github.com/koshev-msk/modemfeed/trunk/luci/applications/luci-app-modeminfo koshev-msk/luci-app-modeminfo
 svn co https://github.com/koshev-msk/modemfeed/trunk/packages/net/modeminfo koshev-msk/modeminfo
+# Remove modeminfo telegrambot plugin
+[[ -f koshev-msk/modeminfo/Makefile ]] && sed -i -e '/Package\/\$(PKG_NAME)-telegram\/install/,+4d' -e '/Package\/\$(PKG_NAME)-telegram/,+6d' -e '/\$(eval \$(call BuildPackage,\$(PKG_NAME)-telegram))/,+0d' koshev-msk/modeminfo/Makefile
+[[ -f koshev-msk/modeminfo/root/usr/lib/telegrambot/plugins/modeminfo.sh ]] && rm -f koshev-msk/modeminfo/root/usr/lib/telegrambot/plugins/modeminfo.sh
 
 # Add luci-app-smstools3
 svn co https://github.com/koshev-msk/modemfeed/trunk/luci/applications/luci-app-smstools3 koshev-msk/luci-app-smstools3
