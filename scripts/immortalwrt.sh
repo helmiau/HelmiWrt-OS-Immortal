@@ -239,6 +239,8 @@ if [[ $SOURCE_BRANCH == *"21.02"* ]]; then
 	sed -i "s|neobird=y|neobird=n|g" $OPENWRT_ROOT_PATH/.config
 	sed -i "s|vnstat=y|vnstat2=y|g" $OPENWRT_ROOT_PATH/.config
 	sed -i "s|vnstati=y|vnstati2=y|g" $OPENWRT_ROOT_PATH/.config
+	# Add Docker LuCI
+	echo -e "CONFIG_PACKAGE_luci-app-docker=y" >> $OPENWRT_ROOT_PATH/.config
 fi
 
 # Add Adguardhome
@@ -247,7 +249,7 @@ git clone --depth=1 https://github.com/yang229/luci-app-adguardhome
 # Add CUPS (Common UNIX Printing System) - https://www.cups.org/ & https://openprinting.github.io/cups/
 # Source https://techlife.nz/blog/howto-getting-cups-working-on-openwrt-guide/
 # Tutorial https://github.com/TheMMcOfficial/cups-for-openwrt
-svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-cupsd kiddin9/luci-app-cupsd
+# svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-cupsd kiddin9/luci-app-cupsd
 
 popd
 
