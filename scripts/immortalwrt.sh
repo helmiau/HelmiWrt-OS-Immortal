@@ -14,16 +14,8 @@ sed -i 's/mrirors/mirrors/g' $OPENWRT_ROOT_PATH/scripts/download.pl
 
 # Mod default-settings
 [ -d package/emortal/default-settings/files ] && pushd package/emortal/default-settings/files
-sed -i 's#exit 0#chmod +x /bin/helmiwrt\n/bin/helmiwrt#g' 99-default-settings
+sed -i 's#exit 0#chmod +x /etc/init.d/zzzwrtmi\n/etc/init.d/zzzwrtmi enable#g' 99-default-settings
 cat << 'EOF' >>  99-default-settings
-if ! grep -q 'helmiwrt' /etc/rc.local; then
-sed -i 's#exit 0#\nchmod +x /bin/helmiwrt#g' /etc/rc.local
-cat << 'EOF' >> /etc/rc.local
-/bin/helmiwrt
-exit 0
-\EOF
-fi
-
 if ! grep '/usr/bin/zsh' /etc/passwd
 sed -i 's|/bin/ash|/usr/bin/zsh|g' /etc/passwd
 fi
