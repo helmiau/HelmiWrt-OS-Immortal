@@ -31,8 +31,8 @@ jobs:
         with:
           timezoneLinux: "Asia/Jakarta"
 
-      - name: Load HelmiWrt Mods
-        id: mods
+      - name: Load HelmiWrt Data
+        id: data
         run: |
           mkdir -p workspace
           cd workspace
@@ -58,8 +58,8 @@ jobs:
           echo "UP_DEL_OLD=$UP_DEL_OLD" >> $GITHUB_ENV
           export OLD_BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[1] | .tag_name' | sed 's/helmiwrt-//g')
           echo "OLD_BUILD_DATE=$OLD_BUILD_DATE" >> $GITHUB_ENV
-          export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[0] | .tag_name' | sed 's/helmiwrt-//g')
-          echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
+          export NEW_BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[0] | .tag_name' | sed 's/helmiwrt-//g')
+          echo "NEW_BUILD_DATE=$NEW_BUILD_DATE" >> $GITHUB_ENV
           #####################
           export BSITE=$( grep blog_site filex/up_info.txt | sed 's/blog_site=//g' )
           echo "BSITE=$BSITE" >> $GITHUB_ENV
@@ -70,19 +70,47 @@ jobs:
           export BMAIL=$( grep mailku filex/up_info.txt | sed 's/mailku=//g' )
           echo "BMAIL=$BMAIL" >> $GITHUB_ENV
           #####################
-          rm -rf filex
+          export OLD_K54=$(grep -oE '5.4.[0-9]{1,3}' $BPOST | head -n 1)
+          echo "OLD_K54=$OLD_K54" >> $GITHUB_ENV
+          export OLD_K510=$(grep -oE '5.10.[0-9]{1,3}' $BPOST | head -n 1)
+          echo "OLD_K510=$OLD_K510" >> $GITHUB_ENV
+          export OLD_K515=$(grep -oE '5.15.[0-9]{1,3}' $BPOST | head -n 1)
+          echo "OLD_K515=$OLD_K515" >> $GITHUB_ENV
+          export OLD_K61=$(grep -oE '6.1.[0-9]{1,3}' $BPOST | head -n 1)
+          echo "OLD_K61=$OLD_K61" >> $GITHUB_ENV
+          export NEW_K54="5.4.$(curl -s https://raw.githubusercontent.com/helmiau/linux-5.4.y/main/Makefile | grep -oE "SUBLEVEL =.*" | head -n 1 | grep -oE '[0-9]{1,3}')"
+          echo "NEW_K54=$NEW_K54" >> $GITHUB_ENV
+          export NEW_K510="5.10.$(curl -s https://raw.githubusercontent.com/helmiau/linux-5.10.y/main/Makefile | grep -oE "SUBLEVEL =.*" | head -n 1 | grep -oE '[0-9]{1,3}')"
+          echo "NEW_K510=$NEW_K510" >> $GITHUB_ENV
+          export NEW_K515="5.15.$(curl -s https://raw.githubusercontent.com/helmiau/linux-5.15.y/main/Makefile | grep -oE "SUBLEVEL =.*" | head -n 1 | grep -oE '[0-9]{1,3}')"
+          echo "NEW_K515=$NEW_K515" >> $GITHUB_ENV
+          export NEW_K61="6.1.$(curl -s https://raw.githubusercontent.com/helmiau/linux-6.1.y/main/Makefile | grep -oE "SUBLEVEL =.*" | head -n 1 | grep -oE '[0-9]{1,3}')"
+          echo "NEW_K61=$NEW_K61" >> $GITHUB_ENV
+          #####################
           wget $BRAW/$BPOST
+          sleep 2
           sed -i "s|$UP_USEROLD/$UP_OLD|$UP_USERNEW/$UP_NEW|g" $BPOST
-          sleep 3
+          sleep 2
           sed -i "s|$UP_LIST_PASS_OLD|$UP_LIST_PASS_NEW|g" $BPOST
-          sleep 3
+          sleep 2
           sed -i "s|$UP_PASS_OLD|$UP_PASS_NEW|g" $BPOST
-          sleep 10
-          echo "Mods loaded succesfully, resuming build"
+          sleep 2
+          sed -i "s|$OLD_K54|$NEW_K54|g" $BPOST
+          sleep 2
+          sed -i "s|$OLD_K510|$NEW_K510|g" $BPOST
+          sleep 2
+          sed -i "s|$OLD_K515|$NEW_K515|g" $BPOST
+          sleep 2
+          sed -i "s|$OLD_K61|$NEW_K61|g" $BPOST
+          sleep 2
+          #####################
+          rm -rf filex
+          #####################
+          echo "Data created succesfully, resuming deploy"
           echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Pushing Content Update
-        if: steps.mods.outputs.status == 'success' && !cancelled()
+        if: steps.data.outputs.status == 'success' && !cancelled()
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.HELMIWRT_RW }}
@@ -103,9 +131,9 @@ jobs:
           replacesArtifacts: true
           owner: ${{ env.UP_USERNEW }}
           repo: ${{ env.UP_NEW }}
-          name: HelmiWrt OS ${{ env.BUILD_DATE }}
+          name: HelmiWrt OS ${{ env.NEW_BUILD_DATE }}
           token: ${{ secrets.HELMIWRT_RW }}
-          tag: helmiwrt-${{ env.BUILD_DATE }}
+          tag: helmiwrt-${{ env.NEW_BUILD_DATE }}
           artifacts: release_body.txt
           bodyFile: release_body.txt
 
