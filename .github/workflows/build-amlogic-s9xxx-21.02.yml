@@ -117,6 +117,7 @@ jobs:
             echo "PRE_RELEASE_STATS=false" >> $GITHUB_ENV
             echo "status=success" >> $GITHUB_OUTPUT
         fi
+        echo "Checking release done!. resuming..."
 
     - name: Upload Firmware Files to GitHub Release
       uses: ncipollo/release-action@v1.12.0
