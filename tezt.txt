@@ -18,6 +18,20 @@ Notes:
 ########################
 ##   NEW CHANGELOGS  ##
 ########################
+#update - 11 April 2023:
+########################
+- Updated kernel for amlogic devices (5.4.x, 5.10.x, 5.15.x, 6.1.x)
+- Set default value ttl to 65 (for all connected ethernet devices) (run command in terminal "helmiwrt ttl 60" to change ttl into 60)
+- Re-added complete docker packages
+- Updated apps and dependencies
+- Removed some unused packages
+- Removed mactoiface
+- Fix some usb and LAN not detected automatically (cause mactoiface)
+- Fix some bugs
+- etc
+- Updated LuCI password !! check again !!
+
+########################
 #update - 17 Maret 2023:
 ########################
 - Updated speedtest, bugsc, tinyfm offline, and other dependencies
