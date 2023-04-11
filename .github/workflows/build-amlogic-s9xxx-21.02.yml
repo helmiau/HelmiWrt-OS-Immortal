@@ -97,7 +97,7 @@ jobs:
             wget -q -P openwrt-armvirt "$HELMIWRT_REL-$BUILD_DATE/$HELMIWRT_FILENAME"
             # Build Firmware $SOURCE_BRANCH
             sudo chmod +x make
-            sudo ./make -b $PROC_LISTS -k $KERNEL_VR -s $ROOTFS_SIZE -r $KERNEL_REPO -a false
+            sudo ./make -b $PROC_LISTS -k $KERNEL_VR -s $ROOTFS_SIZE -r $KERNEL_REPO -a true
             export PACKAGED_OUTPUTPATH="${PWD}/out"
             echo "PACKAGED_OUTPUTPATH=$PACKAGED_OUTPUTPATH" >> $GITHUB_ENV
             find . -type f -name 'helmiwrt-$SOURCE_BRANCH-*' | while read FILE ; do
