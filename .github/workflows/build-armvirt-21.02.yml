@@ -502,8 +502,10 @@ jobs:
 
       - name: Checking Release Status
         id: release_status
+        if: env.FIRMWARE_RELEASE_UPLOAD == 'true' && steps.checkfiles.outputs.status == 'success' && !cancelled()
         run: |
-          REL_STATS="$(curl -s https://github.com/$UP_USERNEW/$UP_NEW/releases | grep -c 'Latest')"
+          export REL_STATS="$(curl -s https://github.com/$UP_USERNEW/$UP_NEW/releases | grep -c 'Latest')"
+          echo "REL_STATS=$REL_STATS" >> $GITHUB_ENV
           if [[ $REL_STATS -lt 1 ]]; then
               echo "PRE_RELEASE_STATS=true" >> $GITHUB_ENV
               echo "status=success" >> $GITHUB_OUTPUT
@@ -511,12 +513,13 @@ jobs:
               echo "PRE_RELEASE_STATS=false" >> $GITHUB_ENV
               echo "status=success" >> $GITHUB_OUTPUT
           fi
+          echo "Checking release done!. resuming..."
 
       - name: Deploy Files To Release
         uses: ncipollo/release-action@v1.12.0
-        if: env.FIRMWARE_RELEASE_UPLOAD == 'true' && steps.checkfiles.outputs.status == 'success' && steps.release_status.outputs.status == 'success' && !cancelled()
+        if: steps.release_status.outputs.status == 'success' && !cancelled()
         with:
-          prerelease: true
+          prerelease: ${{ env.PRE_RELEASE_STATS }}
           allowUpdates: true
           replacesArtifacts: true
           owner: ${{ env.UP_USERNEW }}
