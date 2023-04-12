@@ -438,7 +438,7 @@ jobs:
 
       - name: Deploy Files To Release
         uses: ncipollo/release-action@v1.12.0
-        if: env.FIRMWARE_RELEASE_UPLOAD == 'true' && steps.release_status.outputs.status == 'success' && !cancelled()
+        if: steps.release_status.outputs.status == 'success' && !cancelled()
         with:
           prerelease: ${{ env.PRE_RELEASE_STATS }}
           allowUpdates: true
