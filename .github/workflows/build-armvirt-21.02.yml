@@ -488,7 +488,7 @@ jobs:
         run: |
           [ ! -d $GITHUB_WORKSPACE/kerjain ] && mkdir -p $GITHUB_WORKSPACE/kerjain
           cd $GITHUB_WORKSPACE/kerjain
-          export KERJA_DIR=$(echo $PWD)
+          export KERJA_DIR="$(echo ${PWD})"
           echo "KERJA_DIR=$KERJA_DIR" >> $GITHUB_ENV
           export SOURCE_BRANCH=$SOURCE_BRANCH
           echo "SOURCE_BRANCH=$SOURCE_BRANCH" >> $GITHUB_ENV
