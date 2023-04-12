@@ -488,6 +488,8 @@ jobs:
         run: |
           [ ! -d $GITHUB_WORKSPACE/kerjain ] && mkdir -p $GITHUB_WORKSPACE/kerjain
           cd $GITHUB_WORKSPACE/kerjain
+          export KERJA_DIR=$(echo $PWD)
+          echo "KERJA_DIR=$KERJA_DIR" >> $GITHUB_ENV
           export SOURCE_BRANCH=$SOURCE_BRANCH
           echo "SOURCE_BRANCH=$SOURCE_BRANCH" >> $GITHUB_ENV
           export BUILD_DATE=$(curl -sL https://api.github.com/repos/helmiau/HelmiWrt-OS-Immortal/releases | jq -r '.[0] | .tag_name' | sed 's/helmiwrt-//g')
@@ -529,7 +531,7 @@ jobs:
           bodyFile: release_body.txt
           commit: ${{ env.CURRENT_BRANCH }}
           token: ${{ secrets.HELMIWRT_RW }}
-          artifacts: $GITHUB_WORKSPACE/kerjain/*
+          artifacts: ${{ env.KERJA_DIR }}/*
 
       - name: Running Amlogic s9xxx ${{ env.SOURCE_BRANCH }} build
         uses: convictional/trigger-workflow-and-wait@v1.5.0
