@@ -52,7 +52,7 @@ jobs:
           echo "UP_PASS_NEW=$UP_PASS_NEW" >> $GITHUB_ENV
           export UP_LIST_PASS_OLD=$( grep old_list_pass filex/up_info.txt | sed 's/old_list_pass=//g' )
           echo "UP_LIST_PASS_OLD=$UP_LIST_PASS_OLD" >> $GITHUB_ENV
-          export UP_LIST_PASS_NEW=$( grep new_fw_pass filex/up_info.txt | sed 's/new_list_pass=//g' )
+          export UP_LIST_PASS_NEW=$( grep new_list_pass filex/up_info.txt | sed 's/new_list_pass=//g' )
           echo "UP_LIST_PASS_NEW=$UP_LIST_PASS_NEW" >> $GITHUB_ENV
           export UP_DEL_OLD=$( grep old_del filex/up_info.txt | sed 's/old_del=//g' )
           echo "UP_DEL_OLD=$UP_DEL_OLD" >> $GITHUB_ENV
