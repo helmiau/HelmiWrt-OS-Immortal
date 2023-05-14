@@ -55,6 +55,7 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
+          ls
           chmod +x $GITHUB_WORKSPACE/scripts/free_disk_space.sh
           $GITHUB_WORKSPACE/scripts/free_disk_space.sh
           sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
