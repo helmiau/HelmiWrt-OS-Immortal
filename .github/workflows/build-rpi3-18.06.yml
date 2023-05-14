@@ -236,6 +236,9 @@ jobs:
           echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE"
           echo "==========================================="
 
+      - name: Checkout
+        uses: actions/checkout@main
+
       - name: Initialization Environment
         env:
           DEBIAN_FRONTEND: noninteractive
