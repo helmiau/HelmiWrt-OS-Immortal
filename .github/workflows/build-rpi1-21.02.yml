@@ -51,10 +51,14 @@ jobs:
       TOOLCHAIN_IMAGE: ${{ steps.env.outputs.TOOLCHAIN_IMAGE }}
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
       - name: Initialization Environment
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
+          chmod +x $GITHUB_WORKSPACE/scripts/free_disk_space.sh && $GITHUB_WORKSPACE/scripts/free_disk_space.sh
           sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
           sudo -E apt-get -qq update
           sudo -E apt-get -qq install squashfs-tools $(curl -fsSL git.io/depends-ubuntu-2004)
@@ -63,9 +67,6 @@ jobs:
           sudo ln -sf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
           docker image prune -a -f
           mkdir -p workspace
-
-      - name: Checkout
-        uses: actions/checkout@main
 
       - name: Clone Source Code
         id: clone
@@ -235,10 +236,14 @@ jobs:
           echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE"
           echo "==========================================="
 
+      - name: Checkout
+        uses: actions/checkout@main
+
       - name: Initialization Environment
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
+          chmod +x $GITHUB_WORKSPACE/scripts/free_disk_space.sh && $GITHUB_WORKSPACE/scripts/free_disk_space.sh
           sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
           sudo -E apt-get -qq update
           sudo -E apt-get -qq install rdate squashfs-tools $(curl -fsSL git.io/depends-ubuntu-2004)

@@ -37,6 +37,7 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
+        chmod +x $GITHUB_WORKSPACE/scripts/free_disk_space.sh && $GITHUB_WORKSPACE/scripts/free_disk_space.sh
         docker rmi `docker images -q`
         sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android 2>/dev/null
         sudo -E apt-get -y update
