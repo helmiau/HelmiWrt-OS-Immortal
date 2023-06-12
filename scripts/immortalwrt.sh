@@ -74,8 +74,8 @@ svn co https://github.com/koshev-msk/modemfeed/trunk/luci/applications/luci-app-
 # Add support for Fibocom L860-GL l850/l860 ncm
 svn co https://github.com/koshev-msk/modemfeed/trunk/packages/net/xmm-modem koshev-msk/xmm-modem
 
-if [[ $SOURCE_BRANCH == *"21.02"* ]]; then
-	echo "21.02 branch detected! Adding 21.02 repos..."
+if [[ $SOURCE_BRANCH != *"18.06"* ]]; then
+	echo "21.02 or 23.05 branch detected! Adding 21.02 repos..."
 	# Add luci-app-modemband
 	echo "Adding luci-app-modemband..."
 	git clone --depth=1 https://github.com/4IceG/luci-app-modemband
@@ -108,14 +108,13 @@ rm -rf helmiwrt-packages/luci-app-v2raya
 #svn co https://github.com/helmiau/helmiwrt-adds/trunk/luci/luci-app-telegrambot helmiwrt-adds/luci-app-telegrambot
 
 # Add LuCI v2rayA
-if [[ $SOURCE_BRANCH == *"21.02"* ]]; then
-	echo "OpenWrt $SOURCE_BRANCH detected! using luci-app-v2raya master branch..."
-	git clone --depth=1 -b master https://github.com/zxlhhyccc/luci-app-v2raya
-elif [[ $SOURCE_BRANCH == *"18.06"* ]]; then
+if [[ $SOURCE_BRANCH == *"18.06"* ]]; then
 	echo "OpenWrt $SOURCE_BRANCH detected! using luci-app-v2raya 18.06 branch..."
 	git clone --depth=1 -b 18.06 https://github.com/zxlhhyccc/luci-app-v2raya
+else 
+	echo "OpenWrt $SOURCE_BRANCH detected! using luci-app-v2raya master branch..."
+	git clone --depth=1 -b master https://github.com/zxlhhyccc/luci-app-v2raya
 fi
-
 
 # Add luci-theme-neobird theme
 git clone --depth=1 https://github.com/helmiau/luci-theme-neobird
@@ -227,7 +226,7 @@ if [[ $TOOLCHAIN_IMAGE == *"bcm27xx"* ]]; then
 	sed -i 's/kmod-usb-net-rtl8152=/kmod-usb-net-rtl8152-vendor=/g' $OPENWRT_ROOT_PATH/.config
 fi
 
-if [[ $SOURCE_BRANCH == *"21.02"* ]]; then
+if [[ $SOURCE_BRANCH != *"18.06"* ]]; then
 	echo "OpenWrt $SOURCE_BRANCH detected! adding openwrt-$SOURCE_BRANCH config..."
 	sed -i "s|argonv3=y|argon=y|g" $OPENWRT_ROOT_PATH/.config
 	sed -i "s|edge=y|edge=n|g" $OPENWRT_ROOT_PATH/.config
