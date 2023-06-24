@@ -58,7 +58,7 @@ jobs:
         echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
         export UP_NEW=$( grep new_repo filex/up_info.txt | sed 's/new_repo=//g' )
         echo "UP_NEW=$UP_NEW" >> $GITHUB_ENV
-        mv filex/script/make-amlogic $GITHUB_WORKSPACE/scripts/make
+        mv filex/script/make-amlogic $GITHUB_WORKSPACE/make-amlogic
         rm -rf filex
         export HELMIWRT_REL="https://github.com/$UP_USERNEW/$UP_NEW/releases/download/helmiwrt"
         echo "HELMIWRT_REL=$HELMIWRT_REL" >> $GITHUB_ENV
@@ -90,7 +90,7 @@ jobs:
         # Start Build s9xxx based on $SOURCE_BRANCH source.
         if wget -q --method=HEAD "$HELMIWRT_REL-$BUILD_DATE/$HELMIWRT_FILENAME"; then
             # Using modified make file, then modify output file name
-            [ -f make ] && rm -f make && mv $GITHUB_WORKSPACE/scripts/make make
+            [ -f make ] && rm -f make && mv $GITHUB_WORKSPACE/make-amlogic make
             sed -i "/build_image_file=/c\ build_image_file=\"\${out_path}/helmiwrt-$SOURCE_BRANCH-\${board}-k\${kernel}.img\"" make
             grep "build_image_file=" make
             # Download Firmware $SOURCE_BRANCH
