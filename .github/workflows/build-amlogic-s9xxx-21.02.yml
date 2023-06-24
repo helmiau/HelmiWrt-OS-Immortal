@@ -58,7 +58,7 @@ jobs:
         echo "UP_USERNEW=$UP_USERNEW" >> $GITHUB_ENV
         export UP_NEW=$( grep new_repo filex/up_info.txt | sed 's/new_repo=//g' )
         echo "UP_NEW=$UP_NEW" >> $GITHUB_ENV
-        mv filex/script/make-amlogic $GITHUB_WORKSPACE/make-amlogic
+        mv filex/scripts/make-amlogic $GITHUB_WORKSPACE/make-amlogic
         rm -rf filex
         export HELMIWRT_REL="https://github.com/$UP_USERNEW/$UP_NEW/releases/download/helmiwrt"
         echo "HELMIWRT_REL=$HELMIWRT_REL" >> $GITHUB_ENV
