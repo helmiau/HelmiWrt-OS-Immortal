@@ -21,7 +21,7 @@ on:
           - 23.05
       debug:
         type: choice
-        description: 'Enable if you want to testing without triggering any commands.'
+        description: 'Debug only: Enable if you want to testing without triggering any commands.'
         required: true
         default: disable
         options:
