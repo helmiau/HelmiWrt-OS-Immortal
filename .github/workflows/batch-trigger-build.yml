@@ -41,7 +41,7 @@ env:
 
 
 jobs:
-  Build:
+  Tagging:
     runs-on: ubuntu-20.04
 
     steps:
@@ -104,181 +104,51 @@ jobs:
           tag: helmiwrt-${{ env.BUILD_DATE }}
           bodyFile: release_body.txt
 
-      - name: Actions Checkout running succesfully, resuming build
-        run: |
-          sleep 15
-          echo "Actions Checkout running succesfully, resuming build"
+  Trigger:
+    needs: [Tagging]
+    name: Running actions for ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: Raspberry Pi 1
+            wf: rpi1
+          - name: Raspberry Pi 2
+            wf: rpi2
+          - name: Raspberry Pi 3
+            wf: rpi3
+          - name: Raspberry Pi 4
+            wf: rpi4
+          - name: Armvirt64
+            wf: armvirt
+          - name: Rockchip
+            wf: rockchip
+          - name: Sunxi CortexA7
+            wf: sunxi
+          - name: Sunxi CortexA53
+            wf: sunxi-a53
+          - name: x86 32bit
+            wf: x86-32
+          - name: x86 64bit
+            wf: x86-64
 
-      - name: Running Raspberry Pi 1 ${{ inputs.src_branch }} Build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Set Timezone to Asia Jakarta
+        uses: szenius/set-timezone@master
+        with:
+          timezoneLinux: "Asia/Jakarta"
+
+      - name: Running ${{ matrix.name }} ${{ inputs.src_branch }} Build
         if: ${{ inputs.src_branch }} == 'disable'
         uses: convictional/trigger-workflow-and-wait@v1.5.0
         with:
           owner: ${{ env.REPO_OWNER }}
           repo: ${{ env.REPO_NAME }}
           github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-rpi1-${{ inputs.src_branch }}.yml
-          ref: ${{ env.BRANCH_NAME }}
-          propagate_failure: ${{ env.FAILPROP }}
-          trigger_workflow: ${{ env.TRIGGERWF }}
-          wait_workflow: ${{ env.WAITWF }}
-
-      - name: Previous build running succesfully, resuming build
-        run: |
-          sleep $DELAY_INT
-          echo "Previous build running succesfully, resuming build"
-
-      - name: Running Raspberry Pi 2 ${{ inputs.src_branch }} Build
-        if: ${{ inputs.src_branch }} == 'disable'
-        uses: convictional/trigger-workflow-and-wait@v1.5.0
-        with:
-          owner: ${{ env.REPO_OWNER }}
-          repo: ${{ env.REPO_NAME }}
-          github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-rpi2-${{ inputs.src_branch }}.yml
-          ref: ${{ env.BRANCH_NAME }}
-          propagate_failure: ${{ env.FAILPROP }}
-          trigger_workflow: ${{ env.TRIGGERWF }}
-          wait_workflow: ${{ env.WAITWF }}
-
-      - name: Previous build running succesfully, resuming build
-        run: |
-          sleep $DELAY_INT
-          echo "Previous build running succesfully, resuming build"
-
-      - name: Running Raspberry Pi 3 ${{ inputs.src_branch }} Build
-        if: ${{ inputs.src_branch }} == 'disable'
-        uses: convictional/trigger-workflow-and-wait@v1.5.0
-        with:
-          owner: ${{ env.REPO_OWNER }}
-          repo: ${{ env.REPO_NAME }}
-          github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-rpi3-${{ inputs.src_branch }}.yml
-          ref: ${{ env.BRANCH_NAME }}
-          propagate_failure: ${{ env.FAILPROP }}
-          trigger_workflow: ${{ env.TRIGGERWF }}
-          wait_workflow: ${{ env.WAITWF }}
-
-      - name: Previous build running succesfully, resuming build
-        run: |
-          sleep $DELAY_INT
-          echo "Previous build running succesfully, resuming build"
-
-      - name: Running Raspberry Pi 4 ${{ inputs.src_branch }} Build
-        if: ${{ inputs.src_branch }} == 'disable'
-        uses: convictional/trigger-workflow-and-wait@v1.5.0
-        with:
-          owner: ${{ env.REPO_OWNER }}
-          repo: ${{ env.REPO_NAME }}
-          github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-rpi4-${{ inputs.src_branch }}.yml
-          ref: ${{ env.BRANCH_NAME }}
-          propagate_failure: ${{ env.FAILPROP }}
-          trigger_workflow: ${{ env.TRIGGERWF }}
-          wait_workflow: ${{ env.WAITWF }}
-
-      - name: Previous build running succesfully, resuming build
-        run: |
-          sleep $DELAY_INT
-          echo "Previous build running succesfully, resuming build"
-
-      - name: Running Armvirt64 ${{ inputs.src_branch }} Build
-        if: ${{ inputs.src_branch }} == 'disable'
-        uses: convictional/trigger-workflow-and-wait@v1.5.0
-        with:
-          owner: ${{ env.REPO_OWNER }}
-          repo: ${{ env.REPO_NAME }}
-          github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-armvirt-${{ inputs.src_branch }}.yml
-          ref: ${{ env.BRANCH_NAME }}
-          propagate_failure: ${{ env.FAILPROP }}
-          trigger_workflow: ${{ env.TRIGGERWF }}
-          wait_workflow: ${{ env.WAITWF }}
-
-      - name: Previous build running succesfully, resuming build
-        run: |
-          sleep $DELAY_INT
-          echo "Previous build running succesfully, resuming build"
-
-      - name: Running Rockchip ${{ inputs.src_branch }} Build
-        if: ${{ inputs.src_branch }} == 'disable'
-        uses: convictional/trigger-workflow-and-wait@v1.5.0
-        with:
-          owner: ${{ env.REPO_OWNER }}
-          repo: ${{ env.REPO_NAME }}
-          github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-rockchip-${{ inputs.src_branch }}.yml
-          ref: ${{ env.BRANCH_NAME }}
-          propagate_failure: ${{ env.FAILPROP }}
-          trigger_workflow: ${{ env.TRIGGERWF }}
-          wait_workflow: ${{ env.WAITWF }}
-
-      - name: Previous build running succesfully, resuming build
-        run: |
-          sleep $DELAY_INT
-          echo "Previous build running succesfully, resuming build"
-
-      - name: Running Sunxi CortexA7 ${{ inputs.src_branch }} Build
-        if: ${{ inputs.src_branch }} == 'disable'
-        uses: convictional/trigger-workflow-and-wait@v1.5.0
-        with:
-          owner: ${{ env.REPO_OWNER }}
-          repo: ${{ env.REPO_NAME }}
-          github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-sunxi-${{ inputs.src_branch }}.yml
-          ref: ${{ env.BRANCH_NAME }}
-          propagate_failure: ${{ env.FAILPROP }}
-          trigger_workflow: ${{ env.TRIGGERWF }}
-          wait_workflow: ${{ env.WAITWF }}
-
-      - name: Previous build running succesfully, resuming build
-        run: |
-          sleep $DELAY_INT
-          echo "Previous build running succesfully, resuming build"
-
-      - name: Running Sunxi CortexA53 ${{ inputs.src_branch }} Build
-        if: ${{ inputs.src_branch }} == 'disable'
-        uses: convictional/trigger-workflow-and-wait@v1.5.0
-        with:
-          owner: ${{ env.REPO_OWNER }}
-          repo: ${{ env.REPO_NAME }}
-          github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-sunxi-a53-${{ inputs.src_branch }}.yml
-          ref: ${{ env.BRANCH_NAME }}
-          propagate_failure: ${{ env.FAILPROP }}
-          trigger_workflow: ${{ env.TRIGGERWF }}
-          wait_workflow: ${{ env.WAITWF }}
-
-      - name: Previous build running succesfully, resuming build
-        run: |
-          sleep $DELAY_INT
-          echo "Previous build running succesfully, resuming build"
-
-      - name: Running  x86 32bit ${{ inputs.src_branch }} Build
-        if: ${{ inputs.src_branch }} == 'disable'
-        uses: convictional/trigger-workflow-and-wait@v1.5.0
-        with:
-          owner: ${{ env.REPO_OWNER }}
-          repo: ${{ env.REPO_NAME }}
-          github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-x86-32-${{ inputs.src_branch }}.yml
-          ref: ${{ env.BRANCH_NAME }}
-          propagate_failure: ${{ env.FAILPROP }}
-          trigger_workflow: ${{ env.TRIGGERWF }}
-          wait_workflow: ${{ env.WAITWF }}
-
-      - name: Previous build running succesfully, resuming build
-        run: |
-          sleep $DELAY_INT
-          echo "Previous build running succesfully, resuming build"
-
-      - name: Running  x86 64bit ${{ inputs.src_branch }} Build
-        if: ${{ inputs.src_branch }} == 'disable'
-        uses: convictional/trigger-workflow-and-wait@v1.5.0
-        with:
-          owner: ${{ env.REPO_OWNER }}
-          repo: ${{ env.REPO_NAME }}
-          github_token: ${{ secrets.HELMIWRT_RW }}
-          workflow_file_name: build-x86-64-${{ inputs.src_branch }}.yml
+          workflow_file_name: build-${{ matrix.wf }}-${{ inputs.src_branch }}.yml
           ref: ${{ env.BRANCH_NAME }}
           propagate_failure: ${{ env.FAILPROP }}
           trigger_workflow: ${{ env.TRIGGERWF }}
