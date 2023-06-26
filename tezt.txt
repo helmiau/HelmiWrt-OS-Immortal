@@ -18,6 +18,19 @@ Notes:
 ########################
 ##   NEW CHANGELOGS  ##
 ########################
+#update - June 2023:
+########################
+- Updated kernel for amlogic devices (5.4.x, 5.10.x, 5.15.x, 6.1.x)
+- Updated apps and dependencies
+- Revamped hilink script for auto reboot and checking device info (see script usage sample at rc.local)
+- Revamped bugsc a.k.a sni/ssl bug scanner
+- Removed v2raya
+- NO UPDATE for 18.06 firmware, last version for this firmware version is April 2023 build
+- Fix some bugs
+- etc
+- Updated LuCI password !! check again !!
+
+########################
 #update - 11 April 2023:
 ########################
 - Updated kernel for amlogic devices (5.4.x, 5.10.x, 5.15.x, 6.1.x)
