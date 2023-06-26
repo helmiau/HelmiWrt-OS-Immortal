@@ -23,10 +23,10 @@ on:
         type: choice
         description: 'Debug only: Enable if you want to testing without triggering any commands.'
         required: true
-        default: disable
+        default: false
         options:
-          - enable
-          - disable
+          - true
+          - false
 
 env:
   REPO_OWNER: helmiau
@@ -79,7 +79,7 @@ jobs:
           echo "Mods loaded succesfully, resuming build..."
 
       - name: Create Release Tag for This Repository
-        if: ${{ inputs.debug }} == 'disable'
+        if: ${{ inputs.debug == 'false' }}
         uses: ncipollo/release-action@v1.12.0
         with:
           prerelease: true
@@ -91,7 +91,7 @@ jobs:
           bodyFile: release_body.txt
 
       - name: Create Release Tag for Upload Repository
-        if: ${{ inputs.debug }} == 'disable'
+        if: ${{ inputs.debug == 'false' }}
         uses: ncipollo/release-action@v1.12.0
         with:
           prerelease: true
@@ -142,7 +142,7 @@ jobs:
           timezoneLinux: "Asia/Jakarta"
 
       - name: Running ${{ matrix.name }} ${{ inputs.src_branch }} Build
-        if: ${{ inputs.debug }} == 'disable'
+        if: ${{ inputs.debug == 'false' }}
         uses: convictional/trigger-workflow-and-wait@v1.5.0
         with:
           owner: ${{ env.REPO_OWNER }}
